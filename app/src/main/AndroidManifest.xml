@@ -12,23 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+
         <activity
-            android:name=".Profil"
+            android:name=".agencymain"
             android:exported="false" />
         <activity
-            android:name=".Accueil"
+            android:name=".agencyregister"
             android:exported="false" />
         <activity
-            android:name=".MainActivity4"
+            android:name=".clientregister"
             android:exported="false" />
         <activity
-            android:name=".MainActivity3"
+            android:name=".registerchoice"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/joj"
     android:alpha="0.9"
-    tools:context=".MainActivity"
+    tools:context=".login"
     >
 
     <RelativeLayout

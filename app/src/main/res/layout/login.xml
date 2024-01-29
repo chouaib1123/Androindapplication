@@ -6,18 +6,18 @@
     android:layout_height="match_parent"
     android:background="@drawable/joj"
     android:alpha="0.9"
-    tools:context=".MainActivity">
+    tools:context=".login">
 
     <ImageView
         android:id="@+id/appname"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:src="@drawable/carlogo"
 
         />
 
     <TextView
-        android:id="@+id/question"
+        android:id="@+id/signin"
         android:layout_below="@id/appname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,52 +26,77 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
         android:gravity="center"
-        android:text="Client or Agency?"
+        android:text="Sign in"
         android:textColor="@color/white"
-        android:textSize="25dp"
-        android:fontFamily="@font/exoregular"
+        android:textSize="35dp"
+        android:fontFamily="@font/exobold"
         />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:layout_below="@id/signin"
+        android:inputType="text"
+        android:hint="Username"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+
+        android:layout_margin="20dp"
+        android:background="#30ffffff"
+        android:padding="20dp"
+        android:fontFamily="@font/exoregular"
+        android:drawableLeft="@drawable/baseline_person_outline_24"
+        android:drawablePadding="20dp"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#30ffffff"
+        android:drawableLeft="@drawable/pass"
+        android:drawablePadding="20dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="20dp"
+        android:fontFamily="@font/exoregular"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/client"
-        android:layout_below="@id/question"
+        android:id="@+id/loginbtn"
+        android:layout_below="@id/password"
         android:layout_centerHorizontal="true"
-        android:text="Client"
+        android:text="Login"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="40dp"
         android:background="@drawable/rounded_corner"
         android:width="150dp"
         android:fontFamily="@font/exobold"
         />
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/agency"
-        android:layout_below="@id/client"
-        android:layout_centerHorizontal="true"
-        android:text="Agency"
-        android:layout_marginTop="20dp"
-        android:paddingHorizontal="40dp"
-        android:background="@drawable/rounded_corner"
-        android:width="150dp"
-        android:fontFamily="@font/exobold"
-        />
+
 
     <TextView
-        android:id="@+id/backtologin"
+        android:id="@+id/Register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/agency"
+        android:layout_below="@id/loginbtn"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/exoregular"
         android:gravity="center"
-        android:text="Go back to login "
+        android:text="New user? Register now"
         android:textColor="#90ffffff"
         android:textSize="15dp"
         android:textStyle="bold" />

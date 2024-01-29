@@ -2,21 +2,18 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.widget.*;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class Accueil extends AppCompatActivity {
+public class agencymain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_accueil);
+        setContentView(R.layout.agencymain);
         NavigationView nv = findViewById(R.id.navigation_view);
 
         ImageView menu = findViewById(R.id.menu_icon);
