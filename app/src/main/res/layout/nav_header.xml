@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#6938C1"
+    android:id="@+id/nav_header"
+    >
+    <ImageView
+        android:id="@+id/backnav"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@font/back"
+        android:layout_gravity="start"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"
+        android:rotation="180"
+        />
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/carlogo"
+        android:layout_gravity="center"
+
+        android:background="@drawable/circle_background"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chouaib Mounssif"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        />
+
+
+</LinearLayout>
