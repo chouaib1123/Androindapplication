@@ -1,104 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="20dp">
+    android:padding="16dp">
 
-    <!-- Email -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_email"
+    <!-- Profile Picture (ImageView) -->
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/default_profile_image"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- User Information Section -->
+    <LinearLayout
+        android:id="@+id/user_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="Enter email"
+        android:orientation="vertical"
+        android:layout_below="@id/imageViewProfile"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp">
 
-    <!-- Modified Password -->
-    <TextView
+        <!-- Name -->
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/textViewUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Email -->
+        <TextView
+            android:id="@+id/textViewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Additional User Information -->
+        <!-- Add more TextViews for additional user information if needed -->
+
+    </LinearLayout>
+
+    <!-- Edit Profile Button -->
+    <Button
+        android:id="@+id/buttonEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password:"
-        android:textSize="18sp"
+        android:text="Edit Profile"
+        android:layout_below="@id/user_info_layout"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_modified_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="Enter modified password"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
 
-    <!-- Username -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username:"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Enter username"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
-
-    <!-- Age -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age:"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Enter age"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
-
-    <!-- Ville (City in French) -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ville:"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_ville"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Enter ville"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
-
-    <!-- City -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="City:"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-    <EditText
-        android:id="@+id/edit_text_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Enter city"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
-
-</LinearLayout>
+</RelativeLayout>
