@@ -118,7 +118,6 @@ public class clientregister extends AppCompatActivity {
                         },
                         year, month, day);
 
-                dialog.getDatePicker().setMaxDate(cal.getTimeInMillis());
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
