@@ -72,7 +72,7 @@
             android:drawableLeft="@drawable/baseline_person_outline_24"
             android:drawablePadding="20dp"
             android:fontFamily="@font/exoregular"
-            android:hint="Gmail"
+            android:hint="Email"
             android:inputType="text"
             android:padding="20dp"
             android:textColor="@color/white"
@@ -147,7 +147,7 @@
             android:drawableLeft="@drawable/nname"
             android:drawablePadding="20dp"
             android:fontFamily="@font/exoregular"
-            android:hint="Full name"
+            android:hint="Manager Full Name"
             android:inputType="text"
             android:padding="20dp"
             android:textColor="@color/white"
@@ -205,7 +205,7 @@
             android:drawableLeft="@drawable/adresse"
             android:drawablePadding="20dp"
             android:fontFamily="@font/exoregular"
-            android:hint="@string/full_adresse"
+            android:hint="Full Address"
             android:inputType="text"
             android:padding="20dp"
             android:textColor="@color/white"
@@ -228,6 +228,7 @@
             android:padding="20dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/registr"

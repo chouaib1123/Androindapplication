@@ -5,6 +5,10 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.Controller.IRegisterClientController;
+import com.example.myapplication.Controller.RegisterClientController;
+import com.example.myapplication.Model.Extra.LicenseCategory;
+import com.example.myapplication.View.IRegisterView;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import android.app.DatePickerDialog;
@@ -21,22 +25,58 @@ import android.view.View;
 import android.widget.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class clientregister extends AppCompatActivity {
+public class clientregister extends AppCompatActivity implements IRegisterView {
 
+    EditText email, password, vpassword, phoneNumber, licenseCategory;
+    TextView licenseIssueDate, licenseExpireDate;
+
+    Button registerClient;
 
     TextView selectedTextView;
+    IRegisterClientController registerClientController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.clientregister);
+        registerClientController = new RegisterClientController(this);
+
+        email  = (EditText) findViewById(R.id.gmail);
+        password = (EditText) findViewById(R.id.password);
+        vpassword = (EditText) findViewById(R.id.vpassword);
+        phoneNumber = (EditText) findViewById(R.id.phone);
+        licenseCategory = (EditText) findViewById(R.id.categorieLicence);
+        licenseExpireDate = (TextView)findViewById(R.id.DL_ed);
+        licenseIssueDate = (TextView)findViewById(R.id.DL_od);
+        registerClient = (Button) findViewById(R.id.register);
+
+        registerClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerClientController.onClientRegister(
+                        email.getText().toString().trim(),
+                        password.getText().toString().trim(),
+                        vpassword.getText().toString().trim(),
+                        phoneNumber.getText().toString().trim(),
+                        licenseCategory.getText().toString().trim(),
+                        licenseExpireDate.getText().toString().trim(),
+                        licenseIssueDate.getText().toString().trim()
+
+                );
+            }
+        });
+
+
+
 
         TextView mDisplayDate = findViewById(R.id.birthdate);
-        TextView mDisplayDate2 = findViewById(R.id.DL_ed);
-        TextView mDisplayDate3 = findViewById(R.id.DL_od);
+
         TextView recto = findViewById(R.id.Cinreco);
         TextView verso = findViewById(R.id.Cinverso);
         TextView dlrecto = findViewById(R.id.dlverso);
@@ -49,8 +89,8 @@ public class clientregister extends AppCompatActivity {
 
 
         setDatePickerDialog(mDisplayDate);
-        setDatePickerDialog(mDisplayDate2);
-        setDatePickerDialog(mDisplayDate3);
+        setDatePickerDialog(licenseExpireDate);
+        setDatePickerDialog(licenseIssueDate);
 
 
     }
@@ -62,7 +102,7 @@ public class clientregister extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 selectedTextView = textView;
+                selectedTextView = textView;
                 startImagePickerForTextView();
             }
         });
@@ -82,14 +122,14 @@ public class clientregister extends AppCompatActivity {
             Uri uri = data.getData();
             if (uri != null) {
 
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        selectedTextView.setBackground(drawable);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                    selectedTextView.setBackground(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
 
-                    }
+                }
 
             }
         }
@@ -126,5 +166,13 @@ public class clientregister extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void OnRegisterSuccess(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void OnRegisterError(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
 }
