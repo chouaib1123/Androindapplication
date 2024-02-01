@@ -25,12 +25,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class clientregister extends AppCompatActivity {
+import android.view.View.OnClickListener;
+
+public class clientregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
 
     //----------------------------
+    private String username, email, password, vPassword, phoneNumber, city, address, firstName, lastName, birthDate;
+    private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
 
-    private String username;
+    // images afterwards**
 
     //----------------------------
     @Override
@@ -57,10 +61,36 @@ public class clientregister extends AppCompatActivity {
         //----------------------------
 
 
-
         //----------------------------
 
     }
+
+    private void getFieldsValues() {
+        username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
+        email = ((EditText)findViewById(R.id.gmail)).getText().toString().trim();
+        password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
+        vPassword = ((EditText)findViewById(R.id.vpassword)).getText().toString().trim();
+        phoneNumber = ((EditText)findViewById(R.id.phone)).getText().toString().trim();
+        city = ((EditText)findViewById(R.id.ville)).getText().toString().trim();
+        address = ((EditText)findViewById(R.id.adresse)).getText().toString().trim();
+        firstName = ((EditText)findViewById(R.id.firstname)).getText().toString().trim();
+        lastName = ((EditText)findViewById(R.id.lastname)).getText().toString().trim();
+        birthDate = ((TextView)findViewById(R.id.birthdate)).getText().toString().trim();
+        cinNumber = ((EditText)findViewById(R.id.Cinnumber)).getText().toString().trim();
+        drivingLicenceCategory = ((EditText)findViewById(R.id.categorieLicence)).getText().toString().trim();
+        drivingLicenseObtainDate = ((TextView)findViewById(R.id.DL_od)).getText().toString().trim();
+        drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
+
+        // images
+    }
+
+    //----------------------------
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    //----------------------------
 
     private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
 
