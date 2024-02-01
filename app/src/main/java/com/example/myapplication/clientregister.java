@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class clientregister extends AppCompatActivity {
-
-
     TextView selectedTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +44,18 @@ public class clientregister extends AppCompatActivity {
         setOnClickListenerForTextView(dlrecto);
         setOnClickListenerForTextView(dlverso);
 
-
-
         setDatePickerDialog(mDisplayDate);
         setDatePickerDialog(mDisplayDate2);
         setDatePickerDialog(mDisplayDate3);
-
-
     }
 
     private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
-
 
     private void setOnClickListenerForTextView(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 selectedTextView = textView;
+                selectedTextView = textView;
                 startImagePickerForTextView();
             }
         });
@@ -81,16 +74,13 @@ public class clientregister extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                         BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
                         selectedTextView.setBackground(drawable);
                     } catch (IOException e) {
                         e.printStackTrace();
-
                     }
-
             }
         }
     }
@@ -118,12 +108,9 @@ public class clientregister extends AppCompatActivity {
                         },
                         year, month, day);
 
-
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
     }
-
-
 }
