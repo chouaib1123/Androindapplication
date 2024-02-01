@@ -27,6 +27,12 @@ import java.util.Map;
 
 public class clientregister extends AppCompatActivity {
     TextView selectedTextView;
+
+    //----------------------------
+
+    private String username;
+
+    //----------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,13 @@ public class clientregister extends AppCompatActivity {
         setDatePickerDialog(mDisplayDate);
         setDatePickerDialog(mDisplayDate2);
         setDatePickerDialog(mDisplayDate3);
+
+        //----------------------------
+
+
+
+        //----------------------------
+
     }
 
     private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
