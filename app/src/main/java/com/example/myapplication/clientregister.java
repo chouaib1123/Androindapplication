@@ -5,6 +5,16 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.Controller.ClientController;
+import com.example.myapplication.Controller.UserController;
+import com.example.myapplication.DAO.ClientDaoImp;
+import com.example.myapplication.DAO.UserDaoImp;
+import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Extra.LicenseCategory;
+import com.example.myapplication.Extra.State;
+import com.example.myapplication.Extra.UserType;
+import com.example.myapplication.Model.Client;
+import com.example.myapplication.Model.User;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import android.app.DatePickerDialog;
@@ -21,6 +31,9 @@ import android.view.View;
 import android.widget.*;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,8 +72,9 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         setDatePickerDialog(mDisplayDate3);
 
         //----------------------------
+        Button registerClientButton = (Button) findViewById(R.id.registr);
 
-
+        registerClientButton.setOnClickListener(this);
         //----------------------------
 
     }
@@ -87,7 +101,67 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     //----------------------------
     @Override
     public void onClick(View view) {
+        int srcId = view.getId();
 
+        if(srcId == R.id.registr) {
+            getFieldsValues();
+
+//            String accountCreationDate = LocalDate.now().toString();
+            Date currentDate = new java.sql.Date(System.currentTimeMillis());
+            int userId;
+
+            Client client = new Client(
+                    username,
+                    currentDate,
+                    address,
+                    city,
+                    email,
+                    password,
+                    phoneNumber,
+                    State.PENDING,
+                    UserType.CLIENT,
+                    firstName,
+                    lastName,
+                    Date.valueOf(birthDate),
+                    cinNumber,
+                    null,
+                    null,
+                    LicenseCategory.valueOf(drivingLicenceCategory),
+                    Date.valueOf(drivingLicenseExpireDate),
+                    Date.valueOf(drivingLicenseObtainDate),
+                    null,
+                    null
+            );
+
+            UserController userController = new UserController(new UserDaoImp());
+            ClientController clientController = new ClientController(new ClientDaoImp());
+
+            userController.registerUser(client.getUsername(),
+                    client.getAccountCreationDate(),
+                    client.getAddress(),
+                    client.getCity(),
+                    client.getEmail(),
+                    client.getUserPassword(),
+                    client.getUserPhoneNumber(),
+                    client.getUserType()
+            );
+
+            userId = userController.getUserByUsername(client.getUsername()).getUserId();
+
+            clientController.registerClient(client.getFirstName(),
+                    client.getLastName(),
+                    client.getBirthDate(),
+                    client.getCin(),
+                    client.getCinRecto(),
+                    client.getCinVerso(),
+                    client.getLicenseCategory(),
+                    client.getLicenseExpireDate(),
+                    client.getLicenseObtainDate(),
+                    client.getLicenseRecto(),
+                    client.getLicenseVerso(),
+                    userId
+            );
+        }
     }
 
     //----------------------------
@@ -143,9 +217,11 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                                 month = month + 1;
-                                Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
+//                                Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
+                                Log.d(TAG, "onDateSet: yyyy-mm-dd: " + year + "-" + month + "-" + day);
 
-                                String date = month + "/" + day + "/" + year;
+//                                String date = month + "/" + day + "/" + year;
+                                String date = year + "-" + month + "-" + day;
                                 textView.setText(date);
                             }
                         },

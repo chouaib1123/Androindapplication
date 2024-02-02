@@ -32,6 +32,18 @@ public abstract class User {
         this.userType = userType;
     }
 
+    public User(String username, Date accountCreationDate, String address, String city, String email, String userPassword, String userPhoneNumber, State profileState, UserType userType) {
+        this.username = username;
+        this.accountCreationDate = accountCreationDate;
+        this.address = address;
+        this.city = city;
+        this.email = email;
+        this.userPassword = userPassword;
+        this.userPhoneNumber = userPhoneNumber;
+        this.profileState = profileState;
+        this.userType = userType;
+    }
+
     public int getUserId() {
         return userId;
     }

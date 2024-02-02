@@ -41,17 +41,51 @@ public class Client extends User {
         this.licenseVerso = licenseVerso;
     }
 
+    public Client(String username, Date accountCreationDate, String address, String city, String email,
+                  String userPassword, String userPhoneNumber, State profileState, UserType userType,
+                  String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto, byte[] cinVerso,
+                  LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate, byte[] licenseRecto, byte[] licenseVerso) {
+        super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.cin = cin;
+        this.cinRecto = cinRecto;
+        this.cinVerso = cinVerso;
+        this.licenseCategory = licenseCategory;
+        this.licenseExpireDate = licenseExpireDate;
+        this.licenseObtainDate = licenseObtainDate;
+        this.licenseRecto = licenseRecto;
+        this.licenseVerso = licenseVerso;
+    }
+
+    public Client(String username, Date accountCreationDate, String address, String city, String email,
+                  String userPassword, String userPhoneNumber, State profileState, UserType userType,
+                  String firstName, String lastName, Date birthDate, String cin,
+                  LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate) {
+        super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.cin = cin;
+        this.licenseCategory = licenseCategory;
+        this.licenseExpireDate = licenseExpireDate;
+        this.licenseObtainDate = licenseObtainDate;
+    }
+
     public Client(int userId, String username, Date accountCreationDate, String address, String city, String email,
             String userPassword, String userPhoneNumber, State profileState, UserType userType) {
                 super(userId, username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
                 userType);
     }
 
-    public Client(int clientId2, String firstName2, String lastName2, Date birthDate2, String cin2, byte[] cinRecto2,
-            byte[] cinVerso2, LicenseCategory licenseCategory2, Date licenseExpireDate2, Date licenseObtainDate2,
-            byte[] licenseRecto2, byte[] licenseVerso2, int userId) {
+    public Client(int clientId, String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto,
+            byte[] cinVerso, LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate,
+            byte[] licenseRecto, byte[] licenseVerso, int userId) {
                 super();
     }
+
+    public Client() {}
 
     public int getClientId() {
         return clientId;
