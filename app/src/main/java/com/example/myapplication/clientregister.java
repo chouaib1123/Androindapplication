@@ -19,12 +19,17 @@ import com.example.myapplication.Model.User;
 import com.example.myapplication.View.UserView;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -36,10 +41,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
@@ -59,9 +66,12 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     //----------------------------
     private String username, email, password, vPassword, phoneNumber, city, address, firstName, lastName, birthDate;
     private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
-    // images afterwards**
+    private TextView cinRecto, cinVerso, drivingLicenseRecto, drivingLicenseVerso;
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://rentcarmobileapp-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
 
     //----------------------------
     @Override
@@ -109,7 +119,10 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         drivingLicenseObtainDate = ((TextView)findViewById(R.id.DL_od)).getText().toString().trim();
         drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
 
-        // images
+        cinRecto = (TextView) findViewById(R.id.Cinreco);
+        cinVerso = (TextView) findViewById(R.id.Cinverso);
+        drivingLicenseRecto = (TextView) findViewById(R.id.dlreco);
+        drivingLicenseVerso = (TextView) findViewById(R.id.dlverso);
     }
 
     private boolean checkFields() {
@@ -269,70 +282,18 @@ public class clientregister extends AppCompatActivity implements OnClickListener
             if(checkFields()) {
 //                String accountCreationDate = LocalDate.now().toString();
                 String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
-//                int userId;
-//
-//                Client client = new Client(
-//                        username,
-//                        currentDate,
-//                        address,
-//                        city,
-//                        email,
-//                        password,
-//                        phoneNumber,
-//                        State.PENDING,
-//                        UserType.CLIENT,
-//                        firstName,
-//                        lastName,
-//                        Date.valueOf(birthDate),
-//                        cinNumber,
-//                        null,
-//                        null,
-//                        LicenseCategory.valueOf(drivingLicenceCategory),
-//                        Date.valueOf(drivingLicenseExpireDate),
-//                        Date.valueOf(drivingLicenseObtainDate),
-//                        null,
-//                        null
-//                );
-
-//                UserController userController = new UserController(new UserDaoImp());
-//                ClientController clientController = new ClientController(new ClientDaoImp());
-
-//                userController.registerUser(client.getUsername(),
-//                        client.getAccountCreationDate(),
-//                        client.getAddress(),
-//                        client.getCity(),
-//                        client.getEmail(),
-//                        client.getUserPassword(),
-//                        client.getUserPhoneNumber(),
-//                        client.getUserType()
-//                );
-
-//                userId = userController.getUserByUsername(client.getUsername()).getUserId();
-
-//                clientController.registerClient(client.getFirstName(),
-//                        client.getLastName(),
-//                        client.getBirthDate(),
-//                        client.getCin(),
-//                        client.getCinRecto(),
-//                        client.getCinVerso(),
-//                        client.getLicenseCategory(),
-//                        client.getLicenseExpireDate(),
-//                        client.getLicenseObtainDate(),
-//                        client.getLicenseRecto(),
-//                        client.getLicenseVerso(),
-//                        userId
-//                );
 
                 databaseReference.child("Client").addListenerForSingleValueEvent(new ValueEventListener() {
                     final UserViewImp userViewImp = new UserViewImp();
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
                             userViewImp.OnRegisterError(clientregister.this, "Username already exists!");
-                        } else if(snapshot.hasChild(email.replaceAll("[\\[\\].#$/]", "_"))) {
-                            userViewImp.OnRegisterError(clientregister.this, "Email already exists!");
-                        } else if(snapshot.hasChild(cinNumber.replaceAll("[\\[\\].#$/]", "_"))) {
-                            userViewImp.OnRegisterError(clientregister.this, "CIN already exists!");
+//                        } else if(snapshot.hasChild(email.replaceAll("[\\[\\].#$/]", "_"))) {             // can't force the uniqueness of a field except the identifier
+//                            userViewImp.OnRegisterError(clientregister.this, "Email already exists!");
+//                        } else if(snapshot.hasChild(cinNumber.replaceAll("[\\[\\].#$/]", "_"))) {
+//                            userViewImp.OnRegisterError(clientregister.this, "CIN already exists!");
                         } else {
                             databaseReference.child("Client").child(username).child("accountCreationDate").setValue(currentDate);
                             databaseReference.child("Client").child(username).child("address").setValue(address);
@@ -350,6 +311,8 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                             databaseReference.child("Client").child(username).child("drivingLicenseObtainDate").setValue(drivingLicenseObtainDate);
                             databaseReference.child("Client").child(username).child("drivingLicenseExpireDate").setValue(drivingLicenseExpireDate);
 
+                            uploadImagesToFirebaseStorage();
+
                             userViewImp.OnRegisterSuccess(clientregister.this, "Registered successfully");
                             finish();
                         }
@@ -363,10 +326,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
             }
         }
     }
-
-    //----------------------------
-
-    private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
 
     private void setOnClickListenerForTextView(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
@@ -391,16 +350,85 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        selectedTextView.setBackground(drawable);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                    textViewImages.put(selectedTextView, new Pair<>(uri, drawable));
+                    selectedTextView.setBackground(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
+    private void uploadImagesToFirebaseStorage() {
+
+        String cinRectoFilename = "cin_recto.png";
+        String cinVersoFilename = "cin_verso.png";
+        String drivingLicenseRectoFilename = "driving_license_recto.png";
+        String drivingLicenseVersoFilename = "driving_license_verso.png";
+
+        // Iterate through the textViewImages map
+        for (Map.Entry<TextView, Pair<Uri, BitmapDrawable>> entry : textViewImages.entrySet()) {
+            final TextView textView = entry.getKey();
+            Pair<Uri, BitmapDrawable> imageData = entry.getValue();
+
+            final Uri uri = imageData.first;
+            final BitmapDrawable drawable = imageData.second;
+
+            try {
+                // Convert the BitmapDrawable to a Bitmap
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Convert the Bitmap to a byte array
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                final byte[] byteArray = stream.toByteArray();
+                String filename = getFilenameForTextView(textView);
+
+                // Get a reference to the Firebase Storage location
+                final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + username + '/' + filename);
+                //final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString() + ".png");
+                // Upload the byte array to Firebase Storage
+                storageRef.putBytes(byteArray)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d("Firebase", "Image uploaded to Firebase Storage for TextView: " + textView.getId());
+                                // You can add any further processing here, such as getting download URLs
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String getFilenameForTextView(TextView textView) {
+        // Map TextView types to filenames
+        if (textView == cinRecto) {
+            return "cin_recto.png";
+        } else if (textView == cinVerso) {
+            return "cin_verso.png";
+        } else if (textView == drivingLicenseRecto) {
+            return "driving_license_recto.png";
+        } else if (textView == drivingLicenseVerso) {
+            return "driving_license_verso.png";
+        }
+
+        // Default filename
+        return "default.png";
+    }
+
+    //----------------------------
+
     private void setDatePickerDialog(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
