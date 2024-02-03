@@ -10,10 +10,22 @@ import android.widget.*;
 import com.google.android.material.navigation.NavigationView;
 
 public class agencymain extends AppCompatActivity {
+
+    TextView usernameTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agencymain);
+        String username = getIntent().getStringExtra("Agency Name");
+
+        // Find the TextView in your layout
+        usernameTextView = findViewById(R.id.username);
+
+        // Set the username in the TextView
+        if (username != null && !username.isEmpty()) {
+            usernameTextView.setText(username);
+        }
+
         NavigationView nv = findViewById(R.id.navigation_view);
 
         ImageView menu = findViewById(R.id.menu_icon);
