@@ -40,12 +40,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class clientregister extends AppCompatActivity {
-<<<<<<< Updated upstream
-
-
-    TextView selectedTextView;
-=======
-
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -62,25 +56,11 @@ public class clientregister extends AppCompatActivity {
     TextView selectedTextView;
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
 
->>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.clientregister);
-<<<<<<< Updated upstream
 
-        TextView mDisplayDate = findViewById(R.id.birthdate);
-        TextView mDisplayDate2 = findViewById(R.id.DL_ed);
-        TextView mDisplayDate3 = findViewById(R.id.DL_od);
-        TextView recto = findViewById(R.id.Cinreco);
-        TextView verso = findViewById(R.id.Cinverso);
-        TextView dlrecto = findViewById(R.id.dlverso);
-        TextView dlverso = findViewById(R.id.dlreco);
-        setOnClickListenerForTextView(recto);
-        setOnClickListenerForTextView(verso);
-        setOnClickListenerForTextView(dlrecto);
-        setOnClickListenerForTextView(dlverso);
-=======
         username = findViewById(R.id.username);
         email = findViewById(R.id.gmail);
         password = findViewById(R.id.password);
@@ -99,19 +79,19 @@ public class clientregister extends AppCompatActivity {
         licenseIssueDate = findViewById(R.id.DL_od);
         drivingLicenseRecto = findViewById(R.id.dlreco);
         drivingLicenseVerso = findViewById(R.id.dlverso);
-        registerClient = findViewById(R.id.register);
+        registerClient = findViewById(R.id.registr);
 
         setOnClickListenerForTextView(cinRecto);
         setOnClickListenerForTextView(cinVerso);
         setOnClickListenerForTextView(drivingLicenseRecto);
         setOnClickListenerForTextView(drivingLicenseVerso);
->>>>>>> Stashed changes
 
 
 
-        setDatePickerDialog(mDisplayDate);
-        setDatePickerDialog(mDisplayDate2);
-        setDatePickerDialog(mDisplayDate3);
+
+        setDatePickerDialog(birthDate);
+        setDatePickerDialog(licenseExpireDate);
+        setDatePickerDialog(licenseIssueDate);
 
         registerClient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,16 +144,16 @@ public class clientregister extends AppCompatActivity {
 //                }
         }
         });
+
     }
 
-    private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
 
 
     private void setOnClickListenerForTextView(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 selectedTextView = textView;
+                selectedTextView = textView;
                 startImagePickerForTextView();
             }
         });
@@ -196,14 +176,6 @@ public class clientregister extends AppCompatActivity {
             Uri uri = data.getData();
             if (uri != null) {
 
-<<<<<<< Updated upstream
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        selectedTextView.setBackground(drawable);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-=======
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -211,13 +183,13 @@ public class clientregister extends AppCompatActivity {
                     selectedTextView.setBackground(drawable);
                 } catch (IOException e) {
                     e.printStackTrace();
->>>>>>> Stashed changes
-
-                    }
-
+                }
             }
         }
     }
+
+
+
     private void setDatePickerDialog(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,9 +222,8 @@ public class clientregister extends AppCompatActivity {
     }
 
 
-<<<<<<< Updated upstream
-}
-=======
+
+
     public String getTrimmedText(EditText editText) {
         return editText.getText().toString().trim();
     }
@@ -337,4 +308,3 @@ public class clientregister extends AppCompatActivity {
         return "default.png";
     }
 }
->>>>>>> Stashed changes

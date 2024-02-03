@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/signikanegative"
-                    android:text="Agency space"
+                    android:text="Client Space"
                     android:textColor="#411D80"
 
                     android:textSize="22sp" />
@@ -56,11 +56,11 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
+        android:id="@+id/navigation_view2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/headermenuagency"
+        app:menu="@menu/headermenuclient"
         android:layout_marginStart="150dp"
         android:visibility="invisible"/>
 

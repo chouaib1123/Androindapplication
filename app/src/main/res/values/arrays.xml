@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fuel_type_array">
+        <item>Petrol</item>
+        <item>Diesel</item>
+        <item>Electric</item>
+        <!-- Add more fuel types as needed -->
+    </string-array>
+</resources>

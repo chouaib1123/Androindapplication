@@ -393,6 +393,7 @@
             android:textColor="@color/white"
             android:textSize="18dp"
             android:textColorHint="@color/white" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/registr"
                 android:layout_width="wrap_content"
@@ -403,7 +404,6 @@
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/exobold"
                 android:paddingHorizontal="40dp"
-
                 android:text="Register" />
 
 
