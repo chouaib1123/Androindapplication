@@ -67,7 +67,7 @@ public class login extends AppCompatActivity {
                                 if (getClientPassword != null && getClientPassword.equals(getTrimmedText(password))) {
                                     Toast.makeText(login.this, "Client Login successfully", Toast.LENGTH_SHORT).show();
                                     // Start the client activity
-                                    //startActivity(new Intent(login.this, ClientMainActivity.class));
+                                    startActivity(new Intent(login.this, clientmain.class));
                                     finish();
                                 } else {
                                     Toast.makeText(login.this, "Wrong Password for Client", Toast.LENGTH_SHORT).show();

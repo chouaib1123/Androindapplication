@@ -169,7 +169,6 @@ public class agencymain extends AppCompatActivity {
                     selectedTextView.setBackground(drawable);
                 } catch (IOException e) {
                     e.printStackTrace();
-
                 }
 
             }
