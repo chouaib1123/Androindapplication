@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,12 @@ import com.example.myapplication.Model.User;
 import com.example.myapplication.View.UserView;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.firebase.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -52,8 +59,9 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     //----------------------------
     private String username, email, password, vPassword, phoneNumber, city, address, firstName, lastName, birthDate;
     private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
-
     // images afterwards**
+
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://rentcarmobileapp-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
     //----------------------------
     @Override
@@ -259,35 +267,35 @@ public class clientregister extends AppCompatActivity implements OnClickListener
             getFieldsValues();
 
             if(checkFields()) {
-                //            String accountCreationDate = LocalDate.now().toString();
-                Date currentDate = new java.sql.Date(System.currentTimeMillis());
-                int userId;
+//                String accountCreationDate = LocalDate.now().toString();
+                String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
+//                int userId;
+//
+//                Client client = new Client(
+//                        username,
+//                        currentDate,
+//                        address,
+//                        city,
+//                        email,
+//                        password,
+//                        phoneNumber,
+//                        State.PENDING,
+//                        UserType.CLIENT,
+//                        firstName,
+//                        lastName,
+//                        Date.valueOf(birthDate),
+//                        cinNumber,
+//                        null,
+//                        null,
+//                        LicenseCategory.valueOf(drivingLicenceCategory),
+//                        Date.valueOf(drivingLicenseExpireDate),
+//                        Date.valueOf(drivingLicenseObtainDate),
+//                        null,
+//                        null
+//                );
 
-                Client client = new Client(
-                        username,
-                        currentDate,
-                        address,
-                        city,
-                        email,
-                        password,
-                        phoneNumber,
-                        State.PENDING,
-                        UserType.CLIENT,
-                        firstName,
-                        lastName,
-                        Date.valueOf(birthDate),
-                        cinNumber,
-                        null,
-                        null,
-                        LicenseCategory.valueOf(drivingLicenceCategory),
-                        Date.valueOf(drivingLicenseExpireDate),
-                        Date.valueOf(drivingLicenseObtainDate),
-                        null,
-                        null
-                );
-
-                UserController userController = new UserController(new UserDaoImp());
-                ClientController clientController = new ClientController(new ClientDaoImp());
+//                UserController userController = new UserController(new UserDaoImp());
+//                ClientController clientController = new ClientController(new ClientDaoImp());
 
 //                userController.registerUser(client.getUsername(),
 //                        client.getAccountCreationDate(),
@@ -314,6 +322,44 @@ public class clientregister extends AppCompatActivity implements OnClickListener
 //                        client.getLicenseVerso(),
 //                        userId
 //                );
+
+                databaseReference.child("Client").addListenerForSingleValueEvent(new ValueEventListener() {
+                    final UserViewImp userViewImp = new UserViewImp();
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
+                            userViewImp.OnRegisterError(clientregister.this, "Username already exists!");
+                        } else if(snapshot.hasChild(email.replaceAll("[\\[\\].#$/]", "_"))) {
+                            userViewImp.OnRegisterError(clientregister.this, "Email already exists!");
+                        } else if(snapshot.hasChild(cinNumber.replaceAll("[\\[\\].#$/]", "_"))) {
+                            userViewImp.OnRegisterError(clientregister.this, "CIN already exists!");
+                        } else {
+                            databaseReference.child("Client").child(username).child("accountCreationDate").setValue(currentDate);
+                            databaseReference.child("Client").child(username).child("address").setValue(address);
+                            databaseReference.child("Client").child(username).child("city").setValue(city);
+                            databaseReference.child("Client").child(username).child("email").setValue(email);
+                            databaseReference.child("Client").child(username).child("password").setValue(password);
+                            databaseReference.child("Client").child(username).child("phoneNumber").setValue(phoneNumber);
+                            databaseReference.child("Client").child(username).child("profileState").setValue(State.PENDING.toString());
+                            databaseReference.child("Client").child(username).child("userType").setValue(UserType.CLIENT.toString());
+                            databaseReference.child("Client").child(username).child("firstName").setValue(firstName);
+                            databaseReference.child("Client").child(username).child("lastName").setValue(lastName);
+                            databaseReference.child("Client").child(username).child("birthDate").setValue(birthDate);
+                            databaseReference.child("Client").child(username).child("cinNumber").setValue(cinNumber);
+                            databaseReference.child("Client").child(username).child("drivingLicenseCategory").setValue(drivingLicenceCategory);
+                            databaseReference.child("Client").child(username).child("drivingLicenseObtainDate").setValue(drivingLicenseObtainDate);
+                            databaseReference.child("Client").child(username).child("drivingLicenseExpireDate").setValue(drivingLicenseExpireDate);
+
+                            userViewImp.OnRegisterSuccess(clientregister.this, "Registered successfully");
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         }
     }
