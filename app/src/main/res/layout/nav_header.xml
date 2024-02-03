@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="300dp"
     android:orientation="vertical"
-    android:background="#6938C1"
+    android:background="@drawable/purplebackground"
     android:id="@+id/nav_header"
     >
     <ImageView
@@ -29,6 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Chouaib Mounssif"
+        android:fontFamily="@font/signikanegative"
+        android:textSize="25dp"
         android:textAlignment="center"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"

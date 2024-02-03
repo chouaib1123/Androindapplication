@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.*;
 
@@ -27,6 +28,7 @@ import java.util.Map;
 
 public class clientregister extends AppCompatActivity {
 
+    Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
 
     TextView selectedTextView;
     @Override
@@ -41,10 +43,11 @@ public class clientregister extends AppCompatActivity {
         TextView verso = findViewById(R.id.Cinverso);
         TextView dlrecto = findViewById(R.id.dlverso);
         TextView dlverso = findViewById(R.id.dlreco);
+
+        setOnClickListenerForTextView( dlverso);
         setOnClickListenerForTextView(recto);
-        setOnClickListenerForTextView(verso);
-        setOnClickListenerForTextView(dlrecto);
-        setOnClickListenerForTextView(dlverso);
+        setOnClickListenerForTextView( verso);
+        setOnClickListenerForTextView( dlrecto);
 
 
 
@@ -53,16 +56,16 @@ public class clientregister extends AppCompatActivity {
         setDatePickerDialog(mDisplayDate3);
 
 
+
     }
 
-    private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
 
 
     private void setOnClickListenerForTextView(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 selectedTextView = textView;
+                selectedTextView = textView;
                 startImagePickerForTextView();
             }
         });
@@ -82,18 +85,23 @@ public class clientregister extends AppCompatActivity {
             Uri uri = data.getData();
             if (uri != null) {
 
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        selectedTextView.setBackground(drawable);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
 
-                    }
+
+                    selectedTextView.setBackground(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
 
             }
         }
     }
+
+
+
     private void setDatePickerDialog(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +132,7 @@ public class clientregister extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

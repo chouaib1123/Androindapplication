@@ -8,8 +8,8 @@
 
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
 
-    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18dp</item>
+    <style name="Apptheme" parent="Theme.MyApplication">
+        <item name="android:fontFamily">@font/signikanegative</item>
     </style>
+
 </resources>
