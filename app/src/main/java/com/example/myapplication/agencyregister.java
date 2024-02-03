@@ -11,7 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -117,7 +119,6 @@ public class agencyregister extends AppCompatActivity {
 
 
     }
-    private Map<Integer, TextView> clickedTextViewMap = new HashMap<>();
 
 
     private void setOnClickListenerForTextView(final TextView textView) {
