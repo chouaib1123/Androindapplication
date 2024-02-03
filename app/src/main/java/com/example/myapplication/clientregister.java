@@ -27,11 +27,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -96,6 +99,98 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
 
         // images
+    }
+
+    private void checkFields() {
+        if(!isValidUsername(username)) {
+
+        }
+    }
+
+    private boolean isValidUsername(String username) {
+        return !username.isEmpty() && username.length() >= 4;
+    }
+
+    private boolean isValidEmail(String email) {
+        return !email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        return !password.isEmpty() && password.length() >= 6;
+    }
+
+    private boolean isValidVPassword(String password, String vPassword) {
+        return !vPassword.isEmpty() && password.equals(vPassword);
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        boolean startsWith0AndIs10 = phoneNumber.length() == 10 && phoneNumber.startsWith("0");
+        boolean startsWithPlusAndIs13 = phoneNumber.length() == 13 && phoneNumber.startsWith("+");
+        return !phoneNumber.isEmpty() && (startsWith0AndIs10 || startsWithPlusAndIs13);
+    }
+
+    private boolean isValidBirthDate(String birthDate) {
+        return !birthDate.isEmpty() && isAbove18(birthDate);
+    }
+
+    private boolean isAbove18(String birthDate) {
+        // Add your validation rules for the user being above 18
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            Date dateOfBirth = (Date) sdf.parse(birthDate);
+
+            // Get the current date
+            Calendar currentDate = Calendar.getInstance();
+            Date today = (Date) currentDate.getTime();
+
+            // Calculate age
+            currentDate.setTime(today);
+            long ageInMillis = 0;
+            if (dateOfBirth != null) {
+                ageInMillis = currentDate.getTimeInMillis() - dateOfBirth.getTime();
+            }
+            long years = ageInMillis / (365L * 24 * 60 * 60 * 1000);
+
+            // Check if the user is above 18
+            return years >= 18;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false; // Handle parsing exception or consider the user as not above 18
+        }
+    }
+
+    private boolean isValidDrivingLicenseCategory(String category) {
+        if(!category.isEmpty()) {
+            try {
+                LicenseCategory.valueOf(category);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValidDrivingLicenseObtainDate(String obtainDate) {
+        if (obtainDate.isEmpty()) {
+            return false;  // Obtain date cannot be empty
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDate obtainLocalDate = LocalDate.parse(obtainDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+
+        return !obtainLocalDate.isAfter(today);  // Obtain date should be at most today
+    }
+
+    public static boolean isValidDrivingLicenseExpireDate(String expireDate) {
+        if (expireDate.isEmpty()) {
+            return false;  // Expire date cannot be empty
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDate expireLocalDate = LocalDate.parse(expireDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+
+        return !expireLocalDate.isBefore(today);  // Expire date should be at least today
     }
 
     //----------------------------
