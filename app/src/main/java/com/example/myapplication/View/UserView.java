@@ -1,12 +1,10 @@
 package com.example.myapplication.View;
 
-public class UserView implements IUserView{
-    @Override
-    public void OnRegisterSuccess(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void OnRegisterError(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
+import android.content.Context;
+
+public interface UserView {
+
+    public void OnRegisterSuccess(Context context, String message);
+
+    public void OnRegisterError(Context context, String message);
 }

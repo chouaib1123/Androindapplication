@@ -15,6 +15,8 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.Model.User;
+import com.example.myapplication.View.UserView;
+import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import android.app.DatePickerDialog;
@@ -39,6 +41,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import android.view.View.OnClickListener;
@@ -94,17 +97,55 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         lastName = ((EditText)findViewById(R.id.lastname)).getText().toString().trim();
         birthDate = ((TextView)findViewById(R.id.birthdate)).getText().toString().trim();
         cinNumber = ((EditText)findViewById(R.id.Cinnumber)).getText().toString().trim();
-        drivingLicenceCategory = ((EditText)findViewById(R.id.categorieLicence)).getText().toString().trim();
+        drivingLicenceCategory = ((EditText)findViewById(R.id.categorieLicence)).getText().toString().trim().toUpperCase();
         drivingLicenseObtainDate = ((TextView)findViewById(R.id.DL_od)).getText().toString().trim();
         drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
 
         // images
     }
 
-    private void checkFields() {
-        if(!isValidUsername(username)) {
+    private boolean checkFields() {
+        UserViewImp userViewImp = new UserViewImp();
 
+        if(!isValidUsername(username)) {
+            userViewImp.OnRegisterError(this, "Invalid Username!");
+            return false;
+        } else if (!isValidEmail(email)) {
+            userViewImp.OnRegisterError(this, "Invalid Email Address!");
+            return false;
+        } else if (!isValidPassword(password)) {
+            userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
+            return false;
+        } else if (!isValidVPassword(password, vPassword)) {
+            userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
+            return false;
+        } else if (!isValidPhoneNumber(phoneNumber)) {
+            userViewImp.OnRegisterError(this, "Invalid Phone Number!");
+            return false;
+        }  else if (!isValidFirstName(firstName)) {
+            userViewImp.OnRegisterError(this, "Invalid First Name!");
+            return false;
+        } else if (!isValidLastName(lastName)) {
+            userViewImp.OnRegisterError(this, "Invalid Last Name!");
+            return false;
+        } else if (!isValidBirthDate(birthDate)) {
+            userViewImp.OnRegisterError(this, "Invalid Birth Date!");
+            return false;
+        } else if (!isValidCinNumber(cinNumber)) {
+            userViewImp.OnRegisterError(this, "Invalid CIN!");
+            return false;
+        } else if (!isValidDrivingLicenseCategory(drivingLicenceCategory)) {
+            userViewImp.OnRegisterError(this, "Invalid Driving License Category!");
+            return false;
+        } else if (!isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
+            userViewImp.OnRegisterError(this, "Invalid Driving License Obtain Date!");
+            return false;
+        } else if (!isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
+            userViewImp.OnRegisterError(this, "Invalid Driving License Expire Date!");
+            return false;
         }
+
+        return true;
     }
 
     private boolean isValidUsername(String username) {
@@ -129,33 +170,17 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         return !phoneNumber.isEmpty() && (startsWith0AndIs10 || startsWithPlusAndIs13);
     }
 
-    private boolean isValidBirthDate(String birthDate) {
-        return !birthDate.isEmpty() && isAbove18(birthDate);
-    }
-
-    private boolean isAbove18(String birthDate) {
-        // Add your validation rules for the user being above 18
+    public static boolean isValidBirthDate(String birthDate) {
+        // Assuming birthDate is in "yyyy-MM-dd" format
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            Date dateOfBirth = (Date) sdf.parse(birthDate);
-
-            // Get the current date
-            Calendar currentDate = Calendar.getInstance();
-            Date today = (Date) currentDate.getTime();
-
-            // Calculate age
-            currentDate.setTime(today);
-            long ageInMillis = 0;
-            if (dateOfBirth != null) {
-                ageInMillis = currentDate.getTimeInMillis() - dateOfBirth.getTime();
-            }
-            long years = ageInMillis / (365L * 24 * 60 * 60 * 1000);
-
-            // Check if the user is above 18
-            return years >= 18;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            java.util.Date date = sdf.parse(birthDate);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.YEAR, -18);  // Minimum age required, you can adjust this
+            return date != null && date.before(cal.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
-            return false; // Handle parsing exception or consider the user as not above 18
+            return false;  // Invalid date format
         }
     }
 
@@ -171,26 +196,58 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         return false;
     }
 
-    public static boolean isValidDrivingLicenseObtainDate(String obtainDate) {
+    private boolean isValidDrivingLicenseObtainDate(String obtainDate) {
+        // Check if the obtain date is not empty
         if (obtainDate.isEmpty()) {
-            return false;  // Obtain date cannot be empty
+            return false;
         }
 
-        LocalDate today = LocalDate.now();
-        LocalDate obtainLocalDate = LocalDate.parse(obtainDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        // Parse obtain date and current date
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            java.util.Date currentDate = new java.util.Date();
+            java.util.Date parsedObtainDate = sdf.parse(obtainDate);
 
-        return !obtainLocalDate.isAfter(today);  // Obtain date should be at most today
+            // Check if obtain date is at most today
+            if(parsedObtainDate == null) return false;
+            return !parsedObtainDate.after(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public static boolean isValidDrivingLicenseExpireDate(String expireDate) {
+    private boolean isValidDrivingLicenseExpireDate(String expireDate) {
+        // Check if the expire date is not empty
         if (expireDate.isEmpty()) {
-            return false;  // Expire date cannot be empty
+            return false;
         }
 
-        LocalDate today = LocalDate.now();
-        LocalDate expireLocalDate = LocalDate.parse(expireDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        // Parse expire date and current date
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            java.util.Date currentDate = new java.util.Date();
+            java.util.Date parsedExpireDate = sdf.parse(expireDate);
 
-        return !expireLocalDate.isBefore(today);  // Expire date should be at least today
+            // Check if expire date is at least today
+            if(parsedExpireDate == null) return false;
+            return !parsedExpireDate.before(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isValidFirstName(String firstName) {
+        return !firstName.isEmpty();
+    }
+
+    private boolean isValidLastName(String lastName) {
+        return !lastName.isEmpty();
+    }
+
+    private boolean isValidCinNumber(String cinNumber) {
+        return !cinNumber.isEmpty();
     }
 
     //----------------------------
@@ -201,61 +258,63 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         if(srcId == R.id.registr) {
             getFieldsValues();
 
-//            String accountCreationDate = LocalDate.now().toString();
-            Date currentDate = new java.sql.Date(System.currentTimeMillis());
-            int userId;
+            if(checkFields()) {
+                //            String accountCreationDate = LocalDate.now().toString();
+                Date currentDate = new java.sql.Date(System.currentTimeMillis());
+                int userId;
 
-            Client client = new Client(
-                    username,
-                    currentDate,
-                    address,
-                    city,
-                    email,
-                    password,
-                    phoneNumber,
-                    State.PENDING,
-                    UserType.CLIENT,
-                    firstName,
-                    lastName,
-                    Date.valueOf(birthDate),
-                    cinNumber,
-                    null,
-                    null,
-                    LicenseCategory.valueOf(drivingLicenceCategory),
-                    Date.valueOf(drivingLicenseExpireDate),
-                    Date.valueOf(drivingLicenseObtainDate),
-                    null,
-                    null
-            );
+                Client client = new Client(
+                        username,
+                        currentDate,
+                        address,
+                        city,
+                        email,
+                        password,
+                        phoneNumber,
+                        State.PENDING,
+                        UserType.CLIENT,
+                        firstName,
+                        lastName,
+                        Date.valueOf(birthDate),
+                        cinNumber,
+                        null,
+                        null,
+                        LicenseCategory.valueOf(drivingLicenceCategory),
+                        Date.valueOf(drivingLicenseExpireDate),
+                        Date.valueOf(drivingLicenseObtainDate),
+                        null,
+                        null
+                );
 
-            UserController userController = new UserController(new UserDaoImp());
-            ClientController clientController = new ClientController(new ClientDaoImp());
+                UserController userController = new UserController(new UserDaoImp());
+                ClientController clientController = new ClientController(new ClientDaoImp());
 
-            userController.registerUser(client.getUsername(),
-                    client.getAccountCreationDate(),
-                    client.getAddress(),
-                    client.getCity(),
-                    client.getEmail(),
-                    client.getUserPassword(),
-                    client.getUserPhoneNumber(),
-                    client.getUserType()
-            );
+//                userController.registerUser(client.getUsername(),
+//                        client.getAccountCreationDate(),
+//                        client.getAddress(),
+//                        client.getCity(),
+//                        client.getEmail(),
+//                        client.getUserPassword(),
+//                        client.getUserPhoneNumber(),
+//                        client.getUserType()
+//                );
 
-            userId = userController.getUserByUsername(client.getUsername()).getUserId();
+//                userId = userController.getUserByUsername(client.getUsername()).getUserId();
 
-            clientController.registerClient(client.getFirstName(),
-                    client.getLastName(),
-                    client.getBirthDate(),
-                    client.getCin(),
-                    client.getCinRecto(),
-                    client.getCinVerso(),
-                    client.getLicenseCategory(),
-                    client.getLicenseExpireDate(),
-                    client.getLicenseObtainDate(),
-                    client.getLicenseRecto(),
-                    client.getLicenseVerso(),
-                    userId
-            );
+//                clientController.registerClient(client.getFirstName(),
+//                        client.getLastName(),
+//                        client.getBirthDate(),
+//                        client.getCin(),
+//                        client.getCinRecto(),
+//                        client.getCinVerso(),
+//                        client.getLicenseCategory(),
+//                        client.getLicenseExpireDate(),
+//                        client.getLicenseObtainDate(),
+//                        client.getLicenseRecto(),
+//                        client.getLicenseVerso(),
+//                        userId
+//                );
+            }
         }
     }
 
