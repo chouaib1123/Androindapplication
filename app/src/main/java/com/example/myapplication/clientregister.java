@@ -68,7 +68,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
     private TextView cinRecto, cinVerso, drivingLicenseRecto, drivingLicenseVerso;
 
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://rentcarmobileapp-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();

@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "647217251340",
-    "project_id": "rentcarmobileapp",
-    "storage_bucket": "rentcarmobileapp.appspot.com"
+    "project_number": "519060343455",
+    "firebase_url": "https://clientregister-c1856-default-rtdb.firebaseio.com",
+    "project_id": "clientregister-c1856",
+    "storage_bucket": "clientregister-c1856.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:647217251340:android:89e89f75c23f40c3421a29",
+        "mobilesdk_app_id": "1:519060343455:android:fee543b4e35591a074f0aa",
         "android_client_info": {
           "package_name": "com.example.myapplication"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyALI3qAaMYHxQeXApc8apL92-S2Gjtnz68"
+          "current_key": "AIzaSyAlFv_VcjTSwVetKy7m_EMsTgszb5DRFS0"
         }
       ],
       "services": {
