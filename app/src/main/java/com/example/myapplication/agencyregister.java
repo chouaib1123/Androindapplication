@@ -14,7 +14,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DataSnapshot;
@@ -30,9 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class agencyregister extends AppCompatActivity {
-<<<<<<< Updated upstream
     TextView selectedTextView;
-=======
+
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -42,26 +43,18 @@ public class agencyregister extends AppCompatActivity {
     Button registerAgency;
 
 
-
-
-    TextView selectedTextView;
-
     @SuppressLint("MissingInflatedId")
->>>>>>> Stashed changes
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agencyregister);
-<<<<<<< Updated upstream
-        TextView cnss = findViewById(R.id.cnssreg);
-        setOnClickListenerForTextView(cnss);
-=======
 
         agencyName = findViewById(R.id.username);
         email  = findViewById(R.id.gmail);
         password = findViewById(R.id.password);
         vPassword = findViewById(R.id.vpassword);
-        managerFullName = findViewById(R.id.fullname);
+        managerFullName = findViewById(R.id.Managername);
         City = findViewById(R.id.ville);
         agencyFullAddress = findViewById(R.id.adresse);
         patentNumber = findViewById(R.id.patent_number);
@@ -115,7 +108,6 @@ public class agencyregister extends AppCompatActivity {
 
             }
         });
->>>>>>> Stashed changes
 
 
     }
@@ -157,8 +149,6 @@ public class agencyregister extends AppCompatActivity {
             }
         }
     }
-<<<<<<< Updated upstream
-=======
 
     private String getTrimmedText(EditText editText) {
         return editText.getText().toString().trim();
@@ -167,5 +157,4 @@ public class agencyregister extends AppCompatActivity {
     {
         return getTrimmedText(vPassword);
     }
->>>>>>> Stashed changes
 }
