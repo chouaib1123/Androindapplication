@@ -10,6 +10,7 @@ import com.example.myapplication.Controller.ClientController;
 import com.example.myapplication.Controller.UserController;
 import com.example.myapplication.DAO.ClientDaoImp;
 import com.example.myapplication.DAO.UserDaoImp;
+import com.example.myapplication.Extra.FieldsValidation;
 import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Extra.LicenseCategory;
 import com.example.myapplication.Extra.State;
@@ -95,11 +96,8 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         setDatePickerDialog(mDisplayDate2);
         setDatePickerDialog(mDisplayDate3);
 
-        //----------------------------
         Button registerClientButton = (Button) findViewById(R.id.registr);
-
         registerClientButton.setOnClickListener(this);
-        //----------------------------
 
     }
 
@@ -118,7 +116,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         drivingLicenceCategory = ((EditText)findViewById(R.id.categorieLicence)).getText().toString().trim().toUpperCase();
         drivingLicenseObtainDate = ((TextView)findViewById(R.id.DL_od)).getText().toString().trim();
         drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
-
         cinRecto = (TextView) findViewById(R.id.Cinreco);
         cinVerso = (TextView) findViewById(R.id.Cinverso);
         drivingLicenseRecto = (TextView) findViewById(R.id.dlreco);
@@ -128,40 +125,40 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     private boolean checkFields() {
         UserViewImp userViewImp = new UserViewImp();
 
-        if(!isValidUsername(username)) {
+        if(!FieldsValidation.isValidUsername(username)) {
             userViewImp.OnRegisterError(this, "Invalid Username!");
             return false;
-        } else if (!isValidEmail(email)) {
+        } else if (!FieldsValidation.isValidEmail(email)) {
             userViewImp.OnRegisterError(this, "Invalid Email Address!");
             return false;
-        } else if (!isValidPassword(password)) {
+        } else if (!FieldsValidation.isValidPassword(password)) {
             userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
             return false;
-        } else if (!isValidVPassword(password, vPassword)) {
+        } else if (!FieldsValidation.isValidVPassword(password, vPassword)) {
             userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
             return false;
-        } else if (!isValidPhoneNumber(phoneNumber)) {
+        } else if (!FieldsValidation.isValidPhoneNumber(phoneNumber)) {
             userViewImp.OnRegisterError(this, "Invalid Phone Number!");
             return false;
-        }  else if (!isValidFirstName(firstName)) {
+        }  else if (!FieldsValidation.isValidFirstName(firstName)) {
             userViewImp.OnRegisterError(this, "Invalid First Name!");
             return false;
-        } else if (!isValidLastName(lastName)) {
+        } else if (!FieldsValidation.isValidLastName(lastName)) {
             userViewImp.OnRegisterError(this, "Invalid Last Name!");
             return false;
-        } else if (!isValidBirthDate(birthDate)) {
+        } else if (!FieldsValidation.isValidBirthDate(birthDate)) {
             userViewImp.OnRegisterError(this, "Invalid Birth Date!");
             return false;
-        } else if (!isValidCinNumber(cinNumber)) {
+        } else if (!FieldsValidation.isValidCinNumber(cinNumber)) {
             userViewImp.OnRegisterError(this, "Invalid CIN!");
             return false;
-        } else if (!isValidDrivingLicenseCategory(drivingLicenceCategory)) {
+        } else if (!FieldsValidation.isValidDrivingLicenseCategory(drivingLicenceCategory)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Category!");
             return false;
-        } else if (!isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
+        } else if (!FieldsValidation.isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Obtain Date!");
             return false;
-        } else if (!isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
+        } else if (!FieldsValidation.isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Expire Date!");
             return false;
         }
@@ -169,109 +166,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         return true;
     }
 
-    private boolean isValidUsername(String username) {
-        return !username.isEmpty() && username.length() >= 4;
-    }
-
-    private boolean isValidEmail(String email) {
-        return !email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private boolean isValidPassword(String password) {
-        return !password.isEmpty() && password.length() >= 6;
-    }
-
-    private boolean isValidVPassword(String password, String vPassword) {
-        return !vPassword.isEmpty() && password.equals(vPassword);
-    }
-
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        boolean startsWith0AndIs10 = phoneNumber.length() == 10 && phoneNumber.startsWith("0");
-        boolean startsWithPlusAndIs13 = phoneNumber.length() == 13 && phoneNumber.startsWith("+");
-        return !phoneNumber.isEmpty() && (startsWith0AndIs10 || startsWithPlusAndIs13);
-    }
-
-    public static boolean isValidBirthDate(String birthDate) {
-        // Assuming birthDate is in "yyyy-MM-dd" format
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            java.util.Date date = sdf.parse(birthDate);
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.YEAR, -18);  // Minimum age required, you can adjust this
-            return date != null && date.before(cal.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;  // Invalid date format
-        }
-    }
-
-    private boolean isValidDrivingLicenseCategory(String category) {
-        if(!category.isEmpty()) {
-            try {
-                LicenseCategory.valueOf(category);
-                return true;
-            } catch (Exception ex) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    private boolean isValidDrivingLicenseObtainDate(String obtainDate) {
-        // Check if the obtain date is not empty
-        if (obtainDate.isEmpty()) {
-            return false;
-        }
-
-        // Parse obtain date and current date
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            java.util.Date currentDate = new java.util.Date();
-            java.util.Date parsedObtainDate = sdf.parse(obtainDate);
-
-            // Check if obtain date is at most today
-            if(parsedObtainDate == null) return false;
-            return !parsedObtainDate.after(currentDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private boolean isValidDrivingLicenseExpireDate(String expireDate) {
-        // Check if the expire date is not empty
-        if (expireDate.isEmpty()) {
-            return false;
-        }
-
-        // Parse expire date and current date
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            java.util.Date currentDate = new java.util.Date();
-            java.util.Date parsedExpireDate = sdf.parse(expireDate);
-
-            // Check if expire date is at least today
-            if(parsedExpireDate == null) return false;
-            return !parsedExpireDate.before(currentDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private boolean isValidFirstName(String firstName) {
-        return !firstName.isEmpty();
-    }
-
-    private boolean isValidLastName(String lastName) {
-        return !lastName.isEmpty();
-    }
-
-    private boolean isValidCinNumber(String cinNumber) {
-        return !cinNumber.isEmpty();
-    }
-
-    //----------------------------
     @Override
     public void onClick(View view) {
         int srcId = view.getId();
@@ -280,7 +174,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
             getFieldsValues();
 
             if(checkFields()) {
-//                String accountCreationDate = LocalDate.now().toString();
                 String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
 
                 databaseReference.child("Client").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -290,26 +183,24 @@ public class clientregister extends AppCompatActivity implements OnClickListener
 
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
                             userViewImp.OnRegisterError(clientregister.this, "Username already exists!");
-//                        } else if(snapshot.hasChild(email.replaceAll("[\\[\\].#$/]", "_"))) {             // can't force the uniqueness of a field except the identifier
-//                            userViewImp.OnRegisterError(clientregister.this, "Email already exists!");
-//                        } else if(snapshot.hasChild(cinNumber.replaceAll("[\\[\\].#$/]", "_"))) {
-//                            userViewImp.OnRegisterError(clientregister.this, "CIN already exists!");
                         } else {
-                            databaseReference.child("Client").child(username).child("accountCreationDate").setValue(currentDate);
-                            databaseReference.child("Client").child(username).child("address").setValue(address);
-                            databaseReference.child("Client").child(username).child("city").setValue(city);
-                            databaseReference.child("Client").child(username).child("email").setValue(email);
-                            databaseReference.child("Client").child(username).child("password").setValue(password);
-                            databaseReference.child("Client").child(username).child("phoneNumber").setValue(phoneNumber);
-                            databaseReference.child("Client").child(username).child("profileState").setValue(State.PENDING.toString());
-                            databaseReference.child("Client").child(username).child("userType").setValue(UserType.CLIENT.toString());
-                            databaseReference.child("Client").child(username).child("firstName").setValue(firstName);
-                            databaseReference.child("Client").child(username).child("lastName").setValue(lastName);
-                            databaseReference.child("Client").child(username).child("birthDate").setValue(birthDate);
-                            databaseReference.child("Client").child(username).child("cinNumber").setValue(cinNumber);
-                            databaseReference.child("Client").child(username).child("drivingLicenseCategory").setValue(drivingLicenceCategory);
-                            databaseReference.child("Client").child(username).child("drivingLicenseObtainDate").setValue(drivingLicenseObtainDate);
-                            databaseReference.child("Client").child(username).child("drivingLicenseExpireDate").setValue(drivingLicenseExpireDate);
+                            DatabaseReference identifier = databaseReference.child("Client").child(username);
+
+                            identifier.child("accountCreationDate").setValue(currentDate);
+                            identifier.child("address").setValue(address);
+                            identifier.child("city").setValue(city);
+                            identifier.child("email").setValue(email);
+                            identifier.child("password").setValue(password);
+                            identifier.child("phoneNumber").setValue(phoneNumber);
+                            identifier.child("profileState").setValue(State.PENDING.toString());
+                            identifier.child("userType").setValue(UserType.CLIENT.toString());
+                            identifier.child("firstName").setValue(firstName);
+                            identifier.child("lastName").setValue(lastName);
+                            identifier.child("birthDate").setValue(birthDate);
+                            identifier.child("cinNumber").setValue(cinNumber);
+                            identifier.child("drivingLicenseCategory").setValue(drivingLicenceCategory);
+                            identifier.child("drivingLicenseObtainDate").setValue(drivingLicenseObtainDate);
+                            identifier.child("drivingLicenseExpireDate").setValue(drivingLicenseExpireDate);
 
                             uploadImagesToFirebaseStorage();
 
@@ -363,18 +254,10 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     }
 
     private void uploadImagesToFirebaseStorage() {
-
-        String cinRectoFilename = "cin_recto.png";
-        String cinVersoFilename = "cin_verso.png";
-        String drivingLicenseRectoFilename = "driving_license_recto.png";
-        String drivingLicenseVersoFilename = "driving_license_verso.png";
-
         // Iterate through the textViewImages map
         for (Map.Entry<TextView, Pair<Uri, BitmapDrawable>> entry : textViewImages.entrySet()) {
             final TextView textView = entry.getKey();
             Pair<Uri, BitmapDrawable> imageData = entry.getValue();
-
-            final Uri uri = imageData.first;
             final BitmapDrawable drawable = imageData.second;
 
             try {
@@ -389,7 +272,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
 
                 // Get a reference to the Firebase Storage location
                 final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + username + '/' + filename);
-                //final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString() + ".png");
                 // Upload the byte array to Firebase Storage
                 storageRef.putBytes(byteArray)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -426,8 +308,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         // Default filename
         return "default.png";
     }
-
-    //----------------------------
 
     private void setDatePickerDialog(final TextView textView) {
         textView.setOnClickListener(new View.OnClickListener() {
