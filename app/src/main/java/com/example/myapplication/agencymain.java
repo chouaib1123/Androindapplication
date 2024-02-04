@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,10 +23,23 @@ import android.widget.*;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class agencymain extends AppCompatActivity {
+    //------------
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
+    //----------
+
     private LinearLayout containerLayout;
     TextView selectedTextView;
     private ScrollView scrollView;
@@ -35,8 +49,6 @@ public class agencymain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agencymain);
         NavigationView nv = findViewById(R.id.navigation_view);
-
-
 
         ImageView menu = findViewById(R.id.menu_icon);
         View headerView = nv.getHeaderView(0);
@@ -135,6 +147,17 @@ public class agencymain extends AppCompatActivity {
         if(layoutResId == R.layout.carinsert){
             TextView Carpic = findViewById(R.id.carpicture);
             setOnClickListenerForTextView( Carpic);
+
+            EditText matricule ,carColor , fuelType ;
+
+            Button addCar;
+            addCar = findViewById(R.id.button_add_car);
+            addCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
 
     }

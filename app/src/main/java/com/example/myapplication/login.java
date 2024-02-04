@@ -47,71 +47,19 @@ public class login extends AppCompatActivity {
                 OpenActivity2();
             }
         });
-        login.setOnClickListener(new View.OnClickListener()
-        {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view){
-                if(getTrimmedText(username).isEmpty() || getTrimmedText(password).isEmpty()){
+            public void onClick(View view) {
+                String enteredUsername = getTrimmedText(username);
+                String enteredPassword = getTrimmedText(password);
+
+                if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
                     Toast.makeText(login.this, "Please enter your username and password", Toast.LENGTH_SHORT).show();
                 } else {
-                    DatabaseReference clientsRef = databaseReference.child("Clients");
-                    DatabaseReference agencyRef = databaseReference.child("Agency");
-
-                    clientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot clientSnapshot) {
-                            if (clientSnapshot.hasChild(getTrimmedText(username))) {
-                                // Handle client login
-                                final String getClientPassword = clientSnapshot.child(getTrimmedText(username)).child("Password").getValue(String.class);
-
-                                if (getClientPassword != null && getClientPassword.equals(getTrimmedText(password))) {
-                                    Toast.makeText(login.this, "Client Login successfully", Toast.LENGTH_SHORT).show();
-                                    // Start the client activity
-                                    startActivity(new Intent(login.this, clientmain.class));
-                                    finish();
-                                } else {
-                                    Toast.makeText(login.this, "Wrong Password for Client", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // If not a client, check agency login
-                                agencyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot agencySnapshot) {
-                                        if (agencySnapshot.hasChild(getTrimmedText(agencyName))) {
-                                            // Handle agency login
-                                            final String getAgencyPassword = agencySnapshot.child(getTrimmedText(username)).child("Password").getValue(String.class);
-
-                                            if (getAgencyPassword != null && getAgencyPassword.equals(getTrimmedText(password))) {
-                                                Toast.makeText(login.this, "Agency Login successfully", Toast.LENGTH_SHORT).show();
-                                                // Start the agency activity
-                                                startActivity(new Intent(login.this, agencymain.class));
-                                                Intent intent = new Intent(login.this, agencymain.class);
-                                                intent.putExtra("Agency Name", getTrimmedText(agencyName)); // Pass the username to AgencMainActivity
-                                                startActivity(intent);
-                                                finish();
-                                            } else {
-                                                Toast.makeText(login.this, "Wrong Password for Agency", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(login.this, "Invalid username", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError agencyError) {
-                                        Toast.makeText(login.this, "Error checking Agency: " + agencyError.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError clientError) {
-                            Toast.makeText(login.this, "Error checking Clients: " + clientError.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    DatabaseReference clientsRef = databaseReference.child("Client");
+                    checkClientLogin(clientsRef, enteredUsername, enteredPassword);
+                    checkAgencyLogin(enteredUsername , enteredPassword);
                 }
-
             }
         });
     }
@@ -132,5 +80,66 @@ public class login extends AppCompatActivity {
 
     public String getTrimmedText(EditText editText) {
         return editText.getText().toString().trim();
+    }
+
+    private void checkClientLogin(DatabaseReference clientsRef, String username, String password) {
+        clientsRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot clientSnapshot) {
+                if (clientSnapshot.exists()) {
+                    String clientPassword = clientSnapshot.child("password").getValue(String.class);
+                    if (clientPassword != null && clientPassword.equals(password)) {
+                        handleClientLoginSuccess();
+                    } else {
+                        Toast.makeText(login.this, "Wrong Password for Client", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    checkAgencyLogin(username, password);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(login.this, "Error checking Clients: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkAgencyLogin(String username, String password) {
+        DatabaseReference agencyRef = databaseReference.child("Agency");
+        agencyRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot agencySnapshot) {
+                if (agencySnapshot.exists()) {
+                    String agencyPassword = agencySnapshot.child("Password").getValue(String.class);
+                    if (agencyPassword != null && agencyPassword.equals(password)) {
+                        handleAgencyLoginSuccess();
+                    } else {
+                        Toast.makeText(login.this, "Wrong Password for Agency", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(login.this, "Invalid username", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(login.this, "Error checking Agency: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleClientLoginSuccess() {
+        Toast.makeText(login.this, "Client Login successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(login.this, clientmain.class));
+        finish();
+    }
+
+    private void handleAgencyLoginSuccess() {
+        Toast.makeText(login.this, "Agency Login successfully", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(login.this, agencymain.class);
+        intent.putExtra("Agency Name", getTrimmedText(agencyName));
+        startActivity(intent);
+        finish();
     }
 }
