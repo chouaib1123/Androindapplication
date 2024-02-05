@@ -62,13 +62,13 @@ public class agencymain extends AppCompatActivity {
 
         switchToLayout(R.layout.postedcars);
 
-        menu.setOnClickListener(new View.OnClickListener()
-        {
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view){
+            public void onClick(View view) {
                 openMenu();
             }
         });
+
         backbtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -107,6 +107,23 @@ public class agencymain extends AppCompatActivity {
         // Apply fade animation
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         nv.startAnimation(fadeIn);
+        setUpAgencyName();
+    }
+
+    public void setUpAgencyName(){
+
+        // Get the agency name from the Intent
+        String agencyName = getIntent().getStringExtra("Agency Name");
+
+        // Find the TextView
+        NavigationView nv = findViewById(R.id.navigation_view);
+        View headerView = nv.getHeaderView(0);
+        TextView agencyNameTextView = headerView.findViewById(R.id.username);
+
+        // Set the agency name in the TextView
+        if (agencyName != null && !agencyName.isEmpty()) {
+            agencyNameTextView.setText(agencyName);
+        }
     }
 
     public void closeMenu() {

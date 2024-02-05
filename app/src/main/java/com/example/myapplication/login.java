@@ -114,6 +114,7 @@ public class login extends AppCompatActivity {
                     String agencyPassword = agencySnapshot.child("Password").getValue(String.class);
                     if (agencyPassword != null && agencyPassword.equals(password)) {
                         handleAgencyLoginSuccess();
+
                     } else {
                         Toast.makeText(login.this, "Wrong Password for Agency", Toast.LENGTH_SHORT).show();
                     }
