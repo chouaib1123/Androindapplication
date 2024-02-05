@@ -38,7 +38,7 @@ import android.view.View.OnClickListener;
 public class agencyregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    private String agencyName, email, password, vPassword, managerFullName, phoneNumber, City, agencyFullAddress, patentNumber;
+    private String username, email, password, vPassword, managerFullName, agencyName, phoneNumber, City, agencyFullAddress, patentNumber;
 
     @SuppressLint("MissingInflatedId")
 
@@ -52,12 +52,13 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
     }
 
     private void getFieldsValues() {
-        agencyName = Functions.getEditTextValue((EditText)findViewById(R.id.username));
+        username = Functions.getEditTextValue((EditText)findViewById(R.id.username));
         email = Functions.getEditTextValue((EditText)findViewById(R.id.gmail));
         password = Functions.getEditTextValue((EditText)findViewById(R.id.password));
         vPassword = Functions.getEditTextValue((EditText)findViewById(R.id.vpassword));
         phoneNumber = Functions.getEditTextValue((EditText)findViewById(R.id.phone));
         managerFullName = ((EditText)findViewById(R.id.Managername)).getText().toString();
+        agencyName = ((EditText)findViewById(R.id.agencyName)).getText().toString();
         City = Functions.getEditTextValue((EditText)findViewById(R.id.ville));
         agencyFullAddress = Functions.getEditTextValue((EditText)findViewById(R.id.adresse));
         patentNumber = Functions.getEditTextValue((EditText)findViewById(R.id.patent_number));
@@ -66,7 +67,7 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
     private boolean checkFields() {
         UserViewImp userViewImp = new UserViewImp();
 
-        if(!Functions.isValidUsername(agencyName)) {
+        if(!Functions.isValidUsername(username)) {
             userViewImp.OnRegisterError(this, "Invalid Username!");
             return false;
         } else if (!Functions.isValidEmail(email)) {
@@ -84,7 +85,10 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
         }  else if (!Functions.isValidFullName(managerFullName)) {
             userViewImp.OnRegisterError(this, "Invalid Manager Name!");
             return false;
-        } else if (!Functions.isValidCity(City)) {
+        } else if (!Functions.isValidAgencyName(agencyName)) {
+            userViewImp.OnRegisterError(this, "Invalid Agency Name!");
+            return false;
+        }else if (!Functions.isValidCity(City)) {
             userViewImp.OnRegisterError(this, "Invalid City!");
             return false;
         } else if (!Functions.isValidFullAddress(agencyFullAddress)) {
@@ -145,20 +149,21 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                 databaseReference.child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.hasChild(agencyName.replaceAll("[\\[\\].#$/]", "_"))){
-                            Toast.makeText(agencyregister.this, "Agency name already registered", Toast.LENGTH_SHORT).show();
+                        if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))){
+                            Toast.makeText(agencyregister.this, "Username already registered", Toast.LENGTH_SHORT).show();
                         } else {
-                            DatabaseReference identifier = databaseReference.child("Agency").child(agencyName);
+                            DatabaseReference identifier = databaseReference.child("Agency").child(username);
 
                             identifier.child("Email").setValue(email);
                             identifier.child("Password").setValue(password);
-                            identifier.child("Agency manager Full Name").setValue(managerFullName);
+                            identifier.child("Agency Manager Full Name").setValue(managerFullName);
+                            identifier.child("Agency Name").setValue(agencyName);
                             identifier.child("City").setValue(City);
                             identifier.child("Agency Address").setValue(agencyFullAddress);
                             identifier.child("Phone Number").setValue(phoneNumber);
                             identifier.child("Patent Number").setValue(patentNumber);
 
-                            Toast.makeText(agencyregister.this, "registration successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(agencyregister.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }

@@ -119,6 +119,10 @@ public interface Functions {
         return !managerFullName.isEmpty() && managerFullName.matches("[a-zA-Z\\s'-]+") && managerFullName.length() >= 2;
     }
 
+    static boolean isValidAgencyName(String agencyName) {
+        return !agencyName.isEmpty() && agencyName.matches("[a-zA-Z\\s'-]+") && agencyName.length() >= 2;
+    }
+
     static boolean isValidCity(String city) {
         return !city.isEmpty() && city.matches("[a-zA-Z\\s'-]+") && city.length() >= 2;
     }
