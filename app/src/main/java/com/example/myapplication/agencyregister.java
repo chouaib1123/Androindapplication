@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.Extra.FieldsValidation;
+import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DataSnapshot;
@@ -52,45 +52,45 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
     }
 
     private void getFieldsValues() {
-        agencyName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.username));
-        email = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.gmail));
-        password = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.password));
-        vPassword = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.vpassword));
-        phoneNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.phone));
+        agencyName = Functions.getEditTextValue((EditText)findViewById(R.id.username));
+        email = Functions.getEditTextValue((EditText)findViewById(R.id.gmail));
+        password = Functions.getEditTextValue((EditText)findViewById(R.id.password));
+        vPassword = Functions.getEditTextValue((EditText)findViewById(R.id.vpassword));
+        phoneNumber = Functions.getEditTextValue((EditText)findViewById(R.id.phone));
         managerFullName = ((EditText)findViewById(R.id.Managername)).getText().toString();
-        City = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.ville));
-        agencyFullAddress = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.adresse));
-        patentNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.patent_number));
+        City = Functions.getEditTextValue((EditText)findViewById(R.id.ville));
+        agencyFullAddress = Functions.getEditTextValue((EditText)findViewById(R.id.adresse));
+        patentNumber = Functions.getEditTextValue((EditText)findViewById(R.id.patent_number));
     }
 
     private boolean checkFields() {
         UserViewImp userViewImp = new UserViewImp();
 
-        if(!FieldsValidation.isValidUsername(agencyName)) {
+        if(!Functions.isValidUsername(agencyName)) {
             userViewImp.OnRegisterError(this, "Invalid Username!");
             return false;
-        } else if (!FieldsValidation.isValidEmail(email)) {
+        } else if (!Functions.isValidEmail(email)) {
             userViewImp.OnRegisterError(this, "Invalid Email Address!");
             return false;
-        } else if (!FieldsValidation.isValidPassword(password)) {
+        } else if (!Functions.isValidPassword(password)) {
             userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
             return false;
-        } else if (!FieldsValidation.isValidVPassword(password, vPassword)) {
+        } else if (!Functions.isValidVPassword(password, vPassword)) {
             userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
             return false;
-        } else if (!FieldsValidation.isValidPhoneNumber(phoneNumber)) {
+        } else if (!Functions.isValidPhoneNumber(phoneNumber)) {
             userViewImp.OnRegisterError(this, "Invalid Phone Number!");
             return false;
-        }  else if (!FieldsValidation.isValidFullName(managerFullName)) {
+        }  else if (!Functions.isValidFullName(managerFullName)) {
             userViewImp.OnRegisterError(this, "Invalid Manager Name!");
             return false;
-        } else if (!FieldsValidation.isValidCity(City)) {
+        } else if (!Functions.isValidCity(City)) {
             userViewImp.OnRegisterError(this, "Invalid City!");
             return false;
-        } else if (!FieldsValidation.isValidFullAddress(agencyFullAddress)) {
+        } else if (!Functions.isValidFullAddress(agencyFullAddress)) {
             userViewImp.OnRegisterError(this, "Invalid Address!");
             return false;
-        } else if (!FieldsValidation.isValidPatentNumber(patentNumber)) {
+        } else if (!Functions.isValidPatentNumber(patentNumber)) {
             userViewImp.OnRegisterError(this, "Invalid Patent Number!");
             return false;
         }

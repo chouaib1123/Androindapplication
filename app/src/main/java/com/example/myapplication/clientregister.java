@@ -10,7 +10,6 @@ import com.example.myapplication.Controller.ClientController;
 import com.example.myapplication.Controller.UserController;
 import com.example.myapplication.DAO.ClientDaoImp;
 import com.example.myapplication.DAO.UserDaoImp;
-import com.example.myapplication.Extra.FieldsValidation;
 import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Extra.LicenseCategory;
 import com.example.myapplication.Extra.State;
@@ -97,20 +96,20 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     }
 
     private void getFieldsValues() {
-        username = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.username));
-        email = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.gmail));
-        password = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.password));
-        vPassword = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.vpassword));
-        phoneNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.phone));
-        city = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.ville));
-        address = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.adresse));
-        firstName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.firstname));
-        lastName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.lastname));
-        birthDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.birthdate));
-        cinNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.Cinnumber));
-        drivingLicenceCategory = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.categorieLicence)).toUpperCase();
-        drivingLicenseObtainDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.DL_od));
-        drivingLicenseExpireDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.DL_ed));
+        username = Functions.getEditTextValue((EditText)findViewById(R.id.username));
+        email = Functions.getEditTextValue((EditText)findViewById(R.id.gmail));
+        password = Functions.getEditTextValue((EditText)findViewById(R.id.password));
+        vPassword = Functions.getEditTextValue((EditText)findViewById(R.id.vpassword));
+        phoneNumber = Functions.getEditTextValue((EditText)findViewById(R.id.phone));
+        city = Functions.getEditTextValue((EditText)findViewById(R.id.ville));
+        address = Functions.getEditTextValue((EditText)findViewById(R.id.adresse));
+        firstName = Functions.getEditTextValue((EditText)findViewById(R.id.firstname));
+        lastName = Functions.getEditTextValue((EditText)findViewById(R.id.lastname));
+        birthDate = Functions.getEditTextValue((TextView)findViewById(R.id.birthdate));
+        cinNumber = Functions.getEditTextValue((EditText)findViewById(R.id.Cinnumber));
+        drivingLicenceCategory = Functions.getEditTextValue((EditText)findViewById(R.id.categorieLicence)).toUpperCase();
+        drivingLicenseObtainDate = Functions.getEditTextValue((TextView)findViewById(R.id.DL_od));
+        drivingLicenseExpireDate = Functions.getEditTextValue((TextView)findViewById(R.id.DL_ed));
         cinRecto = (TextView) findViewById(R.id.Cinreco);
         cinVerso = (TextView) findViewById(R.id.Cinverso);
         drivingLicenseRecto = (TextView) findViewById(R.id.dlreco);
@@ -120,40 +119,40 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     private boolean checkFields() {
         UserViewImp userViewImp = new UserViewImp();
 
-        if(!FieldsValidation.isValidUsername(username)) {
+        if(!Functions.isValidUsername(username)) {
             userViewImp.OnRegisterError(this, "Invalid Username!");
             return false;
-        } else if (!FieldsValidation.isValidEmail(email)) {
+        } else if (!Functions.isValidEmail(email)) {
             userViewImp.OnRegisterError(this, "Invalid Email Address!");
             return false;
-        } else if (!FieldsValidation.isValidPassword(password)) {
+        } else if (!Functions.isValidPassword(password)) {
             userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
             return false;
-        } else if (!FieldsValidation.isValidVPassword(password, vPassword)) {
+        } else if (!Functions.isValidVPassword(password, vPassword)) {
             userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
             return false;
-        } else if (!FieldsValidation.isValidPhoneNumber(phoneNumber)) {
+        } else if (!Functions.isValidPhoneNumber(phoneNumber)) {
             userViewImp.OnRegisterError(this, "Invalid Phone Number!");
             return false;
-        }  else if (!FieldsValidation.isValidFirstName(firstName)) {
+        }  else if (!Functions.isValidFirstName(firstName)) {
             userViewImp.OnRegisterError(this, "Invalid First Name!");
             return false;
-        } else if (!FieldsValidation.isValidLastName(lastName)) {
+        } else if (!Functions.isValidLastName(lastName)) {
             userViewImp.OnRegisterError(this, "Invalid Last Name!");
             return false;
-        } else if (!FieldsValidation.isValidBirthDate(birthDate)) {
+        } else if (!Functions.isValidBirthDate(birthDate)) {
             userViewImp.OnRegisterError(this, "Invalid Birth Date!");
             return false;
-        } else if (!FieldsValidation.isValidCinNumber(cinNumber)) {
+        } else if (!Functions.isValidCinNumber(cinNumber)) {
             userViewImp.OnRegisterError(this, "Invalid CIN!");
             return false;
-        } else if (!FieldsValidation.isValidDrivingLicenseCategory(drivingLicenceCategory)) {
+        } else if (!Functions.isValidDrivingLicenseCategory(drivingLicenceCategory)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Category!");
             return false;
-        } else if (!FieldsValidation.isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
+        } else if (!Functions.isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Obtain Date!");
             return false;
-        } else if (!FieldsValidation.isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
+        } else if (!Functions.isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
             userViewImp.OnRegisterError(this, "Invalid Driving License Expire Date!");
             return false;
         }
