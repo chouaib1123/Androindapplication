@@ -38,7 +38,7 @@ import android.view.View.OnClickListener;
 public class agencyregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    private  String agencyName, email, password, vPassword, managerFullName, phoneNumber, City, agencyFullAddress, patentNumber ;
+    private String agencyName, email, password, vPassword, managerFullName, phoneNumber, City, agencyFullAddress, patentNumber;
 
     @SuppressLint("MissingInflatedId")
 
