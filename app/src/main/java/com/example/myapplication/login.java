@@ -25,8 +25,7 @@ import android.view.View.OnClickListener;
 
 public class login extends AppCompatActivity implements OnClickListener {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    private String username , password , agencyName;
-
+    private String username , password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,6 @@ public class login extends AppCompatActivity implements OnClickListener {
 
     private void getFieldsValues() {
         username = Functions.getEditTextValue((EditText)findViewById(R.id.username));
-        agencyName = username;
         password = Functions.getEditTextValue((EditText)findViewById(R.id.password));
     }
 
@@ -90,7 +88,7 @@ public class login extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(login.this, "Error checking Client: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(login.this, "Error Checking Client: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -115,21 +113,21 @@ public class login extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(login.this, "Error checking Agency: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(login.this, "Error Checking Agency: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void handleClientLoginSuccess() {
-        Toast.makeText(login.this, "Client Login successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(login.this, "Client Logged In Successfully", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(login.this, clientmain.class));
         finish();
     }
 
     private void handleAgencyLoginSuccess() {
-        Toast.makeText(login.this, "Agency Login successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(login.this, "Agency Logged In Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(login.this, agencymain.class);
-        intent.putExtra("Agency Name", agencyName);
+        intent.putExtra("Agency Name", username);
         startActivity(intent);
         finish();
     }
