@@ -26,7 +26,7 @@ public class Client extends User {
             String userPassword, String userPhoneNumber, State profileState, UserType userType, int clientId,
             String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto, byte[] cinVerso,
             LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate, byte[] licenseRecto, byte[] licenseVerso) {
-        super(userId, username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
+        super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,7 +75,7 @@ public class Client extends User {
 
     public Client(int userId, String username, Date accountCreationDate, String address, String city, String email,
             String userPassword, String userPhoneNumber, State profileState, UserType userType) {
-                super(userId, username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
+                super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
                 userType);
     }
 
