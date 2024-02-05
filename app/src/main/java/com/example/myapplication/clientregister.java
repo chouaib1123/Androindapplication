@@ -63,18 +63,13 @@ import android.view.View.OnClickListener;
 
 public class clientregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
-
-    //----------------------------
     private String username, email, password, vPassword, phoneNumber, city, address, firstName, lastName, birthDate;
     private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
     private TextView cinRecto, cinVerso, drivingLicenseRecto, drivingLicenseVerso;
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
 
-    //----------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,20 +97,20 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     }
 
     private void getFieldsValues() {
-        username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
-        email = ((EditText)findViewById(R.id.gmail)).getText().toString().trim();
-        password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
-        vPassword = ((EditText)findViewById(R.id.vpassword)).getText().toString().trim();
-        phoneNumber = ((EditText)findViewById(R.id.phone)).getText().toString().trim();
-        city = ((EditText)findViewById(R.id.ville)).getText().toString().trim();
-        address = ((EditText)findViewById(R.id.adresse)).getText().toString().trim();
-        firstName = ((EditText)findViewById(R.id.firstname)).getText().toString().trim();
-        lastName = ((EditText)findViewById(R.id.lastname)).getText().toString().trim();
-        birthDate = ((TextView)findViewById(R.id.birthdate)).getText().toString().trim();
-        cinNumber = ((EditText)findViewById(R.id.Cinnumber)).getText().toString().trim();
-        drivingLicenceCategory = ((EditText)findViewById(R.id.categorieLicence)).getText().toString().trim().toUpperCase();
-        drivingLicenseObtainDate = ((TextView)findViewById(R.id.DL_od)).getText().toString().trim();
-        drivingLicenseExpireDate = ((TextView)findViewById(R.id.DL_ed)).getText().toString().trim();
+        username = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.username));
+        email = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.gmail));
+        password = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.password));
+        vPassword = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.vpassword));
+        phoneNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.phone));
+        city = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.ville));
+        address = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.adresse));
+        firstName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.firstname));
+        lastName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.lastname));
+        birthDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.birthdate));
+        cinNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.Cinnumber));
+        drivingLicenceCategory = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.categorieLicence)).toUpperCase();
+        drivingLicenseObtainDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.DL_od));
+        drivingLicenseExpireDate = FieldsValidation.getEditTextValue((TextView)findViewById(R.id.DL_ed));
         cinRecto = (TextView) findViewById(R.id.Cinreco);
         cinVerso = (TextView) findViewById(R.id.Cinverso);
         drivingLicenseRecto = (TextView) findViewById(R.id.dlreco);
@@ -210,9 +205,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
             }
         }
@@ -325,10 +318,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                                 month = month + 1;
-//                                Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
                                 Log.d(TAG, "onDateSet: yyyy-mm-dd: " + year + "-" + month + "-" + day);
-
-//                                String date = month + "/" + day + "/" + year;
                                 String date = year + "-" + month + "-" + day;
                                 textView.setText(date);
                             }

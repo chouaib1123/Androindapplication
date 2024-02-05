@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.Extra.FieldsValidation;
+import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,17 +33,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class agencyregister extends AppCompatActivity {
+import android.view.View.OnClickListener;
+
+public class agencyregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
-
-
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
-    EditText agencyName , email, password, vPassword , managerFullName , phoneNumber , City , agencyFullAddress ,patentNumber ;
-
-    Button registerAgency;
-
+    private  String agencyName, email, password, vPassword, managerFullName, phoneNumber, City, agencyFullAddress, patentNumber ;
 
     @SuppressLint("MissingInflatedId")
 
@@ -50,93 +47,81 @@ public class agencyregister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agencyregister);
 
-        agencyName = findViewById(R.id.username);
-        email  = findViewById(R.id.gmail);
-        password = findViewById(R.id.password);
-        vPassword = findViewById(R.id.vpassword);
-        managerFullName = findViewById(R.id.Managername);
-        City = findViewById(R.id.ville);
-        agencyFullAddress = findViewById(R.id.adresse);
-        patentNumber = findViewById(R.id.patent_number);
-        phoneNumber = findViewById(R.id.phone);
-        registerAgency = findViewById(R.id.registr);
+        Button registerAgency = findViewById(R.id.registr);
+        registerAgency.setOnClickListener(this);
+    }
 
-        registerAgency.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //                if(TextUtils.isEmpty(getTrimmedText(username)) ||
-//                        getTrimmedText(email).isEmpty() ||
-//                        getTrimmedText(password).isEmpty()
-//                ){
-//                    Toast.makeText(clientregister.this, "please fill up the mandatory fields ", Toast.LENGTH_SHORT).show();
-//                } else if (!(getTrimmedText(password).equals(getTrimmedText(vPassword)))) {
-//                    Toast.makeText(clientregister.this, "the password does not match up with verify password", Toast.LENGTH_SHORT).show();
-//                } else if (!(getTrimmedText(phoneNumber).length() == 13 && getTrimmedText(phoneNumber).startsWith("+"))) {
-//                    Toast.makeText(clientregister.this, "Invalid value of the Phone number", Toast.LENGTH_SHORT).show();
-//                } else if (!(Patterns.EMAIL_ADDRESS.matcher(getTrimmedText(email)).matches())) {
-//                    Toast.makeText(clientregister.this, "Invalid email", Toast.LENGTH_SHORT).show();
+    private void getFieldsValues() {
+        agencyName = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.username));
+        email = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.gmail));
+        password = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.password));
+        vPassword = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.vpassword));
+        phoneNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.phone));
+        managerFullName = ((EditText)findViewById(R.id.Managername)).getText().toString();
+        City = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.ville));
+        agencyFullAddress = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.adresse));
+        patentNumber = FieldsValidation.getEditTextValue((EditText)findViewById(R.id.patent_number));
+    }
+
+    private boolean checkFields() {
+        UserViewImp userViewImp = new UserViewImp();
+
+        if(!FieldsValidation.isValidUsername(agencyName)) {
+            userViewImp.OnRegisterError(this, "Invalid Username!");
+            return false;
+        } else if (!FieldsValidation.isValidEmail(email)) {
+            userViewImp.OnRegisterError(this, "Invalid Email Address!");
+            return false;
+        } else if (!FieldsValidation.isValidPassword(password)) {
+            userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
+            return false;
+        } else if (!FieldsValidation.isValidVPassword(password, vPassword)) {
+            userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
+            return false;
+        } else if (!FieldsValidation.isValidPhoneNumber(phoneNumber)) {
+            userViewImp.OnRegisterError(this, "Invalid Phone Number!");
+            return false;
+        }  else if (!FieldsValidation.isValidFullName(managerFullName)) {
+            userViewImp.OnRegisterError(this, "Invalid Manager Name!");
+            return false;
+        } else if (!FieldsValidation.isValidCity(City)) {
+            userViewImp.OnRegisterError(this, "Invalid City!");
+            return false;
+        } else if (!FieldsValidation.isValidFullAddress(agencyFullAddress)) {
+            userViewImp.OnRegisterError(this, "Invalid Address!");
+            return false;
+        } else if (!FieldsValidation.isValidPatentNumber(patentNumber)) {
+            userViewImp.OnRegisterError(this, "Invalid Patent Number!");
+            return false;
+        }
+
+        return true;
+    }
+
+//    private void setOnClickListenerForTextView(final TextView textView) {
+//        textView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                selectedTextView = textView;
+//                startImagePickerForTextView();
+//            }
+//        });
+//    }
 //
-//                } else if (getTrimmedText(password).length() <= 8 ) {
-//                    Toast.makeText(clientregister.this, "The password should greater than 8 characters", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-                databaseReference.child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.hasChild(getTrimmedText(agencyName))){
-                            Toast.makeText(agencyregister.this, "Agency name already registered", Toast.LENGTH_SHORT).show();
-                        }else {
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Email").setValue(getTrimmedText(email));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Password").setValue(getTrimmedText(password));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Agency manager Full Name").setValue(getTrimmedText(managerFullName));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("City").setValue(getTrimmedText(City));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Agency Address").setValue(getTrimmedText(agencyFullAddress));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Phone Number").setValue(getTrimmedText(phoneNumber));
-                            databaseReference.child("Agency").child(getTrimmedText(agencyName)).child("Patent Number").setValue(getTrimmedText(patentNumber));
+//    private void startImagePickerForTextView() {
+//        ImagePicker.with(agencyregister.this)
+//                .crop()                     // Crop image (Optional)
+//                .compress(1024)             // Final image size will be less than 1 MB (Optional)
+//                .maxResultSize(1080, 1080)  // Final image resolution will be less than 1080 x 1080 (Optional)
+//                .start();
+//    }
 
-                            Toast.makeText(agencyregister.this, "registration successfully", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-//                }}
-
-            }
-        });
-
-
-    }
-
-
-    private void setOnClickListenerForTextView(final TextView textView) {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedTextView = textView;
-                startImagePickerForTextView();
-            }
-        });
-    }
-
-    private void startImagePickerForTextView() {
-        ImagePicker.with(agencyregister.this)
-                .crop()                     // Crop image (Optional)
-                .compress(1024)             // Final image size will be less than 1 MB (Optional)
-                .maxResultSize(1080, 1080)  // Final image resolution will be less than 1080 x 1080 (Optional)
-                .start();
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -145,16 +130,43 @@ public class agencyregister extends AppCompatActivity {
                     e.printStackTrace();
 
                 }
-
             }
         }
     }
 
-    private String getTrimmedText(EditText editText) {
-        return editText.getText().toString().trim();
-    }
-    public String getVPassword()
-    {
-        return getTrimmedText(vPassword);
+    @Override
+    public void onClick(View view) {
+        int srcId = view.getId();
+
+        if(srcId == R.id.registr) {
+            getFieldsValues();
+
+            if(checkFields()) {
+                databaseReference.child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild(agencyName.replaceAll("[\\[\\].#$/]", "_"))){
+                            Toast.makeText(agencyregister.this, "Agency name already registered", Toast.LENGTH_SHORT).show();
+                        } else {
+                            DatabaseReference identifier = databaseReference.child("Agency").child(agencyName);
+
+                            identifier.child("Email").setValue(email);
+                            identifier.child("Password").setValue(password);
+                            identifier.child("Agency manager Full Name").setValue(managerFullName);
+                            identifier.child("City").setValue(City);
+                            identifier.child("Agency Address").setValue(agencyFullAddress);
+                            identifier.child("Phone Number").setValue(phoneNumber);
+                            identifier.child("Patent Number").setValue(patentNumber);
+
+                            Toast.makeText(agencyregister.this, "registration successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+            }
+        }
     }
 }

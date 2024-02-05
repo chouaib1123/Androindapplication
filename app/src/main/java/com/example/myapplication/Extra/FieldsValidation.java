@@ -1,6 +1,8 @@
 package com.example.myapplication.Extra;
 
 import android.util.Patterns;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +12,7 @@ import java.util.Locale;
  public interface FieldsValidation {
 
      static boolean isValidUsername(String username) {
-        return !username.isEmpty() && username.length() >= 4;
+        return !username.isEmpty() && username.length() >= 4 && username.matches("[a-zA-Z\\s'-]+");
     }
 
      static boolean isValidEmail(String email) {
@@ -100,14 +102,38 @@ import java.util.Locale;
     }
 
      static boolean isValidFirstName(String firstName) {
-        return !firstName.isEmpty();
+        return !firstName.isEmpty() && firstName.matches("[a-zA-Z\\s'-]+") && firstName.length() >= 2;
     }
 
      static boolean isValidLastName(String lastName) {
-        return !lastName.isEmpty();
+        return !lastName.isEmpty() && lastName.matches("[a-zA-Z\\s'-]+") && lastName.length() >= 2;
     }
 
      static boolean isValidCinNumber(String cinNumber) {
-        return !cinNumber.isEmpty();
+        return !cinNumber.isEmpty() && cinNumber.matches("[a-zA-Z0-9]+");
     }
-}
+
+     static boolean isValidFullName(String managerFullName) {
+         return !managerFullName.isEmpty() && managerFullName.matches("[a-zA-Z\\s'-]+") && managerFullName.length() >= 2;
+     }
+
+     static boolean isValidCity(String city) {
+         return !city.isEmpty() && city.matches("[a-zA-Z\\s'-]+") && city.length() >= 2;
+     }
+
+     static boolean isValidFullAddress(String agencyFullAddress) {
+         return !agencyFullAddress.isEmpty();
+     }
+
+     static boolean isValidPatentNumber(String patentNumber) {
+         return !patentNumber.isEmpty() && patentNumber.matches("\\d{15}");
+     }
+
+     static String getEditTextValue(EditText editText) {
+         return editText.getText().toString().trim();
+     }
+
+     static String getEditTextValue(TextView textView) {
+         return textView.getText().toString().trim();
+     }
+ }
