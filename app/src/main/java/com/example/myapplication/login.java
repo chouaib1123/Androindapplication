@@ -8,9 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-
 import android.widget.*;
 
+import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.View.UserViewImp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,70 +20,59 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import android.view.View.OnClickListener;
 
-public class login extends AppCompatActivity {
 
+public class login extends AppCompatActivity implements OnClickListener {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
-
-    EditText username , password , agencyName;
-    Button login;
-
+    private String username , password , agencyName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        username = findViewById(R.id.username);
-        agencyName = findViewById(R.id.username);
-        password = findViewById(R.id.password);
-        login = findViewById(R.id.loginbtn);
-        TextView txt =  findViewById(R.id.Register);
-        txt.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View view){
-                OpenActivity2();
-            }
-        });
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String enteredUsername = getTrimmedText(username);
-                String enteredPassword = getTrimmedText(password);
 
-                if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
-                    Toast.makeText(login.this, "Please enter your username and password", Toast.LENGTH_SHORT).show();
-                } else {
-                    DatabaseReference clientsRef = databaseReference.child("Client");
-                    checkClientLogin(clientsRef, enteredUsername, enteredPassword);
-                    checkAgencyLogin(enteredUsername , enteredPassword);
-                }
-            }
-        });
+        TextView txt =  findViewById(R.id.Register);
+        txt.setOnClickListener(this);
+
+        Button login = findViewById(R.id.loginbtn);
+        login.setOnClickListener(this);
     }
+
+    private void getFieldsValues() {
+        username = Functions.getEditTextValue((EditText)findViewById(R.id.username));
+        agencyName = username;
+        password = Functions.getEditTextValue((EditText)findViewById(R.id.password));
+    }
+
+    private boolean checkFields() {
+        UserViewImp userViewImp = new UserViewImp();
+
+        if(!Functions.isValidUsername(username)) {
+            userViewImp.OnRegisterError(this, "Invalid Username!");
+            return false;
+        }  else if (!Functions.isValidPassword(password)) {
+            userViewImp.OnRegisterError(this, "Invalid Password!");
+            return false;
+        }
+
+        return true;
+    }
+
     public void  OpenActivity2(){
         Intent intent = new Intent(this, registerchoice.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
     }
-    public void  OpenActivity3(){
+//    public void  OpenActivity3(){
+//        Intent intent = new Intent(this, agencymain.class);
+//        startActivity(intent);
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//    }
 
-
-        Intent intent = new Intent(this, agencymain.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-    }
-
-    public String getTrimmedText(EditText editText) {
-        return editText.getText().toString().trim();
-    }
-
-    private void checkClientLogin(DatabaseReference clientsRef, String username, String password) {
+    private void checkClientLogin(DatabaseReference clientsRef) {
         clientsRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot clientSnapshot) {
@@ -91,21 +81,21 @@ public class login extends AppCompatActivity {
                     if (clientPassword != null && clientPassword.equals(password)) {
                         handleClientLoginSuccess();
                     } else {
-                        Toast.makeText(login.this, "Wrong Password for Client", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(login.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    checkAgencyLogin(username, password);
+                    checkAgencyLogin();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(login.this, "Error checking Clients: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(login.this, "Error checking Client: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void checkAgencyLogin(String username, String password) {
+    private void checkAgencyLogin() {
         DatabaseReference agencyRef = databaseReference.child("Agency");
         agencyRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -116,10 +106,10 @@ public class login extends AppCompatActivity {
                         handleAgencyLoginSuccess();
 
                     } else {
-                        Toast.makeText(login.this, "Wrong Password for Agency", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(login.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(login.this, "Invalid username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(login.this, "Invalid Username", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -139,8 +129,27 @@ public class login extends AppCompatActivity {
     private void handleAgencyLoginSuccess() {
         Toast.makeText(login.this, "Agency Login successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(login.this, agencymain.class);
-        intent.putExtra("Agency Name", getTrimmedText(agencyName));
+        intent.putExtra("Agency Name", agencyName);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int srcId = view.getId();
+
+        if(srcId == R.id.Register) {
+            OpenActivity2();
+        }
+
+        if(srcId == R.id.loginbtn) {
+            getFieldsValues();
+
+            if (checkFields()) {
+                DatabaseReference clientsRef = databaseReference.child("Client");
+                checkClientLogin(clientsRef);
+                checkAgencyLogin();
+            }
+        }
     }
 }
