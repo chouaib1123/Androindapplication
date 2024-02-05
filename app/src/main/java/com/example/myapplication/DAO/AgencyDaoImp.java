@@ -72,14 +72,13 @@ public class AgencyDaoImp implements AgencyDao {
         int agencyId = resultSet.getInt("agency_id");
         int cnssNumber = resultSet.getInt("cnss_number");
         byte[] cnssRegistrationImage = resultSet.getBytes("cnss_registration_image");
-        int companyRegistrationNumber = resultSet.getInt("company_registration_number");
+        int patentNumber = resultSet.getInt("company_registration_number");
         String managerFullName = resultSet.getString("manager_full_name");
         String agencyName = resultSet.getString("agency_name");
         int taxIdentificationNumber = resultSet.getInt("tax_identification_number");
         int userId = resultSet.getInt("user_id");
 
-        return new Agency(agencyId, cnssNumber, cnssRegistrationImage,
-                companyRegistrationNumber, managerFullName, agencyName, taxIdentificationNumber, userId);
+        return new Agency(patentNumber, managerFullName, agencyName);
     }
     
 }

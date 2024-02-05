@@ -111,7 +111,7 @@ public class UserDaoImp implements UserDao {
         return (userType == UserType.CLIENT)
                 ? new Client(userId, username, accountCreationDate, address, city, email,
                         userPassword, userPhoneNumber, profileState, userType)
-                : new Agency(userId, username, accountCreationDate, address, city, email,
+                : new Agency(username, accountCreationDate, address, city, email,
                         userPassword, userPhoneNumber, profileState, userType);
     }
 }

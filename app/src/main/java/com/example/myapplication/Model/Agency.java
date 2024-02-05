@@ -6,70 +6,39 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 
 public class Agency extends User {
-    private int agencyId;
-    private int cnssNumber;
-    private byte[] cnssRegistrationImage;
-    private int companyRegistrationNumber;
+    private int patentNumber;
     private String managerFullName;
     private String agencyName;
-    private int taxIdentificationNumber;
     
-    public Agency(int userId, String username, Date accountCreationDate, String address, String city, String email,
-            String userPassword, String userPhoneNumber, State profileState, UserType userType, int agencyId,
-            int cnssNumber, byte[] cnssRegistrationImage, int companyRegistrationNumber, String managerFullName,
-            String agencyName, int taxIdentificationNumber) {
-        super(userId, username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
+    public Agency(String username, Date accountCreationDate, String address, String city, String email,
+            String userPassword, String userPhoneNumber, State profileState, UserType userType, int patentNumber, String managerFullName,
+            String agencyName) {
+        super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
                 userType);
-        this.agencyId = agencyId;
-        this.cnssNumber = cnssNumber;
-        this.cnssRegistrationImage = cnssRegistrationImage;
-        this.companyRegistrationNumber = companyRegistrationNumber;
+        this.patentNumber = patentNumber;
         this.managerFullName = managerFullName;
         this.agencyName = agencyName;
-        this.taxIdentificationNumber = taxIdentificationNumber;
     }
 
-    public Agency(int userId, String username, Date accountCreationDate, String address, String city, String email,
+    public Agency(String username, Date accountCreationDate, String address, String city, String email,
             String userPassword, String userPhoneNumber, State profileState, UserType userType) {
-                super(userId, username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
+                super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
                 userType);
     }
 
-    public Agency(int agencyId, int cnssNumber, byte[] cnssRegistrationImage, int companyRegistrationNumber,
-            String managerFullName, String agencyName, int taxIdentificationNumber, int userId) {
+    public Agency(int patentNumber,
+            String managerFullName, String agencyName) {
         super();
     }
 
-    public int getAgencyId() {
-        return agencyId;
+    public Agency() {}
+
+    public int getPatentNumber() {
+        return patentNumber;
     }
 
-    public void setAgencyId(int agencyId) {
-        this.agencyId = agencyId;
-    }
-
-    public int getCnssNumber() {
-        return cnssNumber;
-    }
-
-    public void setCnssNumber(int cnssNumber) {
-        this.cnssNumber = cnssNumber;
-    }
-
-    public byte[] getCnssRegistrationImage() {
-        return cnssRegistrationImage;
-    }
-
-    public void setCnssRegistrationImage(byte[] cnssRegistrationImage) {
-        this.cnssRegistrationImage = cnssRegistrationImage;
-    }
-
-    public int getCompanyRegistrationNumber() {
-        return companyRegistrationNumber;
-    }
-
-    public void setCompanyRegistrationNumber(int companyRegistrationNumber) {
-        this.companyRegistrationNumber = companyRegistrationNumber;
+    public void setPatentNumber(int patentNumber) {
+        this.patentNumber = patentNumber;
     }
 
     public String getManagerFullName() {
@@ -88,19 +57,9 @@ public class Agency extends User {
         this.agencyName = agencyName;
     }
 
-    public int getTaxIdentificationNumber() {
-        return taxIdentificationNumber;
-    }
-
-    public void setTaxIdentificationNumber(int taxIdentificationNumber) {
-        this.taxIdentificationNumber = taxIdentificationNumber;
-    }
-
     @Override
     public String toString() {
-        return "Agency [agencyId=" + agencyId + ", cnssNumber=" + cnssNumber + ", cnssRegistrationImage="
-                + Arrays.toString(cnssRegistrationImage) + ", companyRegistrationNumber=" + companyRegistrationNumber
-                + ", managerFullName=" + managerFullName + ", agencyName=" + agencyName + ", taxIdentificationNumber="
-                + taxIdentificationNumber + "]";
+        return "Agency [patentNumber=" + patentNumber
+                + ", managerFullName=" + managerFullName + ", agencyName=" + agencyName + "]";
     }
 }

@@ -5,7 +5,6 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 
 public abstract class User {
-    private int userId;
     private String username;
     private Date accountCreationDate;
     private String address;
@@ -18,9 +17,8 @@ public abstract class User {
 
     public User() {}
 
-    public User(int userId, String username, Date accountCreationDate, String address, String city, String email,
+    public User(String username, Date accountCreationDate, String address, String city, String email,
             String userPassword, String userPhoneNumber, State profileState, UserType userType) {
-        this.userId = userId;
         this.username = username;
         this.accountCreationDate = accountCreationDate;
         this.address = address;
@@ -30,26 +28,6 @@ public abstract class User {
         this.userPhoneNumber = userPhoneNumber;
         this.profileState = profileState;
         this.userType = userType;
-    }
-
-    public User(String username, Date accountCreationDate, String address, String city, String email, String userPassword, String userPhoneNumber, State profileState, UserType userType) {
-        this.username = username;
-        this.accountCreationDate = accountCreationDate;
-        this.address = address;
-        this.city = city;
-        this.email = email;
-        this.userPassword = userPassword;
-        this.userPhoneNumber = userPhoneNumber;
-        this.profileState = profileState;
-        this.userType = userType;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUsername() {
@@ -126,7 +104,7 @@ public abstract class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", username=" + username + ", accountCreationDate=" + accountCreationDate
+        return "User [ username=" + username + ", accountCreationDate=" + accountCreationDate
                 + ", address=" + address + ", city=" + city + ", email=" + email + ", userPassword=" + userPassword
                 + ", userPhoneNumber=" + userPhoneNumber + ", profileState=" + profileState + ", userType=" + userType
                 + "]";

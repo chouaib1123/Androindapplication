@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.*;
 
 import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Model.Agency;
+import com.example.myapplication.Model.Client;
 import com.example.myapplication.View.UserViewImp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,6 +72,8 @@ public class login extends AppCompatActivity implements OnClickListener {
 //        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 //    }
 
+    Client client = new Client();
+
     private void checkClientLogin(DatabaseReference clientsRef) {
         clientsRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -77,6 +81,8 @@ public class login extends AppCompatActivity implements OnClickListener {
                 if (clientSnapshot.exists()) {
                     String clientPassword = clientSnapshot.child("password").getValue(String.class);
                     if (clientPassword != null && clientPassword.equals(password)) {
+                        // set client fields
+                        // ...
                         handleClientLoginSuccess();
                     } else {
                         Toast.makeText(login.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
@@ -93,6 +99,8 @@ public class login extends AppCompatActivity implements OnClickListener {
         });
     }
 
+    Agency agency = new Agency();
+
     private void checkAgencyLogin() {
         DatabaseReference agencyRef = databaseReference.child("Agency");
         agencyRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,6 +109,8 @@ public class login extends AppCompatActivity implements OnClickListener {
                 if (agencySnapshot.exists()) {
                     String agencyPassword = agencySnapshot.child("Password").getValue(String.class);
                     if (agencyPassword != null && agencyPassword.equals(password)) {
+                        final String agencyName = agencySnapshot.child("Agency Name").getValue(String.class);
+                        agency.setAgencyName(agencyName);
                         handleAgencyLoginSuccess();
 
                     } else {
@@ -127,7 +137,7 @@ public class login extends AppCompatActivity implements OnClickListener {
     private void handleAgencyLoginSuccess() {
         Toast.makeText(login.this, "Agency Logged In Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(login.this, agencymain.class);
-        intent.putExtra("Agency Name", username);
+        intent.putExtra("Agency Name", agency.getAgencyName());
         startActivity(intent);
         finish();
     }
