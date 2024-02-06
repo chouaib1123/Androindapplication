@@ -1,34 +1,21 @@
 package com.example.myapplication.Util;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseUtil {
-    private static final int PORT = 3306;
-    private static final String DB_NAME = "rentcardb";
-    private static final String LOGIN = "root";
-    private static final String PASSWORD = "admin";
-    private static final String JDBC_URL = "jdbc:mysql://localhost:" + PORT + "/" + DB_NAME;
+    private static final String URL = "https://clientregister-c1856-default-rtdb.firebaseio.com/";
 
-    public static Connection connect() {
+    public static DatabaseReference connect() {
         try {
-            return DriverManager.getConnection(JDBC_URL, LOGIN, PASSWORD);
-        } catch (SQLException e) {
+            return FirebaseDatabase.getInstance(URL).getReference();
+        } catch (Exception e) {
             System.out.println("Connection Failed!");
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Connection Closed!");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 }

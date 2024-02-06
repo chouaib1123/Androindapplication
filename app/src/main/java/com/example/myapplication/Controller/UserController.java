@@ -6,14 +6,10 @@ import com.example.myapplication.Extra.UserType;
 import com.example.myapplication.Model.User;
 
 public class UserController {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public UserController(UserDao userDao) {
         this.userDao = userDao;
-    }
-
-    public User getUserById(int userId) {
-        return userDao.getUserById(userId);
     }
 
     public User getUserByUsername(String username) {
@@ -25,8 +21,8 @@ public class UserController {
         userDao.insertUser(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, userType);
     }
 
-    public void updateUserProfile(int userId, String address, String city, String email,
+    public void updateUserProfile(String username, String address, String city, String email,
                                   String userPassword, String userPhoneNumber) {
-        userDao.updateUser(userId, address, city, email, userPassword, userPhoneNumber);
+        userDao.updateUser(username, address, city, email, userPassword, userPhoneNumber);
     }
 }

@@ -10,15 +10,15 @@ public class AgencyController {
         this.agencyDao = agencyDao;
     }
 
-    public Agency getAgencyById(int agencyId) {
-        return agencyDao.getAgencyById(agencyId);
+    public Agency getAgencyByUsername(String agencyUsername) {
+        return agencyDao.getAgencyByUsername(agencyUsername);
     }
 
     public void registerAgency(long patentNumber, String managerFullName, String agencyName) {
         agencyDao.insertAgency(patentNumber, managerFullName, agencyName);
     }
 
-    public void updateAgencyDetails(String managerFullName, String agencyName) {
-        agencyDao.updateAgency(managerFullName, agencyName);
+    public void updateAgencyDetails(String agencyUsername, String managerFullName, String agencyName) {
+        agencyDao.updateAgency(agencyUsername, managerFullName, agencyName);
     }
 }

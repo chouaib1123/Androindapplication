@@ -6,7 +6,7 @@ import com.example.myapplication.Extra.DeliveryOption;
 import com.example.myapplication.Model.Request;
 
 public class RequestController {
-    private RequestDao requestsDao;
+    private final RequestDao requestsDao;
 
     public RequestController(RequestDao requestsDao) {
         this.requestsDao = requestsDao;
@@ -17,8 +17,8 @@ public class RequestController {
     }
 
     public void submitRequest(int borrowingPeriod, DeliveryOption deliveryOption,
-                              Date pickUpDate, int carId, int clientId) {
-        requestsDao.insertRequest(borrowingPeriod, deliveryOption, pickUpDate, carId, clientId);
+                              Date pickUpDate, String carMatricula, String clientUsername) {
+        requestsDao.insertRequest(borrowingPeriod, deliveryOption, pickUpDate, carMatricula, clientUsername);
     }
 
     public void updateRequestDetails(int requestId, int borrowingPeriod,

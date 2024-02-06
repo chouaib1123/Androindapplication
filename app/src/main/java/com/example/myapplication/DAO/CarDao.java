@@ -4,11 +4,11 @@ import com.example.myapplication.Extra.FuelType;
 import com.example.myapplication.Model.Car;
 
 public interface CarDao {
-    Car getCarById(int carId);
+    Car getCarByMatricula(String carMatricula);
     void insertCar(byte[] carImage, String color, FuelType fuelType,
                    boolean isAutomatic, String matricula, String model,
-                   double pricePerDay, int seatsNumber, int agencyId);
+                   double pricePerDay, int seatsNumber, String agencyUsername);
 
-    void updateCar(int carId, byte[] carImage, String color, double pricePerDay);
-    void deleteCar(int carId);
+    void updateCar(String carMatricula, byte[] carImage, String color, double pricePerDay);
+    void deleteCar(String carMatricula);
 }

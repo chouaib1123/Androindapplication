@@ -5,28 +5,27 @@ import com.example.myapplication.Extra.FuelType;
 import com.example.myapplication.Model.Car;
 
 public class CarController {
-    private CarDao carDao;
+    private final CarDao carDao;
 
     public CarController(CarDao carDao) {
         this.carDao = carDao;
     }
 
-    public Car getCarById(int carId) {
-        return carDao.getCarById(carId);
+    public Car getCarByMatricula(String carMatricula) {
+        return carDao.getCarByMatricula(carMatricula);
     }
 
-    public void addCar(byte[] carImage, String color, FuelType fuelType,
-                       boolean isAutomatic, String matricula, String model,
-                       double pricePerDay, int seatsNumber, int agencyId) {
+    public void addCar(byte[] carImage, String color, FuelType fuelType, boolean isAutomatic, String matricula, String model,
+                       double pricePerDay, int seatsNumber, String agencyUsername) {
         carDao.insertCar(carImage, color, fuelType, isAutomatic, matricula, model,
-                          pricePerDay, seatsNumber, agencyId);
+                          pricePerDay, seatsNumber, agencyUsername);
     }
 
-    public void updateCarDetails(int carId, byte[] carImage, String color, double pricePerDay) {
-        carDao.updateCar(carId, carImage, color, pricePerDay);
+    public void updateCarDetails(String carMatricula, byte[] carImage, String color, double pricePerDay) {
+        carDao.updateCar(carMatricula, carImage, color, pricePerDay);
     }
 
-    public void removeCar(int carId) {
-        carDao.deleteCar(carId);
+    public void removeCar(String carMatricula) {
+        carDao.deleteCar(carMatricula);
     }
 }

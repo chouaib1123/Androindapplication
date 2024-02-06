@@ -7,7 +7,7 @@ import com.example.myapplication.Model.Request;
 public interface RequestDao {
     Request getRequestById(int requestId);
     void insertRequest(int borrowingPeriod, DeliveryOption deliveryOption,
-                       Date pickUpDate, int carId, int clientId);
+                       Date pickUpDate, String carMatricula, String clientUsername);
 
     void updateRequest(int requestId, int borrowingPeriod, DeliveryOption deliveryOption,
                        Date pickUpDate);

@@ -16,6 +16,7 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.Model.User;
+import com.example.myapplication.Util.DatabaseUtil;
 import com.example.myapplication.View.UserView;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -65,8 +66,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
     private String username, email, password, vPassword, phoneNumber, city, address, firstName, lastName, birthDate;
     private String cinNumber, drivingLicenceCategory, drivingLicenseExpireDate, drivingLicenseObtainDate;
     private TextView cinRecto, cinVerso, drivingLicenseRecto, drivingLicenseVerso;
-
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
+//    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
 
     @Override
@@ -92,7 +92,6 @@ public class clientregister extends AppCompatActivity implements OnClickListener
 
         Button registerClientButton = (Button) findViewById(R.id.registr);
         registerClientButton.setOnClickListener(this);
-
     }
 
     private void getFieldsValues() {
@@ -168,9 +167,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
             getFieldsValues();
 
             if(checkFields()) {
-                String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
-
-                databaseReference.child("Client").addListenerForSingleValueEvent(new ValueEventListener() {
+                DatabaseUtil.connect().child("Client").addListenerForSingleValueEvent(new ValueEventListener() {
                     final UserViewImp userViewImp = new UserViewImp();
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -178,24 +175,11 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
                             userViewImp.OnRegisterError(clientregister.this, "Username already exists!");
                         } else {
-                            DatabaseReference identifier = databaseReference.child("Client").child(username);
+                            ClientController clientController = new ClientController(new ClientDaoImp());
 
-                            identifier.child("accountCreationDate").setValue(currentDate);
-                            identifier.child("address").setValue(address);
-                            identifier.child("city").setValue(city);
-                            identifier.child("email").setValue(email);
-                            identifier.child("password").setValue(password);
-                            identifier.child("phoneNumber").setValue(phoneNumber);
-                            identifier.child("profileState").setValue(State.PENDING.toString());
-                            identifier.child("userType").setValue(UserType.CLIENT.toString());
-                            identifier.child("firstName").setValue(firstName);
-                            identifier.child("lastName").setValue(lastName);
-                            identifier.child("birthDate").setValue(birthDate);
-                            identifier.child("cinNumber").setValue(cinNumber);
-                            identifier.child("drivingLicenseCategory").setValue(drivingLicenceCategory);
-                            identifier.child("drivingLicenseObtainDate").setValue(drivingLicenseObtainDate);
-                            identifier.child("drivingLicenseExpireDate").setValue(drivingLicenseExpireDate);
-
+                            clientController.registerClient(username, address, city, email, password, phoneNumber,
+                                    firstName, lastName, birthDate, cinNumber, drivingLicenceCategory,
+                                    drivingLicenseExpireDate, drivingLicenseObtainDate);
                             uploadImagesToFirebaseStorage();
 
                             userViewImp.OnRegisterSuccess(clientregister.this, "Registered successfully");

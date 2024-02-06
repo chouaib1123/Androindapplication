@@ -6,32 +6,31 @@ import com.example.myapplication.Extra.LicenseCategory;
 import com.example.myapplication.Model.Client;
 
 public class ClientController {
-    private ClientDao clientDao;
+    private final ClientDao clientDao;
 
     public ClientController(ClientDao clientDao) {
         this.clientDao = clientDao;
     }
 
-    public Client getClientById(int clientId) {
-        return clientDao.getClientById(clientId);
+    public Client getClientByUsername(String clientUsername) {
+        return clientDao.getClientByUsername(clientUsername);
     }
 
-    public void registerClient(String firstName, String lastName, Date birthDate, String cin,
-                               byte[] cinRecto, byte[] cinVerso, LicenseCategory licenseCategory,
-                               Date licenseExpireDate, Date licenseObtainDate,
-                               byte[] licenseRecto, byte[] licenseVerso, int userId) {
-        clientDao.insertClient(firstName, lastName, birthDate, cin, cinRecto, cinVerso,
-                                licenseCategory, licenseExpireDate, licenseObtainDate,
-                                licenseRecto, licenseVerso, userId);
+    public void registerClient(String username, String address, String city,
+                               String email, String userPassword, String userPhoneNumber, String firstName, String lastName,
+                               String birthDate, String cin, String licenseCategory,
+                               String licenseExpireDate, String licenseObtainDate) {
+        clientDao.insertClient(username, address, city, email, userPassword, userPhoneNumber, firstName, lastName,
+                 birthDate, cin, licenseCategory, licenseExpireDate, licenseObtainDate);
     }
 
-    public void updateClientCINImage(int clientId, byte[] cinRecto, byte[] cinVerso) {
-        clientDao.updateClientCINImage(clientId, cinRecto, cinVerso);
+    public void updateClientCINImage(String clientUsername, byte[] cinRecto, byte[] cinVerso) {
+        clientDao.updateClientCINImage(clientUsername, cinRecto, cinVerso);
     }
 
-    public void updateClientDrivingLicense(int clientId, Date licenseExpireDate,
+    public void updateClientDrivingLicense(String clientUsername, Date licenseExpireDate,
                                            byte[] licenseRecto, byte[] licenseVerso) {
-        clientDao.updateClientDrivingLicense(clientId, licenseExpireDate, licenseRecto, licenseVerso);
+        clientDao.updateClientDrivingLicense(clientUsername, licenseExpireDate, licenseRecto, licenseVerso);
     }
 }
 
