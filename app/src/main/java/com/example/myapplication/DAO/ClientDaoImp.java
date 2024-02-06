@@ -111,8 +111,8 @@ public class ClientDaoImp implements ClientDao {
         byte[] licenseVerso = resultSet.getBytes("driving_license_verso");
         int userId = resultSet.getInt("user_id");
 
-        return new Client(clientId, firstName, lastName, birthDate, cin,
+        return new Client(firstName, lastName, birthDate, cin,
                 cinRecto, cinVerso, licenseCategory, licenseExpireDate, licenseObtainDate,
-                licenseRecto, licenseVerso, userId);
+                licenseRecto, licenseVerso);
     }
 }

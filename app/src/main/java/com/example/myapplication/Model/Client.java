@@ -1,5 +1,6 @@
 package com.example.myapplication.Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 
@@ -7,9 +8,7 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 import com.example.myapplication.Extra.LicenseCategory;
 
-public class Client extends User {
-    
-    private int clientId;
+public class Client extends User implements Serializable {
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -22,29 +21,10 @@ public class Client extends User {
     private byte[] licenseRecto;
     private byte[] licenseVerso;
     
-    public Client(int userId, String username, Date accountCreationDate, String address, String city, String email,
-            String userPassword, String userPhoneNumber, State profileState, UserType userType, int clientId,
+    public Client(String username, Date accountCreationDate, String address, String city, String email,
+            String userPassword, String userPhoneNumber, State profileState, UserType userType,
             String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto, byte[] cinVerso,
             LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate, byte[] licenseRecto, byte[] licenseVerso) {
-        super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
-        this.clientId = clientId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.cin = cin;
-        this.cinRecto = cinRecto;
-        this.cinVerso = cinVerso;
-        this.licenseCategory = licenseCategory;
-        this.licenseExpireDate = licenseExpireDate;
-        this.licenseObtainDate = licenseObtainDate;
-        this.licenseRecto = licenseRecto;
-        this.licenseVerso = licenseVerso;
-    }
-
-    public Client(String username, Date accountCreationDate, String address, String city, String email,
-                  String userPassword, String userPhoneNumber, State profileState, UserType userType,
-                  String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto, byte[] cinVerso,
-                  LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate, byte[] licenseRecto, byte[] licenseVerso) {
         super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState, userType);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,27 +53,19 @@ public class Client extends User {
         this.licenseObtainDate = licenseObtainDate;
     }
 
-    public Client(int userId, String username, Date accountCreationDate, String address, String city, String email,
+    public Client(String username, Date accountCreationDate, String address, String city, String email,
             String userPassword, String userPhoneNumber, State profileState, UserType userType) {
                 super(username, accountCreationDate, address, city, email, userPassword, userPhoneNumber, profileState,
                 userType);
     }
 
-    public Client(int clientId, String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto,
+    public Client(String firstName, String lastName, Date birthDate, String cin, byte[] cinRecto,
             byte[] cinVerso, LicenseCategory licenseCategory, Date licenseExpireDate, Date licenseObtainDate,
-            byte[] licenseRecto, byte[] licenseVerso, int userId) {
+            byte[] licenseRecto, byte[] licenseVerso) {
                 super();
     }
 
     public Client() {}
-
-    public int getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -185,7 +157,7 @@ public class Client extends User {
 
     @Override
     public String toString() {
-        return "Client [clientId=" + clientId + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
+        return "Client [firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
                 + birthDate + ", cin=" + cin + ", cinRecto=" + Arrays.toString(cinRecto) + ", cinVerso="
                 + Arrays.toString(cinVerso) + ", licenseCategory=" + licenseCategory + ", licenseExpireDate="
                 + licenseExpireDate + ", licenseObtainDate=" + licenseObtainDate + ", licenseRecto="

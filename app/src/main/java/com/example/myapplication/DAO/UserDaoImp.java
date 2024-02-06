@@ -109,7 +109,7 @@ public class UserDaoImp implements UserDao {
         UserType userType = UserType.valueOf(resultSet.getString("user_type"));
 
         return (userType == UserType.CLIENT)
-                ? new Client(userId, username, accountCreationDate, address, city, email,
+                ? new Client(username, accountCreationDate, address, city, email,
                         userPassword, userPhoneNumber, profileState, userType)
                 : new Agency(username, accountCreationDate, address, city, email,
                         userPassword, userPhoneNumber, profileState, userType);

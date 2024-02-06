@@ -24,6 +24,8 @@ import com.google.firebase.storage.StorageReference;
 
 import android.view.View.OnClickListener;
 
+import java.sql.Date;
+
 
 public class login extends AppCompatActivity implements OnClickListener {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
@@ -72,7 +74,7 @@ public class login extends AppCompatActivity implements OnClickListener {
 //        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 //    }
 
-    Client client = new Client();
+    Client loggedInClient = new Client();
 
     private void checkClientLogin(DatabaseReference clientsRef) {
         clientsRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -81,8 +83,26 @@ public class login extends AppCompatActivity implements OnClickListener {
                 if (clientSnapshot.exists()) {
                     String clientPassword = clientSnapshot.child("password").getValue(String.class);
                     if (clientPassword != null && clientPassword.equals(password)) {
-                        // set client fields
-                        // ...
+                        final String firstName = clientSnapshot.child("firstName").getValue(String.class);
+                        final String lastName = clientSnapshot.child("lastName").getValue(String.class);
+                        final String email = clientSnapshot.child("email").getValue(String.class);
+                        final String phoneNumber = clientSnapshot.child("phoneNumber").getValue(String.class);
+                        final String address = clientSnapshot.child("address").getValue(String.class);
+                        final String city = clientSnapshot.child("city").getValue(String.class);
+                        final String cinNumber = clientSnapshot.child("cinNumber").getValue(String.class);
+                        final String drivingLicenseExpireDate = clientSnapshot.child("drivingLicenseExpireDate").getValue(String.class);
+                        // other fields ...
+
+                        loggedInClient.setUsername(username);
+                        loggedInClient.setFirstName(firstName);
+                        loggedInClient.setLastName(lastName);
+                        loggedInClient.setEmail(email);
+                        loggedInClient.setUserPhoneNumber(phoneNumber);
+                        loggedInClient.setAddress(address);
+                        loggedInClient.setCity(city);
+                        loggedInClient.setCin(cinNumber);
+                        loggedInClient.setLicenseExpireDate(Date.valueOf(drivingLicenseExpireDate));
+
                         handleClientLoginSuccess();
                     } else {
                         Toast.makeText(login.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
@@ -99,7 +119,7 @@ public class login extends AppCompatActivity implements OnClickListener {
         });
     }
 
-    Agency agency = new Agency();
+    Agency loggedInAgency = new Agency();
 
     private void checkAgencyLogin() {
         DatabaseReference agencyRef = databaseReference.child("Agency");
@@ -107,10 +127,25 @@ public class login extends AppCompatActivity implements OnClickListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot agencySnapshot) {
                 if (agencySnapshot.exists()) {
-                    String agencyPassword = agencySnapshot.child("Password").getValue(String.class);
+                    String agencyPassword = agencySnapshot.child("password").getValue(String.class);
                     if (agencyPassword != null && agencyPassword.equals(password)) {
-                        final String agencyName = agencySnapshot.child("Agency Name").getValue(String.class);
-                        agency.setAgencyName(agencyName);
+                        final String agencyName = agencySnapshot.child("agencyName").getValue(String.class);
+                        final String email = agencySnapshot.child("email").getValue(String.class);
+                        final String managerFullName = agencySnapshot.child("managerFullName").getValue(String.class);
+                        final String city = agencySnapshot.child("city").getValue(String.class);
+                        final String address = agencySnapshot.child("address").getValue(String.class);
+                        final String phoneNumber = agencySnapshot.child("phoneNumber").getValue(String.class);
+                        final String patentNumber = agencySnapshot.child("patentNumber").getValue(String.class);
+
+                        loggedInAgency.setAgencyName(agencyName);
+                        loggedInAgency.setUsername(username);
+                        loggedInAgency.setEmail(email);
+                        loggedInAgency.setManagerFullName(managerFullName);
+                        loggedInAgency.setCity(city);
+                        loggedInAgency.setAddress(address);
+                        loggedInAgency.setUserPhoneNumber(phoneNumber);
+                        loggedInAgency.setPatentNumber(Integer.parseInt(patentNumber));
+
                         handleAgencyLoginSuccess();
 
                     } else {
@@ -130,14 +165,16 @@ public class login extends AppCompatActivity implements OnClickListener {
 
     private void handleClientLoginSuccess() {
         Toast.makeText(login.this, "Client Logged In Successfully", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(login.this, clientmain.class));
+        Intent intent = new Intent(login.this, clientmain.class);
+        intent.putExtra("loggedInClient", loggedInClient);
+        startActivity(intent);
         finish();
     }
 
     private void handleAgencyLoginSuccess() {
         Toast.makeText(login.this, "Agency Logged In Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(login.this, agencymain.class);
-        intent.putExtra("Agency Name", agency.getAgencyName());
+        intent.putExtra("loggedInAgency", loggedInAgency);
         startActivity(intent);
         finish();
     }

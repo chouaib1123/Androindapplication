@@ -1,10 +1,11 @@
 package com.example.myapplication.Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 
-public abstract class User {
+public abstract class User implements Serializable {
     private String username;
     private Date accountCreationDate;
     private String address;

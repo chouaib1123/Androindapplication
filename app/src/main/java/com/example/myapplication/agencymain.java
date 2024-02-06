@@ -21,6 +21,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 
+import com.example.myapplication.Model.Agency;
+import com.example.myapplication.Model.Client;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
@@ -33,31 +35,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class agencymain extends AppCompatActivity {
-    //------------
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
-    //----------
-
+    private TextView agencyNameTextView;
     private LinearLayout containerLayout;
     TextView selectedTextView;
     private ScrollView scrollView;
+    Agency loggedInAgency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agencymain);
-        NavigationView nv = findViewById(R.id.navigation_view);
 
+        NavigationView nv = findViewById(R.id.navigation_view);
         ImageView menu = findViewById(R.id.menu_icon);
         View headerView = nv.getHeaderView(0);
         ImageView  backbtn = headerView.findViewById(R.id.backnav);
-
-
-
-
-
+        agencyNameTextView = headerView.findViewById(R.id.username);
         scrollView = findViewById(R.id.scrollview);
 
         switchToLayout(R.layout.postedcars);
@@ -77,8 +74,6 @@ public class agencymain extends AppCompatActivity {
             }
         });
 
-
-
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -95,11 +90,6 @@ public class agencymain extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-
-
     }
     public void openMenu() {
         NavigationView nv = findViewById(R.id.navigation_view);
@@ -111,18 +101,15 @@ public class agencymain extends AppCompatActivity {
     }
 
     public void setUpAgencyName(){
+        Intent intent = getIntent();
 
-        // Get the agency name from the Intent
-        String agencyName = getIntent().getStringExtra("Agency Name");
+        if(intent != null) {
+            loggedInAgency = (Agency) intent.getSerializableExtra("loggedInAgency");
 
-        // Find the TextView
-        NavigationView nv = findViewById(R.id.navigation_view);
-        View headerView = nv.getHeaderView(0);
-        TextView agencyNameTextView = headerView.findViewById(R.id.username);
-
-        // Set the agency name in the TextView
-        if (agencyName != null && !agencyName.isEmpty()) {
-            agencyNameTextView.setText(agencyName);
+            if(loggedInAgency != null) {
+                final String agencyName = loggedInAgency.getAgencyName();
+                agencyNameTextView.setText(String.format("%s", agencyName));
+            }
         }
     }
 

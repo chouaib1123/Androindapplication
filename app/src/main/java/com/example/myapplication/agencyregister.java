@@ -154,14 +154,14 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                         } else {
                             DatabaseReference identifier = databaseReference.child("Agency").child(username);
 
-                            identifier.child("Email").setValue(email);
-                            identifier.child("Password").setValue(password);
-                            identifier.child("Agency Manager Full Name").setValue(managerFullName);
-                            identifier.child("Agency Name").setValue(agencyName);
-                            identifier.child("City").setValue(City);
-                            identifier.child("Agency Address").setValue(agencyFullAddress);
-                            identifier.child("Phone Number").setValue(phoneNumber);
-                            identifier.child("Patent Number").setValue(patentNumber);
+                            identifier.child("email").setValue(email);
+                            identifier.child("password").setValue(password);
+                            identifier.child("managerFullName").setValue(managerFullName);
+                            identifier.child("agencyName").setValue(agencyName);
+                            identifier.child("city").setValue(City);
+                            identifier.child("address").setValue(agencyFullAddress);
+                            identifier.child("phoneNumber").setValue(phoneNumber);
+                            identifier.child("patentNumber").setValue(patentNumber);
 
                             Toast.makeText(agencyregister.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                             finish();
