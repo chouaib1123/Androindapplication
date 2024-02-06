@@ -43,7 +43,7 @@ public class agencymain extends AppCompatActivity {
     private LinearLayout containerLayout;
     TextView selectedTextView;
     private ScrollView scrollView;
-    Agency loggedInAgency;
+    private Agency loggedInAgency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,9 @@ public class agencymain extends AppCompatActivity {
 
         switchToLayout(R.layout.postedcars);
 
+        Intent intent = getIntent();
+        if(intent != null) loggedInAgency = (Agency) intent.getSerializableExtra("loggedInAgency");
+
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,8 +69,7 @@ public class agencymain extends AppCompatActivity {
             }
         });
 
-        backbtn.setOnClickListener(new View.OnClickListener()
-        {
+        backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
                 closeMenu();
@@ -79,10 +81,8 @@ public class agencymain extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.profil) {
-
                     switchToLayout(R.layout.agencyprofil);
                 } else if (itemId == R.id.postedcards) {
-
                     switchToLayout(R.layout.postedcars);
                 } else if (itemId == R.id.pendreq) {
                     switchToLayout(R.layout.pendingrequest);
@@ -101,15 +101,9 @@ public class agencymain extends AppCompatActivity {
     }
 
     public void setUpAgencyName(){
-        Intent intent = getIntent();
-
-        if(intent != null) {
-            loggedInAgency = (Agency) intent.getSerializableExtra("loggedInAgency");
-
-            if(loggedInAgency != null) {
-                final String agencyName = loggedInAgency.getAgencyName();
-                agencyNameTextView.setText(String.format("%s", agencyName));
-            }
+        if(loggedInAgency != null) {
+            final String agencyName = loggedInAgency.getAgencyName();
+            agencyNameTextView.setText(String.format("%s", agencyName));
         }
     }
 
@@ -136,6 +130,7 @@ public class agencymain extends AppCompatActivity {
         scrollView.removeAllViews();
         View newLayout = LayoutInflater.from(agencymain.this).inflate(layoutResId, scrollView, false);
         scrollView.addView(newLayout);
+
         if(layoutResId == R.layout.postedcars){
             Button loginButton = findViewById(R.id.ADDcars);
             loginButton.setOnClickListener(new View.OnClickListener() {
@@ -144,18 +139,14 @@ public class agencymain extends AppCompatActivity {
                     switchToLayout(R.layout.carinsert);
                 }
             });
-
-
-
         }
+
         if(layoutResId == R.layout.carinsert){
             TextView Carpic = findViewById(R.id.carpicture);
             setOnClickListenerForTextView( Carpic);
-
             EditText matricule ,carColor , fuelType ;
+            Button addCar = findViewById(R.id.button_add_car);
 
-            Button addCar;
-            addCar = findViewById(R.id.button_add_car);
             addCar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,6 +155,36 @@ public class agencymain extends AppCompatActivity {
             });
         }
 
+        if(layoutResId == R.layout.agencyprofil) {
+            TextView agencyNameTV = (TextView) findViewById(R.id.agencyName);
+            TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
+            TextView usernameTV = (TextView) findViewById(R.id.agencyUsername);
+            TextView emailTV = (TextView) findViewById(R.id.email);
+            TextView patentNumberTV = (TextView) findViewById(R.id.patentNumber);
+            TextView managerFullNameTV = (TextView) findViewById(R.id.managerFullName);
+            TextView addressTV = (TextView) findViewById(R.id.address);
+            TextView cityTV = (TextView) findViewById(R.id.city);
+
+            if(loggedInAgency != null) {
+                final String email = loggedInAgency.getEmail();
+                final String username = loggedInAgency.getUsername();
+                final String agencyName = loggedInAgency.getAgencyName();
+                final String phoneNumber = loggedInAgency.getUserPhoneNumber();
+                final String patentNumber = String.valueOf(loggedInAgency.getPatentNumber());
+                final String managerFullName = loggedInAgency.getManagerFullName();
+                final String address = loggedInAgency.getAddress();
+                final String city = loggedInAgency.getCity();
+
+                agencyNameTV.setText(agencyName);
+                emailTV.setText(email);
+                phoneNumberTV.setText(phoneNumber);
+                usernameTV.setText(username);
+                patentNumberTV.setText(patentNumber);
+                managerFullNameTV.setText(managerFullName);
+                addressTV.setText(address);
+                cityTV.setText(city);
+            }
+        }
     }
 
     private void setOnClickListenerForTextView(final TextView textView) {
@@ -189,7 +210,6 @@ public class agencymain extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -197,9 +217,7 @@ public class agencymain extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
-
 }

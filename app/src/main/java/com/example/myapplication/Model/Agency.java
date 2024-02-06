@@ -27,7 +27,7 @@ public class Agency extends User implements Serializable {
                 userType);
     }
 
-    public Agency(int patentNumber,
+    public Agency(long patentNumber,
             String managerFullName, String agencyName) {
         super();
     }
