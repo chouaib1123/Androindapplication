@@ -1,11 +1,12 @@
 package com.example.myapplication.Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 
-public class Agency extends User {
+public class Agency extends User implements Serializable {
     private int patentNumber;
     private String managerFullName;
     private String agencyName;
