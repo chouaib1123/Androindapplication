@@ -41,6 +41,9 @@ public class clientmain extends AppCompatActivity {
 
         switchToLayout(R.layout.cars);
 
+        Intent intent = getIntent();
+        if(intent != null) loggedInClient = (Client) intent.getSerializableExtra("loggedInClient");
+
         menu.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -62,10 +65,8 @@ public class clientmain extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.profil) {
-
                     switchToLayout(R.layout.clientprofil);
                 } else if (itemId == R.id.cars) {
-
                     switchToLayout(R.layout.cars);
                 } else if (itemId == R.id.pendreq) {
                     switchToLayout(R.layout.clientpendingrequest);
@@ -84,16 +85,10 @@ public class clientmain extends AppCompatActivity {
     }
 
     public void setLoggedInClientName() {
-        Intent intent = getIntent();
-
-        if(intent != null) {
-            loggedInClient = (Client) intent.getSerializableExtra("loggedInClient");
-
-            if(loggedInClient != null) {
-                final String clientFirstName = loggedInClient.getFirstName();
-                final String clientLastName = loggedInClient.getLastName();
-                clientNameTextView.setText(String.format("%s %s", clientFirstName, clientLastName));
-            }
+        if(loggedInClient != null) {
+            final String clientFirstName = loggedInClient.getFirstName();
+            final String clientLastName = loggedInClient.getLastName();
+            clientNameTextView.setText(String.format("%s %s", clientFirstName, clientLastName));
         }
     }
 
@@ -120,5 +115,39 @@ public class clientmain extends AppCompatActivity {
         scrollView.removeAllViews();
         View newLayout = LayoutInflater.from(clientmain.this).inflate(layoutResId, scrollView, false);
         scrollView.addView(newLayout);
+
+        if(layoutResId == R.layout.clientprofil) {
+            TextView clientFullNameTV = (TextView) findViewById(R.id.clientFullName);
+            TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
+            TextView usernameTV = (TextView) findViewById(R.id.clientUsername);
+            TextView emailTV = (TextView) findViewById(R.id.email);
+            TextView cinNumberTV = (TextView) findViewById(R.id.cinNumber);
+            TextView drivingLicenseExpireDateTV = (TextView) findViewById(R.id.drivingLicenseExpireDate);
+            TextView drivingLicenseObtainDateTV = (TextView) findViewById(R.id.drivingLicenseObtainDate);
+            TextView addressTV = (TextView) findViewById(R.id.address);
+            TextView cityTV = (TextView) findViewById(R.id.city);
+
+            if(loggedInClient != null) {
+                final String email = loggedInClient.getEmail();
+                final String username = loggedInClient.getUsername();
+                final String clientFullName = String.format("%s %s", loggedInClient.getFirstName(), loggedInClient.getLastName());
+                final String phoneNumber = loggedInClient.getUserPhoneNumber();
+                final String cinNumber = loggedInClient.getCin();
+                final String drivingLicenseExpireDate = String.valueOf(loggedInClient.getLicenseExpireDate());
+                final String drivingLicenseObtainDate = String.valueOf(loggedInClient.getLicenseObtainDate());
+                final String address = loggedInClient.getAddress();
+                final String city = loggedInClient.getCity();
+
+                clientFullNameTV.setText(clientFullName);
+                emailTV.setText(email);
+                phoneNumberTV.setText(phoneNumber);
+                usernameTV.setText(username);
+                cinNumberTV.setText(cinNumber);
+                drivingLicenseExpireDateTV.setText(drivingLicenseExpireDate);
+                drivingLicenseObtainDateTV.setText(drivingLicenseObtainDate);
+                addressTV.setText(address);
+                cityTV.setText(city);
+            }
+        }
     }
 }

@@ -91,7 +91,7 @@ public class login extends AppCompatActivity implements OnClickListener {
                         final String city = clientSnapshot.child("city").getValue(String.class);
                         final String cinNumber = clientSnapshot.child("cinNumber").getValue(String.class);
                         final String drivingLicenseExpireDate = clientSnapshot.child("drivingLicenseExpireDate").getValue(String.class);
-                        // other fields ...
+                        final String drivingLicenseObtainDate = clientSnapshot.child("drivingLicenseObtainDate").getValue(String.class);
 
                         loggedInClient.setUsername(username);
                         loggedInClient.setFirstName(firstName);
@@ -102,6 +102,7 @@ public class login extends AppCompatActivity implements OnClickListener {
                         loggedInClient.setCity(city);
                         loggedInClient.setCin(cinNumber);
                         loggedInClient.setLicenseExpireDate(Date.valueOf(drivingLicenseExpireDate));
+                        loggedInClient.setLicenseObtainDate(Date.valueOf(drivingLicenseObtainDate));
 
                         handleClientLoginSuccess();
                     } else {
