@@ -7,7 +7,7 @@ import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.UserType;
 
 public class Agency extends User implements Serializable {
-    private int patentNumber;
+    private long patentNumber;
     private String managerFullName;
     private String agencyName;
     
@@ -34,11 +34,11 @@ public class Agency extends User implements Serializable {
 
     public Agency() {}
 
-    public int getPatentNumber() {
+    public long getPatentNumber() {
         return patentNumber;
     }
 
-    public void setPatentNumber(int patentNumber) {
+    public void setPatentNumber(long patentNumber) {
         this.patentNumber = patentNumber;
     }
 

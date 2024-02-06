@@ -144,7 +144,7 @@ public class login extends AppCompatActivity implements OnClickListener {
                         loggedInAgency.setCity(city);
                         loggedInAgency.setAddress(address);
                         loggedInAgency.setUserPhoneNumber(phoneNumber);
-                        loggedInAgency.setPatentNumber(Integer.parseInt(patentNumber));
+                        loggedInAgency.setPatentNumber(Long.parseLong(patentNumber));
 
                         handleAgencyLoginSuccess();
 
