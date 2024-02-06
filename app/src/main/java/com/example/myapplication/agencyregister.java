@@ -18,7 +18,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.Controller.AgencyController;
+import com.example.myapplication.Controller.ClientController;
+import com.example.myapplication.DAO.AgencyDaoImp;
+import com.example.myapplication.DAO.ClientDaoImp;
 import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Util.DatabaseUtil;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DataSnapshot;
@@ -37,8 +42,7 @@ import android.view.View.OnClickListener;
 
 public class agencyregister extends AppCompatActivity implements OnClickListener {
     TextView selectedTextView;
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://clientregister-c1856-default-rtdb.firebaseio.com/");
-    private String username, email, password, vPassword, managerFullName, agencyName, phoneNumber, City, agencyFullAddress, patentNumber;
+    private String username, email, password, vPassword, managerFullName, agencyName, phoneNumber, city, agencyFullAddress, patentNumber;
 
     @SuppressLint("MissingInflatedId")
 
@@ -59,7 +63,7 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
         phoneNumber = Functions.getEditTextValue((EditText)findViewById(R.id.phone));
         managerFullName = ((EditText)findViewById(R.id.Managername)).getText().toString();
         agencyName = ((EditText)findViewById(R.id.agencyName)).getText().toString();
-        City = Functions.getEditTextValue((EditText)findViewById(R.id.ville));
+        city = Functions.getEditTextValue((EditText)findViewById(R.id.ville));
         agencyFullAddress = Functions.getEditTextValue((EditText)findViewById(R.id.adresse));
         patentNumber = Functions.getEditTextValue((EditText)findViewById(R.id.patent_number));
     }
@@ -88,7 +92,7 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
         } else if (!Functions.isValidAgencyName(agencyName)) {
             userViewImp.OnRegisterError(this, "Invalid Agency Name!");
             return false;
-        }else if (!Functions.isValidCity(City)) {
+        }else if (!Functions.isValidCity(city)) {
             userViewImp.OnRegisterError(this, "Invalid City!");
             return false;
         } else if (!Functions.isValidFullAddress(agencyFullAddress)) {
@@ -102,24 +106,6 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
         return true;
     }
 
-//    private void setOnClickListenerForTextView(final TextView textView) {
-//        textView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                selectedTextView = textView;
-//                startImagePickerForTextView();
-//            }
-//        });
-//    }
-//
-//    private void startImagePickerForTextView() {
-//        ImagePicker.with(agencyregister.this)
-//                .crop()                     // Crop image (Optional)
-//                .compress(1024)             // Final image size will be less than 1 MB (Optional)
-//                .maxResultSize(1080, 1080)  // Final image resolution will be less than 1080 x 1080 (Optional)
-//                .start();
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,7 +118,6 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                     selectedTextView.setBackground(drawable);
                 } catch (IOException e) {
                     e.printStackTrace();
-
                 }
             }
         }
@@ -146,22 +131,16 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
             getFieldsValues();
 
             if(checkFields()) {
-                databaseReference.child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
+                DatabaseUtil.connect().child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))){
                             Toast.makeText(agencyregister.this, "Username already registered", Toast.LENGTH_SHORT).show();
                         } else {
-                            DatabaseReference identifier = databaseReference.child("Agency").child(username);
+                            AgencyController agencyController = new AgencyController(new AgencyDaoImp());
 
-                            identifier.child("email").setValue(email);
-                            identifier.child("password").setValue(password);
-                            identifier.child("managerFullName").setValue(managerFullName);
-                            identifier.child("agencyName").setValue(agencyName);
-                            identifier.child("city").setValue(City);
-                            identifier.child("address").setValue(agencyFullAddress);
-                            identifier.child("phoneNumber").setValue(phoneNumber);
-                            identifier.child("patentNumber").setValue(patentNumber);
+                            agencyController.registerAgency(username, agencyFullAddress, city, email, password, phoneNumber,
+                                    patentNumber, managerFullName, agencyName);
 
                             Toast.makeText(agencyregister.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                             finish();

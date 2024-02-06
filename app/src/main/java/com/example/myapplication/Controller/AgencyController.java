@@ -14,8 +14,11 @@ public class AgencyController {
         return agencyDao.getAgencyByUsername(agencyUsername);
     }
 
-    public void registerAgency(long patentNumber, String managerFullName, String agencyName) {
-        agencyDao.insertAgency(patentNumber, managerFullName, agencyName);
+    public void registerAgency(String agencyUsername, String address, String city,
+                               String email, String userPassword, String userPhoneNumber, String patentNumber,
+                               String managerFullName, String agencyName) {
+        agencyDao.insertAgency(agencyUsername, address, city, email, userPassword, userPhoneNumber,
+                patentNumber, managerFullName, agencyName);
     }
 
     public void updateAgencyDetails(String agencyUsername, String managerFullName, String agencyName) {
