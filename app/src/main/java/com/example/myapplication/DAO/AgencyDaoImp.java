@@ -27,19 +27,13 @@ public class AgencyDaoImp implements AgencyDao {
     }
 
     @Override
-    public void insertAgency(int cnssNumber, byte[] cnssRegistrationImage,
-                             int companyRegistrationNumber, String managerFullName,
-                             String agencyName, int taxIdentificationNumber, int userId) {
+    public void insertAgency(long patentNumber, String managerFullName, String agencyName) {
         String query = "call InsertAgency(?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = ConnectionPool.getConnectionFromPool();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, cnssNumber);
-            preparedStatement.setBytes(2, cnssRegistrationImage);
-            preparedStatement.setInt(3, companyRegistrationNumber);
+            preparedStatement.setLong(3, patentNumber);
             preparedStatement.setString(4, managerFullName);
             preparedStatement.setString(5, agencyName);
-            preparedStatement.setInt(6, taxIdentificationNumber);
-            preparedStatement.setInt(7, userId);
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -51,11 +45,10 @@ public class AgencyDaoImp implements AgencyDao {
     }
 
     @Override
-    public void updateAgency(int agencyId, String managerFullName, String agencyName) {
+    public void updateAgency(String managerFullName, String agencyName) {
         String query = "call updateAgency(?, ?, ?)";
         try (Connection connection = ConnectionPool.getConnectionFromPool();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                 preparedStatement.setInt(1, agencyId);
             preparedStatement.setString(2, managerFullName);
             preparedStatement.setString(3, agencyName);
 

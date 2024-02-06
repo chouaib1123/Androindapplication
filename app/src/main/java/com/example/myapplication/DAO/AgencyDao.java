@@ -4,9 +4,7 @@ import com.example.myapplication.Model.Agency;
 
 public interface AgencyDao {
     Agency getAgencyById(int agencyId);
-    void insertAgency(int cnssNumber, byte[] cnssRegistrationImage,
-                      int companyRegistrationNumber, String managerFullName,
-                      String agencyName, int taxIdentificationNumber, int userId);
+    void insertAgency(long patentNumber, String managerFullName, String agencyName);
 
-    void updateAgency(int agencyId, String managerFullName, String agencyName);
+    void updateAgency(String managerFullName, String agencyName);
 }

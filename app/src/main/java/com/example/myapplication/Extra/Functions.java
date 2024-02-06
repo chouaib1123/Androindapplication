@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public interface Functions {
     static boolean isValidUsername(String username) {
-        return !username.isEmpty() && username.length() >= 4 && username.matches("[a-zA-Z\\s'-]+");
+        return !username.isEmpty() && username.length() >= 4  && username.matches("[a-zA-Z0-9\\s'-]+");
     }
 
     static boolean isValidEmail(String email) {
@@ -120,7 +120,7 @@ public interface Functions {
     }
 
     static boolean isValidAgencyName(String agencyName) {
-        return !agencyName.isEmpty() && agencyName.matches("[a-zA-Z\\s'-]+") && agencyName.length() >= 2;
+        return !agencyName.isEmpty() && agencyName.matches("[a-zA-Z0-9\\s'-]+") && agencyName.length() >= 2;
     }
 
     static boolean isValidCity(String city) {

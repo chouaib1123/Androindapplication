@@ -4,7 +4,7 @@ import com.example.myapplication.DAO.AgencyDao;
 import com.example.myapplication.Model.Agency;
 
 public class AgencyController {
-    private AgencyDao agencyDao;
+    private final AgencyDao agencyDao;
 
     public AgencyController(AgencyDao agencyDao) {
         this.agencyDao = agencyDao;
@@ -14,14 +14,11 @@ public class AgencyController {
         return agencyDao.getAgencyById(agencyId);
     }
 
-    public void registerAgency(int cnssNumber, byte[] cnssRegistrationImage,
-                               int companyRegistrationNumber, String managerFullName,
-                               String agencyName, int taxIdentificationNumber, int userId) {
-        agencyDao.insertAgency(cnssNumber, cnssRegistrationImage, companyRegistrationNumber,
-                                managerFullName, agencyName, taxIdentificationNumber, userId);
+    public void registerAgency(long patentNumber, String managerFullName, String agencyName) {
+        agencyDao.insertAgency(patentNumber, managerFullName, agencyName);
     }
 
-    public void updateAgencyDetails(int agencyId, String managerFullName, String agencyName) {
-        agencyDao.updateAgency(agencyId, managerFullName, agencyName);
+    public void updateAgencyDetails(String managerFullName, String agencyName) {
+        agencyDao.updateAgency(managerFullName, agencyName);
     }
 }
