@@ -122,6 +122,7 @@ public class clientmain extends AppCompatActivity {
             TextView usernameTV = (TextView) findViewById(R.id.clientUsername);
             TextView emailTV = (TextView) findViewById(R.id.email);
             TextView cinNumberTV = (TextView) findViewById(R.id.cinNumber);
+            TextView drivingLicenseCategoryTV = (TextView) findViewById(R.id.drivingLicenseCategory);
             TextView drivingLicenseExpireDateTV = (TextView) findViewById(R.id.drivingLicenseExpireDate);
             TextView drivingLicenseObtainDateTV = (TextView) findViewById(R.id.drivingLicenseObtainDate);
             TextView addressTV = (TextView) findViewById(R.id.address);
@@ -133,6 +134,7 @@ public class clientmain extends AppCompatActivity {
                 final String clientFullName = String.format("%s %s", loggedInClient.getFirstName(), loggedInClient.getLastName());
                 final String phoneNumber = loggedInClient.getUserPhoneNumber();
                 final String cinNumber = loggedInClient.getCin();
+                final String drivingLicenseCategory = String.valueOf(loggedInClient.getLicenseCategory());
                 final String drivingLicenseExpireDate = String.valueOf(loggedInClient.getLicenseExpireDate());
                 final String drivingLicenseObtainDate = String.valueOf(loggedInClient.getLicenseObtainDate());
                 final String address = loggedInClient.getAddress();
@@ -143,10 +145,11 @@ public class clientmain extends AppCompatActivity {
                 phoneNumberTV.setText(phoneNumber);
                 usernameTV.setText(username);
                 cinNumberTV.setText(cinNumber);
-                drivingLicenseExpireDateTV.setText(drivingLicenseExpireDate);
-                drivingLicenseObtainDateTV.setText(drivingLicenseObtainDate);
                 addressTV.setText(address);
                 cityTV.setText(city);
+                drivingLicenseCategoryTV.setText(drivingLicenseCategory);
+                drivingLicenseExpireDateTV.setText(drivingLicenseExpireDate);
+                drivingLicenseObtainDateTV.setText(drivingLicenseObtainDate);
             }
         }
     }

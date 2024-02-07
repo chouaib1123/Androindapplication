@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.*;
 
 import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Extra.LicenseCategory;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.View.UserViewImp;
@@ -90,6 +91,7 @@ public class login extends AppCompatActivity implements OnClickListener {
                         final String address = clientSnapshot.child("address").getValue(String.class);
                         final String city = clientSnapshot.child("city").getValue(String.class);
                         final String cinNumber = clientSnapshot.child("cinNumber").getValue(String.class);
+                        final String drivingLicenseCategory = clientSnapshot.child("drivingLicenseCategory").getValue(String.class);
                         final String drivingLicenseExpireDate = clientSnapshot.child("drivingLicenseExpireDate").getValue(String.class);
                         final String drivingLicenseObtainDate = clientSnapshot.child("drivingLicenseObtainDate").getValue(String.class);
 
@@ -101,6 +103,7 @@ public class login extends AppCompatActivity implements OnClickListener {
                         loggedInClient.setAddress(address);
                         loggedInClient.setCity(city);
                         loggedInClient.setCin(cinNumber);
+                        loggedInClient.setLicenseCategory(LicenseCategory.valueOf(drivingLicenseCategory));
                         loggedInClient.setLicenseExpireDate(Date.valueOf(drivingLicenseExpireDate));
                         loggedInClient.setLicenseObtainDate(Date.valueOf(drivingLicenseObtainDate));
 
