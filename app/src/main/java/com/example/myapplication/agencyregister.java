@@ -128,7 +128,7 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))){
                             Toast.makeText(agencyregister.this, "Username already registered", Toast.LENGTH_SHORT).show();
                         } else {
-                            AgencyController agencyController = new AgencyController(new AgencyDaoImp());
+                            AgencyController agencyController = new AgencyController();
 
                             agencyController.registerAgency(username, agencyFullAddress, city, email, password, phoneNumber,
                                     patentNumber, managerFullName, agencyName);

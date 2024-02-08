@@ -2,14 +2,15 @@ package com.example.myapplication.Controller;
 
 import java.sql.Date;
 import com.example.myapplication.DAO.RequestDao;
+import com.example.myapplication.DAO.RequestDaoImp;
 import com.example.myapplication.Extra.DeliveryOption;
 import com.example.myapplication.Model.Request;
 
 public class RequestController {
     private final RequestDao requestsDao;
 
-    public RequestController(RequestDao requestsDao) {
-        this.requestsDao = requestsDao;
+    public RequestController() {
+        this.requestsDao = new RequestDaoImp();
     }
 
     public Request getRequestById(int requestId) {

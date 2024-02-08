@@ -208,7 +208,7 @@ public class agencymain extends AppCompatActivity {
                                 if(snapshot.hasChild(matricula))
                                     Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
                                 else {
-                                    CarController carController = new CarController(new CarDaoImp());
+                                    CarController carController = new CarController();
 
                                     carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
                                     uploadImagesToFirebaseStorage();

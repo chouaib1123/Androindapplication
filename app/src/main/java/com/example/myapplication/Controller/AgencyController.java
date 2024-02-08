@@ -1,13 +1,14 @@
 package com.example.myapplication.Controller;
 
 import com.example.myapplication.DAO.AgencyDao;
+import com.example.myapplication.DAO.AgencyDaoImp;
 import com.example.myapplication.Model.Agency;
 
 public class AgencyController {
     private final AgencyDao agencyDao;
 
-    public AgencyController(AgencyDao agencyDao) {
-        this.agencyDao = agencyDao;
+    public AgencyController() {
+        this.agencyDao = new AgencyDaoImp();
     }
 
     public Agency getAgencyByUsername(String agencyUsername) {

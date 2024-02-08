@@ -157,7 +157,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
                             userViewImp.OnError(clientregister.this, "Username already exists!");
                         } else {
-                            ClientController clientController = new ClientController(new ClientDaoImp());
+                            ClientController clientController = new ClientController();
 
                             clientController.registerClient(username, address, city, email, password, phoneNumber,
                                     firstName, lastName, birthDate, cinNumber, drivingLicenceCategory,

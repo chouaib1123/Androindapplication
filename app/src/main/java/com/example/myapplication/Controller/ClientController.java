@@ -2,14 +2,15 @@ package com.example.myapplication.Controller;
 
 import java.sql.Date;
 import com.example.myapplication.DAO.ClientDao;
+import com.example.myapplication.DAO.ClientDaoImp;
 import com.example.myapplication.Extra.LicenseCategory;
 import com.example.myapplication.Model.Client;
 
 public class ClientController {
     private final ClientDao clientDao;
 
-    public ClientController(ClientDao clientDao) {
-        this.clientDao = clientDao;
+    public ClientController() {
+        this.clientDao = new ClientDaoImp();
     }
 
     public Client getClientByUsername(String clientUsername) {

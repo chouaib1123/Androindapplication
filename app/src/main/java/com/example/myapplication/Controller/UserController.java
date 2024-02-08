@@ -2,14 +2,15 @@ package com.example.myapplication.Controller;
 
 import java.sql.Date;
 import com.example.myapplication.DAO.UserDao;
+import com.example.myapplication.DAO.UserDaoImp;
 import com.example.myapplication.Extra.UserType;
 import com.example.myapplication.Model.User;
 
 public class UserController {
     private final UserDao userDao;
 
-    public UserController(UserDao userDao) {
-        this.userDao = userDao;
+    public UserController() {
+        this.userDao = new UserDaoImp();
     }
 
     public User getUserByUsername(String username) {

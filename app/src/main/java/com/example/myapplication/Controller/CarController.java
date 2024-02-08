@@ -1,14 +1,15 @@
 package com.example.myapplication.Controller;
 
 import com.example.myapplication.DAO.CarDao;
+import com.example.myapplication.DAO.CarDaoImp;
 import com.example.myapplication.Extra.FuelType;
 import com.example.myapplication.Model.Car;
 
 public class CarController {
     private final CarDao carDao;
 
-    public CarController(CarDao carDao) {
-        this.carDao = carDao;
+    public CarController() {
+        this.carDao = new CarDaoImp();
     }
 
     public Car getCarByMatricula(String carMatricula) {
