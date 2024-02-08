@@ -332,7 +332,7 @@ public class agencymain extends AppCompatActivity {
                             textViewLocation.setText(agencyCity); // Display agency information
 
                             // Retrieve and set the car image from Firebase Storage
-                            String imageName = carMatricule;
+                            String imageName = carMatricule + ".png";
                             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername + "/" + imageName);
 
                             final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
@@ -398,7 +398,7 @@ public class agencymain extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 final byte[] byteArray = stream.toByteArray();
                 String agencyUsername = loggedInAgency.getUsername();
-                String filename = matricula;
+                String filename = matricula + ".png";
 
                 // Get a reference to the Firebase Storage location
                 final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername +"/" + filename);
