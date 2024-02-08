@@ -1,6 +1,7 @@
 package com.example.myapplication.Extra;
 
 import android.util.Patterns;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -104,11 +105,11 @@ public interface Functions {
     }
 
     static boolean isValidFirstName(String firstName) {
-        return !firstName.isEmpty() && firstName.matches("[a-zA-Z\\s'-]+") && firstName.length() >= 2;
+        return !firstName.isEmpty() && firstName.matches("[a-zA-Z\\s']+") && firstName.length() >= 2;
     }
 
     static boolean isValidLastName(String lastName) {
-        return !lastName.isEmpty() && lastName.matches("[a-zA-Z\\s'-]+") && lastName.length() >= 2;
+        return !lastName.isEmpty() && lastName.matches("[a-zA-Z\\s']+") && lastName.length() >= 2;
     }
 
     static boolean isValidCinNumber(String cinNumber) {
@@ -135,11 +136,58 @@ public interface Functions {
         return !patentNumber.isEmpty() && patentNumber.matches("\\d{15}");
     }
 
+    static boolean isValidFuelType(String fuelType) {
+        if(!fuelType.isEmpty()) {
+            try {
+                FuelType.valueOf(fuelType);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    static boolean isValidColor(String color) {
+        return !color.isEmpty() && color.matches("[a-zA-Z]+");
+    }
+
+    static boolean isValidMatricula(String matricula) {
+        return !matricula.isEmpty() && matricula.matches("[a-zA-Z0-9\\s'-]+");
+    }
+
+    static boolean isValidModel(String model) {
+        return !model.isEmpty() && model.length() >= 2 && model.matches("[a-zA-Z0-9\\s'-]+");
+    }
+
+    static boolean isValidPricePerDay(String pricePerDay) {
+        try {
+            double price = Double.parseDouble(pricePerDay);
+            return price > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    static boolean isValidSeatsNumber(String seatsNumber) {
+        try {
+            int seats = Integer.parseInt(seatsNumber);
+            return seats > 0 && seats <= 55;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     static String getEditTextValue(EditText editText) {
         return editText.getText().toString().trim();
     }
 
     static String getEditTextValue(TextView textView) {
         return textView.getText().toString().trim();
+    }
+
+    static String getCheckBoxValue(CheckBox checkBox)
+    {
+        return String.valueOf(checkBox.isChecked());
     }
 }

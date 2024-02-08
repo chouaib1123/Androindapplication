@@ -27,6 +27,7 @@ import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.Util.DatabaseUtil;
+import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -137,18 +138,39 @@ public class agencymain extends AppCompatActivity {
     }
 
     private void getFieldsValues() {
-        // set color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername
         color = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_color));
         fuelType = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_fuel));
-        isAutomatic = Functions.getEditTextValue((EditText)findViewById(R.id.checkbox_automatic));
+        isAutomatic = Functions.getCheckBoxValue((CheckBox) findViewById(R.id.checkbox_automatic));
         matricula = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_matricule));
         model = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_model));
         pricePerDay = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_price_per_day));
         seatsNumber = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_seats_number));
+        agencyUsername = loggedInAgency.getUsername();
     }
 
     private boolean checkFields() {
-        // check color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername
+        UserViewImp userViewImp = new UserViewImp();
+
+        if(!Functions.isValidColor(color)) {
+            userViewImp.OnRegisterError(this, "Invalid Color!");
+            return false;
+        } else if (!Functions.isValidFuelType(fuelType)) {
+            userViewImp.OnRegisterError(this, "Invalid Fuel Type!");
+            return false;
+        } else if (!Functions.isValidMatricula(matricula)) {
+            userViewImp.OnRegisterError(this, "Invalid Matricula!");
+            return false;
+        } else if (!Functions.isValidModel(model)) {
+            userViewImp.OnRegisterError(this, "Invalid Car Model!");
+            return false;
+        } else if (!Functions.isValidPricePerDay(pricePerDay)) {
+            userViewImp.OnRegisterError(this, "Invalid Price!");
+            return false;
+        }  else if (!Functions.isValidSeatsNumber(seatsNumber)) {
+            userViewImp.OnRegisterError(this, "Invalid Number of Seats!");
+            return false;
+        }
+
         return true;
     }
 
@@ -170,20 +192,7 @@ public class agencymain extends AppCompatActivity {
         if (layoutResId == R.layout.carinsert) {
             TextView carPicture = findViewById(R.id.carpicture);
             setOnClickListenerForTextView(carPicture);
-
-//            EditText carMatricule, carColor, carFuelType, carModel, carPricePerDay, carSeatsNumber;
-            CheckBox carIsAutomatic;
-            Button addCar;
-
-//            carColor = findViewById(R.id.edit_text_car_color);
-//            carFuelType = findViewById(R.id.edit_text_fuel);
-            carIsAutomatic = findViewById(R.id.checkbox_automatic);
-//            carMatricule = findViewById(R.id.edit_text_car_matricule);
-//            carModel = findViewById(R.id.edit_text_car_model);
-//            carPricePerDay = findViewById(R.id.edit_text_car_price_per_day);
-//            carSeatsNumber = findViewById(R.id.edit_text_car_seats_number);
-            addCar = findViewById(R.id.button_add_car);
-//            String agencyName = loggedInAgency.getAgencyName();
+            Button addCar = findViewById(R.id.button_add_car);
 
             addCar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -298,12 +307,11 @@ public class agencymain extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 final byte[] byteArray = stream.toByteArray();
                 EditText editTextMatricule = findViewById(R.id.edit_text_car_matricule);
-                String agencyName = getIntent().getStringExtra("Agency Name");
+                String agencyUsername = loggedInAgency.getUsername();
                 String filename = getFilenameForTextView(editTextMatricule);
 
                 // Get a reference to the Firebase Storage location
-                final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" +agencyName +"/" + filename);
-                //final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString() + ".png");
+                final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername +"/" + filename);
                 // Upload the byte array to Firebase Storage
                 storageRef.putBytes(byteArray)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
