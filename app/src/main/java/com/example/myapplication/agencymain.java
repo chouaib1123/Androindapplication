@@ -21,8 +21,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 
+import com.example.myapplication.Controller.CarController;
+import com.example.myapplication.DAO.CarDaoImp;
+import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Client;
+import com.example.myapplication.Util.DatabaseUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,13 +48,12 @@ import java.util.Map;
 public class agencymain extends AppCompatActivity {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
     private TextView agencyNameTextView;
-    private LinearLayout containerLayout;
     TextView selectedTextView;
     private ScrollView scrollView;
     private Agency loggedInAgency;
+    private String color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +136,22 @@ public class agencymain extends AppCompatActivity {
         nv.startAnimation(fadeOut);
     }
 
+    private void getFieldsValues() {
+        // set color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername
+        color = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_color));
+        fuelType = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_fuel));
+        isAutomatic = Functions.getEditTextValue((EditText)findViewById(R.id.checkbox_automatic));
+        matricula = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_matricule));
+        model = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_model));
+        pricePerDay = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_price_per_day));
+        seatsNumber = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_seats_number));
+    }
+
+    private boolean checkFields() {
+        // check color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername
+        return true;
+    }
+
     protected void switchToLayout(int layoutResId) {
         scrollView.removeAllViews();
         View newLayout = LayoutInflater.from(agencymain.this).inflate(layoutResId, scrollView, false);
@@ -152,52 +171,46 @@ public class agencymain extends AppCompatActivity {
             TextView carPicture = findViewById(R.id.carpicture);
             setOnClickListenerForTextView(carPicture);
 
-            EditText carMatricule, carColor, carFuelType, carModel, carPricePerDay, carSeatsNumber;
+//            EditText carMatricule, carColor, carFuelType, carModel, carPricePerDay, carSeatsNumber;
             CheckBox carIsAutomatic;
             Button addCar;
 
-            carColor = findViewById(R.id.edit_text_car_color);
-            carFuelType = findViewById(R.id.edit_text_fuel);
+//            carColor = findViewById(R.id.edit_text_car_color);
+//            carFuelType = findViewById(R.id.edit_text_fuel);
             carIsAutomatic = findViewById(R.id.checkbox_automatic);
-            carMatricule = findViewById(R.id.edit_text_car_matricule);
-            carModel = findViewById(R.id.edit_text_car_model);
-            carPricePerDay = findViewById(R.id.edit_text_car_price_per_day);
-            carSeatsNumber = findViewById(R.id.edit_text_car_seats_number);
+//            carMatricule = findViewById(R.id.edit_text_car_matricule);
+//            carModel = findViewById(R.id.edit_text_car_model);
+//            carPricePerDay = findViewById(R.id.edit_text_car_price_per_day);
+//            carSeatsNumber = findViewById(R.id.edit_text_car_seats_number);
             addCar = findViewById(R.id.button_add_car);
-            String agencyName = getIntent().getStringExtra("Agency Name");
+//            String agencyName = loggedInAgency.getAgencyName();
 
             addCar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    databaseReference.child(agencyName).child("Car Matricule").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.hasChild(getTrimmedText(carMatricule)))
-                                Toast.makeText(agencymain.this, "the car already exists", Toast.LENGTH_SHORT).show();
-                            else {
-                                DatabaseReference identifier = databaseReference.child("Agency").child(agencyName).child("Cars");
-                                identifier.child(getTrimmedText(carMatricule)).child("Car Matricule").setValue(getTrimmedText(carMatricule));
-                                identifier.child(getTrimmedText(carMatricule)).child("Car Color").setValue(getTrimmedText(carColor));
-                                identifier.child(getTrimmedText(carMatricule)).child("Fuel Type").setValue(getTrimmedText(carFuelType));
-                                identifier.child(getTrimmedText(carMatricule)).child("Is Automatic").setValue(checkedCarAutomatic(carIsAutomatic));
-                                identifier.child(getTrimmedText(carMatricule)).child("Car Model").setValue(getTrimmedText(carModel));
-                                identifier.child(getTrimmedText(carMatricule)).child("Price Per Day").setValue(getTrimmedText(carPricePerDay));
-                                identifier.child(getTrimmedText(carMatricule)).child("Seats Number").setValue(getTrimmedText(carSeatsNumber));
-                                uploadImagesToFirebaseStorage();
+                    getFieldsValues();
 
-                                Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
-                                finish();
+                    if(checkFields()) {
+                        DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.hasChild(matricula))
+                                    Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
+                                else {
+                                    CarController carController = new CarController(new CarDaoImp());
 
+                                    carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
+                                    uploadImagesToFirebaseStorage();
 
+                                    Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+                    }
                 }
             });
         }
@@ -310,5 +323,10 @@ public class agencymain extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private String getFilenameForTextView(EditText editText) {
+        // Map TextView types to filenames
+        return editText.getText().toString().trim() + ".png";
     }
 }

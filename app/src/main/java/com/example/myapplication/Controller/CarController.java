@@ -15,9 +15,9 @@ public class CarController {
         return carDao.getCarByMatricula(carMatricula);
     }
 
-    public void addCar(byte[] carImage, String color, FuelType fuelType, boolean isAutomatic, String matricula, String model,
-                       double pricePerDay, int seatsNumber, String agencyUsername) {
-        carDao.insertCar(carImage, color, fuelType, isAutomatic, matricula, model,
+    public void addCar(String color, String fuelType, String isAutomatic, String matricula, String model,
+                       String pricePerDay, String seatsNumber, String agencyUsername) {
+        carDao.insertCar(color, fuelType, isAutomatic, matricula, model,
                           pricePerDay, seatsNumber, agencyUsername);
     }
 
