@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -252,6 +253,101 @@ public class agencymain extends AppCompatActivity {
                 cityTV.setText(city);
             }
         }
+    }
+
+    public void retrievePostedCars() {
+        LinearLayout myLayout = findViewById(R.id.mylayout);
+        String agencyUsername = loggedInAgency.getUsername();
+        DatabaseReference postedCarsRef = FirebaseDatabase.getInstance().getReference().child("Agency").child(agencyUsername);
+
+        postedCarsRef.child("Cars").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot carSnapshot : dataSnapshot.getChildren()) {
+                    // Read car data
+                    String carModel = carSnapshot.child("model").getValue(String.class);
+                    String carPrice = carSnapshot.child("pricePerDay").getValue(String.class);
+                    String carMatricule = carSnapshot.child("matricula").getValue(String.class);
+                    Log.d("car matriucle" , carMatricule);
+
+                    // Fetch additional information about the agency
+                    DatabaseReference agencyRef = FirebaseDatabase.getInstance().getReference().child("Agency").child(agencyUsername);
+                    agencyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot agencySnapshot) {
+                            String agencyCity = agencySnapshot.child("City").getValue(String.class);
+
+                            // Create CardView
+                            CardView cardView = new CardView(agencymain.this);
+
+                            // Set layout parameters for the CardView
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+                            layoutParams.setMargins(
+                                    40,
+                                    20,
+                                    40,
+                                    50
+                            );
+                            cardView.setId(R.id.edit_text_car_matricule);
+                            cardView.setLayoutParams(layoutParams);
+
+                            // Inflate the layout
+                            View cardLayout = LayoutInflater.from(agencymain.this).inflate(R.layout.card_layout, null);
+
+                            // Find views in the cardLayout
+                            ImageView imageView = cardLayout.findViewById(R.id.imageView);
+                            TextView textViewCarModel = cardLayout.findViewById(R.id.textViewCarModel);
+                            TextView textViewPrice = cardLayout.findViewById(R.id.textViewPrice);
+                            TextView textViewLocation = cardLayout.findViewById(R.id.textViewLocation);
+                            Button buttonModify = cardLayout.findViewById(R.id.buttonModify);
+                            Button buttonDelete = cardLayout.findViewById(R.id.buttonDelete);
+
+                            // Set data to views
+                            textViewCarModel.setText(carModel);
+                            textViewPrice.setText(carPrice);
+                            textViewLocation.setText(agencyCity); // Display agency information
+
+                            // Retrieve and set the car image from Firebase Storage
+                            String imageName = carMatricule + ".png";
+                            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername + "/" + imageName);
+
+                            final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
+                            imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+                                // Convert byte array to Bitmap
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                                // Set the Bitmap to the ImageView
+                                imageView.setImageBitmap(bitmap);
+                            }).addOnFailureListener(exception -> {
+                                // Handle any errors that occurred while fetching the image
+                                exception.printStackTrace();
+                            });
+
+
+
+                            // Add the cardLayout to the CardView
+                            cardView.addView(cardLayout);
+
+                            // Add the CardView to the LinearLayout
+                            myLayout.addView(cardView);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError agencyError) {
+                            // Handle errors if needed
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle errors if needed
+            }
+        });
     }
 
     private void setOnClickListenerForTextView(final TextView textView) {
