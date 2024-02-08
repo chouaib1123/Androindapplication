@@ -258,6 +258,24 @@ public class agencymain extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                    textViewImages.put(selectedTextView, new Pair<>(uri, drawable));
+                    selectedTextView.setBackground(drawable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void retrievePostedCars() {
         LinearLayout myLayout = findViewById(R.id.mylayout);
         String agencyUsername = loggedInAgency.getUsername();
@@ -314,7 +332,7 @@ public class agencymain extends AppCompatActivity {
                             textViewLocation.setText(agencyCity); // Display agency information
 
                             // Retrieve and set the car image from Firebase Storage
-                            String imageName = carMatricule + ".png";
+                            String imageName = carMatricule;
                             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername + "/" + imageName);
 
                             final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
@@ -363,22 +381,6 @@ public class agencymain extends AppCompatActivity {
                 .compress(1024)             // Final image size will be less than 1 MB (Optional)
                 .maxResultSize(1080, 1080)  // Final image resolution will be less than 1080 x 1080 (Optional)
                 .start();
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE && data != null) {
-            Uri uri = data.getData();
-            if (uri != null) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-                    selectedTextView.setBackground(drawable);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private void uploadImagesToFirebaseStorage() {
