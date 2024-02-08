@@ -24,6 +24,8 @@ import android.widget.*;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Client;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -260,6 +264,50 @@ public class agencymain extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    private void uploadImagesToFirebaseStorage() {
+        // Iterate through the textViewImages map
+        for (Map.Entry<TextView, Pair<Uri, BitmapDrawable>> entry : textViewImages.entrySet()) {
+            final TextView textView = entry.getKey();
+            Pair<Uri, BitmapDrawable> imageData = entry.getValue();
+
+            final Uri uri = imageData.first;
+            final BitmapDrawable drawable = imageData.second;
+
+            try {
+                // Convert the BitmapDrawable to a Bitmap
+                Bitmap bitmap = drawable.getBitmap();
+                // Convert the Bitmap to a byte array
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                final byte[] byteArray = stream.toByteArray();
+                EditText editTextMatricule = findViewById(R.id.edit_text_car_matricule);
+                String agencyName = getIntent().getStringExtra("Agency Name");
+                String filename = getFilenameForTextView(editTextMatricule);
+
+                // Get a reference to the Firebase Storage location
+                final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" +agencyName +"/" + filename);
+                //final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString() + ".png");
+                // Upload the byte array to Firebase Storage
+                storageRef.putBytes(byteArray)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d("Firebase", "Image uploaded to Firebase Storage for TextView: " + textView.getId());
+                                // You can add any further processing here, such as getting download URLs
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
