@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import android.widget.*;
@@ -20,8 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import android.view.View.OnClickListener;
 
@@ -53,10 +50,10 @@ public class login extends AppCompatActivity implements OnClickListener {
         UserViewImp userViewImp = new UserViewImp();
 
         if(!Functions.isValidUsername(username)) {
-            userViewImp.OnRegisterError(this, "Invalid Username!");
+            userViewImp.OnError(this, "Invalid Username!");
             return false;
         }  else if (!Functions.isValidPassword(password)) {
-            userViewImp.OnRegisterError(this, "Invalid Password!");
+            userViewImp.OnError(this, "Invalid Password!");
             return false;
         }
 

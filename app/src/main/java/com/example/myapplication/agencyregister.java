@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,24 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Controller.AgencyController;
-import com.example.myapplication.Controller.ClientController;
 import com.example.myapplication.DAO.AgencyDaoImp;
-import com.example.myapplication.DAO.ClientDaoImp;
 import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.view.View.OnClickListener;
 
@@ -72,34 +63,34 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
         UserViewImp userViewImp = new UserViewImp();
 
         if(!Functions.isValidUsername(username)) {
-            userViewImp.OnRegisterError(this, "Invalid Username!");
+            userViewImp.OnError(this, "Invalid Username!");
             return false;
         } else if (!Functions.isValidEmail(email)) {
-            userViewImp.OnRegisterError(this, "Invalid Email Address!");
+            userViewImp.OnError(this, "Invalid Email Address!");
             return false;
         } else if (!Functions.isValidPassword(password)) {
-            userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
+            userViewImp.OnError(this, "Invalid Password. Must be at least 6 characters!");
             return false;
         } else if (!Functions.isValidVPassword(password, vPassword)) {
-            userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
+            userViewImp.OnError(this, "Passwords Don't Match up!");
             return false;
         } else if (!Functions.isValidPhoneNumber(phoneNumber)) {
-            userViewImp.OnRegisterError(this, "Invalid Phone Number!");
+            userViewImp.OnError(this, "Invalid Phone Number!");
             return false;
         }  else if (!Functions.isValidFullName(managerFullName)) {
-            userViewImp.OnRegisterError(this, "Invalid Manager Name!");
+            userViewImp.OnError(this, "Invalid Manager Name!");
             return false;
         } else if (!Functions.isValidAgencyName(agencyName)) {
-            userViewImp.OnRegisterError(this, "Invalid Agency Name!");
+            userViewImp.OnError(this, "Invalid Agency Name!");
             return false;
         }else if (!Functions.isValidCity(city)) {
-            userViewImp.OnRegisterError(this, "Invalid City!");
+            userViewImp.OnError(this, "Invalid City!");
             return false;
         } else if (!Functions.isValidFullAddress(agencyFullAddress)) {
-            userViewImp.OnRegisterError(this, "Invalid Address!");
+            userViewImp.OnError(this, "Invalid Address!");
             return false;
         } else if (!Functions.isValidPatentNumber(patentNumber)) {
-            userViewImp.OnRegisterError(this, "Invalid Patent Number!");
+            userViewImp.OnError(this, "Invalid Patent Number!");
             return false;
         }
 

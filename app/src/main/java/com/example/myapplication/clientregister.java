@@ -7,26 +7,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Controller.ClientController;
-import com.example.myapplication.Controller.UserController;
 import com.example.myapplication.DAO.ClientDaoImp;
-import com.example.myapplication.DAO.UserDaoImp;
 import com.example.myapplication.Extra.Functions;
-import com.example.myapplication.Extra.LicenseCategory;
-import com.example.myapplication.Extra.State;
-import com.example.myapplication.Extra.UserType;
-import com.example.myapplication.Model.Client;
-import com.example.myapplication.Model.User;
 import com.example.myapplication.Util.DatabaseUtil;
-import com.example.myapplication.View.UserView;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,20 +32,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import android.view.View.OnClickListener;
@@ -119,40 +101,40 @@ public class clientregister extends AppCompatActivity implements OnClickListener
         UserViewImp userViewImp = new UserViewImp();
 
         if(!Functions.isValidUsername(username)) {
-            userViewImp.OnRegisterError(this, "Invalid Username!");
+            userViewImp.OnError(this, "Invalid Username!");
             return false;
         } else if (!Functions.isValidEmail(email)) {
-            userViewImp.OnRegisterError(this, "Invalid Email Address!");
+            userViewImp.OnError(this, "Invalid Email Address!");
             return false;
         } else if (!Functions.isValidPassword(password)) {
-            userViewImp.OnRegisterError(this, "Invalid Password. Must be at least 6 characters!");
+            userViewImp.OnError(this, "Invalid Password. Must be at least 6 characters!");
             return false;
         } else if (!Functions.isValidVPassword(password, vPassword)) {
-            userViewImp.OnRegisterError(this, "Passwords Don't Match up!");
+            userViewImp.OnError(this, "Passwords Don't Match up!");
             return false;
         } else if (!Functions.isValidPhoneNumber(phoneNumber)) {
-            userViewImp.OnRegisterError(this, "Invalid Phone Number!");
+            userViewImp.OnError(this, "Invalid Phone Number!");
             return false;
         }  else if (!Functions.isValidFirstName(firstName)) {
-            userViewImp.OnRegisterError(this, "Invalid First Name!");
+            userViewImp.OnError(this, "Invalid First Name!");
             return false;
         } else if (!Functions.isValidLastName(lastName)) {
-            userViewImp.OnRegisterError(this, "Invalid Last Name!");
+            userViewImp.OnError(this, "Invalid Last Name!");
             return false;
         } else if (!Functions.isValidBirthDate(birthDate)) {
-            userViewImp.OnRegisterError(this, "Invalid Birth Date!");
+            userViewImp.OnError(this, "Invalid Birth Date!");
             return false;
         } else if (!Functions.isValidCinNumber(cinNumber)) {
-            userViewImp.OnRegisterError(this, "Invalid CIN!");
+            userViewImp.OnError(this, "Invalid CIN!");
             return false;
         } else if (!Functions.isValidDrivingLicenseCategory(drivingLicenceCategory)) {
-            userViewImp.OnRegisterError(this, "Invalid Driving License Category!");
+            userViewImp.OnError(this, "Invalid Driving License Category!");
             return false;
         } else if (!Functions.isValidDrivingLicenseObtainDate(drivingLicenseObtainDate)) {
-            userViewImp.OnRegisterError(this, "Invalid Driving License Obtain Date!");
+            userViewImp.OnError(this, "Invalid Driving License Obtain Date!");
             return false;
         } else if (!Functions.isValidDrivingLicenseExpireDate(drivingLicenseExpireDate)) {
-            userViewImp.OnRegisterError(this, "Invalid Driving License Expire Date!");
+            userViewImp.OnError(this, "Invalid Driving License Expire Date!");
             return false;
         }
 
@@ -173,7 +155,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                         if(snapshot.hasChild(username.replaceAll("[\\[\\].#$/]", "_"))) {
-                            userViewImp.OnRegisterError(clientregister.this, "Username already exists!");
+                            userViewImp.OnError(clientregister.this, "Username already exists!");
                         } else {
                             ClientController clientController = new ClientController(new ClientDaoImp());
 
@@ -182,7 +164,7 @@ public class clientregister extends AppCompatActivity implements OnClickListener
                                     drivingLicenseExpireDate, drivingLicenseObtainDate);
                             uploadImagesToFirebaseStorage();
 
-                            userViewImp.OnRegisterSuccess(clientregister.this, "Registered successfully");
+                            userViewImp.OnSuccess(clientregister.this, "Registered successfully");
                             finish();
                         }
                     }

@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,7 +24,6 @@ import com.example.myapplication.Controller.CarController;
 import com.example.myapplication.DAO.CarDaoImp;
 import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Model.Agency;
-import com.example.myapplication.Model.Client;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -139,7 +137,7 @@ public class agencymain extends AppCompatActivity {
 
     private void getFieldsValues() {
         color = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_color));
-        fuelType = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_fuel));
+        fuelType = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_fuel)).toUpperCase();
         isAutomatic = Functions.getCheckBoxValue((CheckBox) findViewById(R.id.checkbox_automatic));
         matricula = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_matricule));
         model = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_model));
@@ -152,22 +150,22 @@ public class agencymain extends AppCompatActivity {
         UserViewImp userViewImp = new UserViewImp();
 
         if(!Functions.isValidColor(color)) {
-            userViewImp.OnRegisterError(this, "Invalid Color!");
+            userViewImp.OnError(agencymain.this, "Invalid Color!");
             return false;
         } else if (!Functions.isValidFuelType(fuelType)) {
-            userViewImp.OnRegisterError(this, "Invalid Fuel Type!");
+            userViewImp.OnError(agencymain.this, "Invalid Fuel Type!");
             return false;
         } else if (!Functions.isValidMatricula(matricula)) {
-            userViewImp.OnRegisterError(this, "Invalid Matricula!");
+            userViewImp.OnError(agencymain.this, "Invalid Matricula!");
             return false;
         } else if (!Functions.isValidModel(model)) {
-            userViewImp.OnRegisterError(this, "Invalid Car Model!");
+            userViewImp.OnError(agencymain.this, "Invalid Car Model!");
             return false;
         } else if (!Functions.isValidPricePerDay(pricePerDay)) {
-            userViewImp.OnRegisterError(this, "Invalid Price!");
+            userViewImp.OnError(agencymain.this, "Invalid Price!");
             return false;
         }  else if (!Functions.isValidSeatsNumber(seatsNumber)) {
-            userViewImp.OnRegisterError(this, "Invalid Number of Seats!");
+            userViewImp.OnError(agencymain.this, "Invalid Number of Seats!");
             return false;
         }
 
