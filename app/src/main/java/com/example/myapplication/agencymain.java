@@ -386,8 +386,6 @@ public class agencymain extends AppCompatActivity {
         for (Map.Entry<TextView, Pair<Uri, BitmapDrawable>> entry : textViewImages.entrySet()) {
             final TextView textView = entry.getKey();
             Pair<Uri, BitmapDrawable> imageData = entry.getValue();
-
-            final Uri uri = imageData.first;
             final BitmapDrawable drawable = imageData.second;
 
             try {
@@ -397,7 +395,6 @@ public class agencymain extends AppCompatActivity {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 final byte[] byteArray = stream.toByteArray();
-                EditText editTextMatricule = findViewById(R.id.edit_text_car_matricule);
                 String agencyUsername = loggedInAgency.getUsername();
                 String filename = matricula;
 
