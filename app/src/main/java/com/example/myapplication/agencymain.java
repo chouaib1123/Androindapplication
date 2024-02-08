@@ -68,10 +68,10 @@ public class agencymain extends AppCompatActivity {
         agencyNameTextView = headerView.findViewById(R.id.username);
         scrollView = findViewById(R.id.scrollview);
 
-        switchToLayout(R.layout.postedcars);
-
         Intent intent = getIntent();
         if(intent != null) loggedInAgency = (Agency) intent.getSerializableExtra("loggedInAgency");
+
+        switchToLayout(R.layout.postedcars);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +187,8 @@ public class agencymain extends AppCompatActivity {
                     switchToLayout(R.layout.carinsert);
                 }
             });
+
+            retrievePostedCars();
         }
 
         if (layoutResId == R.layout.carinsert) {
@@ -259,9 +261,9 @@ public class agencymain extends AppCompatActivity {
     public void retrievePostedCars() {
         LinearLayout myLayout = findViewById(R.id.mylayout);
         String agencyUsername = loggedInAgency.getUsername();
-        DatabaseReference postedCarsRef = FirebaseDatabase.getInstance().getReference().child("Agency").child(agencyUsername);
+        DatabaseReference postedCarsRef = DatabaseUtil.connect().child("Agency").child(agencyUsername).child("Cars");
 
-        postedCarsRef.child("Cars").addListenerForSingleValueEvent(new ValueEventListener() {
+        postedCarsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot carSnapshot : dataSnapshot.getChildren()) {
@@ -269,14 +271,14 @@ public class agencymain extends AppCompatActivity {
                     String carModel = carSnapshot.child("model").getValue(String.class);
                     String carPrice = carSnapshot.child("pricePerDay").getValue(String.class);
                     String carMatricule = carSnapshot.child("matricula").getValue(String.class);
-                    Log.d("car matriucle" , carMatricule);
+                    Log.d("matricula" , carMatricule);
 
                     // Fetch additional information about the agency
-                    DatabaseReference agencyRef = FirebaseDatabase.getInstance().getReference().child("Agency").child(agencyUsername);
+                    DatabaseReference agencyRef = DatabaseUtil.connect().child("Agency").child(agencyUsername);
                     agencyRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot agencySnapshot) {
-                            String agencyCity = agencySnapshot.child("City").getValue(String.class);
+                            String agencyCity = agencySnapshot.child("city").getValue(String.class);
 
                             // Create CardView
                             CardView cardView = new CardView(agencymain.this);
@@ -319,7 +321,6 @@ public class agencymain extends AppCompatActivity {
                             imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
                                 // Convert byte array to Bitmap
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
                                 // Set the Bitmap to the ImageView
                                 imageView.setImageBitmap(bitmap);
                             }).addOnFailureListener(exception -> {
@@ -327,19 +328,14 @@ public class agencymain extends AppCompatActivity {
                                 exception.printStackTrace();
                             });
 
-
-
                             // Add the cardLayout to the CardView
                             cardView.addView(cardLayout);
-
                             // Add the CardView to the LinearLayout
-                            myLayout.addView(cardView);
+                            myLayout.addView(cardView, myLayout.getChildCount() - 1);
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError agencyError) {
-                            // Handle errors if needed
-                        }
+                        public void onCancelled(@NonNull DatabaseError agencyError) {}
                     });
                 }
             }
@@ -403,7 +399,7 @@ public class agencymain extends AppCompatActivity {
                 final byte[] byteArray = stream.toByteArray();
                 EditText editTextMatricule = findViewById(R.id.edit_text_car_matricule);
                 String agencyUsername = loggedInAgency.getUsername();
-                String filename = getFilenameForTextView(editTextMatricule);
+                String filename = matricula;
 
                 // Get a reference to the Firebase Storage location
                 final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername +"/" + filename);
