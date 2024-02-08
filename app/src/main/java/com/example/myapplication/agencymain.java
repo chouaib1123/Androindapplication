@@ -25,8 +25,11 @@ import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Client;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -141,15 +144,55 @@ public class agencymain extends AppCompatActivity {
             });
         }
 
-        if(layoutResId == R.layout.carinsert){
-            TextView Carpic = findViewById(R.id.carpicture);
-            setOnClickListenerForTextView( Carpic);
-            EditText matricule ,carColor , fuelType ;
-            Button addCar = findViewById(R.id.button_add_car);
+        if (layoutResId == R.layout.carinsert) {
+            TextView carPicture = findViewById(R.id.carpicture);
+            setOnClickListenerForTextView(carPicture);
+
+            EditText carMatricule, carColor, carFuelType, carModel, carPricePerDay, carSeatsNumber;
+            CheckBox carIsAutomatic;
+            Button addCar;
+
+            carColor = findViewById(R.id.edit_text_car_color);
+            carFuelType = findViewById(R.id.edit_text_fuel);
+            carIsAutomatic = findViewById(R.id.checkbox_automatic);
+            carMatricule = findViewById(R.id.edit_text_car_matricule);
+            carModel = findViewById(R.id.edit_text_car_model);
+            carPricePerDay = findViewById(R.id.edit_text_car_price_per_day);
+            carSeatsNumber = findViewById(R.id.edit_text_car_seats_number);
+            addCar = findViewById(R.id.button_add_car);
+            String agencyName = getIntent().getStringExtra("Agency Name");
 
             addCar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    databaseReference.child(agencyName).child("Car Matricule").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.hasChild(getTrimmedText(carMatricule)))
+                                Toast.makeText(agencymain.this, "the car already exists", Toast.LENGTH_SHORT).show();
+                            else {
+                                DatabaseReference identifier = databaseReference.child("Agency").child(agencyName).child("Cars");
+                                identifier.child(getTrimmedText(carMatricule)).child("Car Matricule").setValue(getTrimmedText(carMatricule));
+                                identifier.child(getTrimmedText(carMatricule)).child("Car Color").setValue(getTrimmedText(carColor));
+                                identifier.child(getTrimmedText(carMatricule)).child("Fuel Type").setValue(getTrimmedText(carFuelType));
+                                identifier.child(getTrimmedText(carMatricule)).child("Is Automatic").setValue(checkedCarAutomatic(carIsAutomatic));
+                                identifier.child(getTrimmedText(carMatricule)).child("Car Model").setValue(getTrimmedText(carModel));
+                                identifier.child(getTrimmedText(carMatricule)).child("Price Per Day").setValue(getTrimmedText(carPricePerDay));
+                                identifier.child(getTrimmedText(carMatricule)).child("Seats Number").setValue(getTrimmedText(carSeatsNumber));
+                                uploadImagesToFirebaseStorage();
+
+                                Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
+                                finish();
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
                 }
             });
