@@ -209,9 +209,11 @@ public class agencymain extends AppCompatActivity {
                                     Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
                                 else {
                                     CarController carController = new CarController();
+                                    String directoryPath = "carImages/" + agencyUsername;
+                                    String filename = matricula + ".png";
 
                                     carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
-                                    uploadImagesToFirebaseStorage();
+                                    DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
                                     Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
                                     finish();
@@ -359,9 +361,7 @@ public class agencymain extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle errors if needed
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
@@ -381,50 +381,5 @@ public class agencymain extends AppCompatActivity {
                 .compress(1024)             // Final image size will be less than 1 MB (Optional)
                 .maxResultSize(1080, 1080)  // Final image resolution will be less than 1080 x 1080 (Optional)
                 .start();
-    }
-
-    private void uploadImagesToFirebaseStorage() {
-        // Iterate through the textViewImages map
-        for (Map.Entry<TextView, Pair<Uri, BitmapDrawable>> entry : textViewImages.entrySet()) {
-            final TextView textView = entry.getKey();
-            Pair<Uri, BitmapDrawable> imageData = entry.getValue();
-            final BitmapDrawable drawable = imageData.second;
-
-            try {
-                // Convert the BitmapDrawable to a Bitmap
-                Bitmap bitmap = drawable.getBitmap();
-                // Convert the Bitmap to a byte array
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                final byte[] byteArray = stream.toByteArray();
-                String agencyUsername = loggedInAgency.getUsername();
-                String filename = matricula + ".png";
-
-                // Get a reference to the Firebase Storage location
-                final StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + agencyUsername +"/" + filename);
-                // Upload the byte array to Firebase Storage
-                storageRef.putBytes(byteArray)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Log.d("Firebase", "Image uploaded to Firebase Storage for TextView: " + textView.getId());
-                                // You can add any further processing here, such as getting download URLs
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private String getFilenameForTextView(EditText editText) {
-        // Map TextView types to filenames
-        return editText.getText().toString().trim() + ".png";
     }
 }
