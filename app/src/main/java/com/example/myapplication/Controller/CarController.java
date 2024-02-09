@@ -5,11 +5,17 @@ import com.example.myapplication.DAO.CarDaoImp;
 import com.example.myapplication.Extra.FuelType;
 import com.example.myapplication.Model.Car;
 
+import java.util.List;
+
 public class CarController {
     private final CarDao carDao;
 
     public CarController() {
         this.carDao = new CarDaoImp();
+    }
+
+    public void retrievePostedCars(String agencyUsername, CarDaoImp.CarRetrievalListener listener) {
+        carDao.retrievePostedCars(agencyUsername, listener);
     }
 
     public Car getCarByMatricula(String carMatricula) {

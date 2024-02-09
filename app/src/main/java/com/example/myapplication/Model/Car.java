@@ -14,12 +14,10 @@ public class Car {
     private String model;
     private double pricePerDay;
     private int seatsNumber;
-    private int agencyId;
+    private String agencyUsername;
     
-    public Car(int carId, byte[] carImage, String color, FuelType fuelType, boolean isAutomatic, String matricula,
-            String model, double pricePerDay, int seatsNumber, int agencyId) {
-        this.carId = carId;
-        this.carImage = carImage;
+    public Car(String color, FuelType fuelType, boolean isAutomatic, String matricula,
+            String model, double pricePerDay, int seatsNumber, String agencyUsername) {
         this.color = color;
         this.fuelType = fuelType;
         this.isAutomatic = isAutomatic;
@@ -27,24 +25,10 @@ public class Car {
         this.model = model;
         this.pricePerDay = pricePerDay;
         this.seatsNumber = seatsNumber;
-        this.agencyId = agencyId;
+        this.agencyUsername = agencyUsername;
     }
 
-    public int getCarId() {
-        return carId;
-    }
-
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
-
-    public byte[] getCarImage() {
-        return carImage;
-    }
-
-    public void setCarImage(byte[] carImage) {
-        this.carImage = carImage;
-    }
+    public Car() {}
 
     public String getColor() {
         return color;
@@ -102,19 +86,19 @@ public class Car {
         this.seatsNumber = seatsNumber;
     }
 
-    public int getAgencyId() {
-        return agencyId;
+    public String getAgencyUsername() {
+        return agencyUsername;
     }
 
-    public void setAgencyId(int agencyId) {
-        this.agencyId = agencyId;
+    public void setAgencyUsername(String agencyUsername) {
+        this.agencyUsername = agencyUsername;
     }
 
     @Override
     public String toString() {
-        return "Car [carId=" + carId + ", carImage=" + Arrays.toString(carImage) + ", color=" + color + ", fuelType="
+        return "Car [color=" + color + ", fuelType="
                 + fuelType + ", isAutomatic=" + isAutomatic + ", matricula=" + matricula + ", model=" + model
-                + ", pricePerDay=" + pricePerDay + ", seatsNumber=" + seatsNumber + ", agencyId=" + agencyId + "]";
+                + ", pricePerDay=" + pricePerDay + ", seatsNumber=" + seatsNumber + ", agencyUsername=" + agencyUsername + "]";
     }
 
     

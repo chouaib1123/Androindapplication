@@ -1,12 +1,21 @@
 package com.example.myapplication.DAO;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.myapplication.Extra.FuelType;
 import com.example.myapplication.Model.Car;
 import com.example.myapplication.Util.DatabaseUtil;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class CarDaoImp implements CarDao {
 
@@ -40,8 +49,38 @@ public class CarDaoImp implements CarDao {
 
     }
 
-    private Car extractCarFromResultSet(ResultSet resultSet) throws SQLException {
-        return null;
+    public interface CarRetrievalListener {
+        void onCarsRetrieved(List<Car> cars);
+        void onError(DatabaseError databaseError);
     }
-    
+
+    @Override
+    public void retrievePostedCars(String agencyUsername, CarRetrievalListener listener) {
+        DatabaseReference postedCarsRef = DatabaseUtil.connect().child("Agency").child(agencyUsername).child("Cars");
+        postedCarsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Car> cars = new ArrayList<>();
+                for (DataSnapshot carSnapshot : dataSnapshot.getChildren()) {
+                    // Read car data
+                    String model = carSnapshot.child("model").getValue(String.class);
+                    String price = carSnapshot.child("pricePerDay").getValue(String.class);
+                    String matricula = carSnapshot.child("matricula").getValue(String.class);
+                    String color = carSnapshot.child("color").getValue(String.class);
+                    String fuelType = carSnapshot.child("fuelType").getValue(String.class);
+                    String isAutomatic = carSnapshot.child("isAutomatic").getValue(String.class);
+                    String seatsNumber = carSnapshot.child("seatsNumber").getValue(String.class);
+
+                    Car car = new Car(color, FuelType.valueOf(fuelType), Boolean.parseBoolean(isAutomatic), matricula, model, Double.parseDouble(price), Integer.parseInt(seatsNumber), agencyUsername);
+                    cars.add(car);
+                }
+                listener.onCarsRetrieved(cars);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onError(databaseError);
+            }
+        });
+    }
 }
