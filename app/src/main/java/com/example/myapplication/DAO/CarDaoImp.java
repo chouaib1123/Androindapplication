@@ -1,11 +1,7 @@
 package com.example.myapplication.DAO;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +71,41 @@ public class CarDaoImp implements CarDao {
                     cars.add(car);
                 }
                 listener.onCarsRetrieved(cars);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onError(databaseError);
+            }
+        });
+    }
+
+    public void retrieveAllCars(CarRetrievalListener listener) {
+        DatabaseReference agenciesRef = DatabaseUtil.connect().child("Agency");
+
+        agenciesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Car> allCars = new ArrayList<>();
+                for (DataSnapshot agencySnapshot : dataSnapshot.getChildren()) {
+                    String agencyUsername = agencySnapshot.getKey();
+                    String agencyCity = agencySnapshot.child("city").getValue(String.class);
+                    DataSnapshot carsSnapshot = agencySnapshot.child("Cars");
+                    for (DataSnapshot carSnapshot : carsSnapshot.getChildren()) {
+                        String model = carSnapshot.child("model").getValue(String.class);
+                        String price = carSnapshot.child("pricePerDay").getValue(String.class);
+                        String matricula = carSnapshot.child("matricula").getValue(String.class);
+                        String color = carSnapshot.child("color").getValue(String.class);
+                        String fuelType = carSnapshot.child("fuelType").getValue(String.class);
+                        String isAutomatic = carSnapshot.child("isAutomatic").getValue(String.class);
+                        String seatsNumber = carSnapshot.child("seatsNumber").getValue(String.class);
+
+                        Car car = new Car(color, fuelType, isAutomatic, matricula,
+                                model, price, seatsNumber, agencyUsername, agencyCity);
+                        allCars.add(car);
+                    }
+                }
+                listener.onCarsRetrieved(allCars);
             }
 
             @Override

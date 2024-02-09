@@ -18,6 +18,10 @@ public class CarController {
         carDao.retrievePostedCars(agencyUsername, listener);
     }
 
+    public void retrieveAllCars(CarDaoImp.CarRetrievalListener listener) {
+        carDao.retrieveAllCars(listener);
+    }
+
     public Car getCarByMatricula(String carMatricula) {
         return carDao.getCarByMatricula(carMatricula);
     }

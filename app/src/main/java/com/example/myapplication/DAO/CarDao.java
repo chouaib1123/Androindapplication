@@ -14,4 +14,5 @@ public interface CarDao {
     void updateCar(String carMatricula, byte[] carImage, String color, double pricePerDay);
     void deleteCar(String carMatricula);
     void retrievePostedCars(String agencyUsername, CarDaoImp.CarRetrievalListener listener);
+    void retrieveAllCars(CarDaoImp.CarRetrievalListener listener);
 }

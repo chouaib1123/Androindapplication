@@ -20,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.myapplication.Controller.CarController;
+import com.example.myapplication.DAO.CarDaoImp;
+import com.example.myapplication.Model.Car;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.google.android.material.navigation.NavigationView;
@@ -31,7 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class clientmain extends AppCompatActivity {
+import java.util.List;
+
+public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener {
 //    private LinearLayout containerLayout;
 //    TextView selectedTextView;
     private ScrollView scrollView;
@@ -167,7 +172,10 @@ public class clientmain extends AppCompatActivity {
         }
 
         if(layoutResId == R.layout.cars){
-            retrievePostedCarsForAllAgencies();
+            CarController carController = new CarController();
+            carController.retrieveAllCars(this);
+
+//            retrievePostedCarsForAllAgencies();
         }
     }
 
@@ -261,5 +269,62 @@ public class clientmain extends AppCompatActivity {
                 agenciesError.toException().printStackTrace();
             }
         });
+    }
+
+    private void displayCarsOnUI(List<Car> cars) {
+        LinearLayout myLayout = findViewById(R.id.mylayoutcar);
+        for (Car car : cars) {
+            // Create CardView for each car
+            CardView cardView = new CardView(clientmain.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(40, 20, 40, 50);
+            cardView.setLayoutParams(layoutParams);
+
+            // Inflate the layout for the card
+            View cardLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.card_client_layout, null);
+
+            // Find views in the cardLayout
+            ImageView imageView = cardLayout.findViewById(R.id.imageView);
+            TextView textViewCarModel = cardLayout.findViewById(R.id.textViewCarModel);
+            TextView textViewPrice = cardLayout.findViewById(R.id.textViewPrice);
+            TextView textViewLocation = cardLayout.findViewById(R.id.textViewLocation);
+
+            // Set data to views
+            textViewCarModel.setText(car.getModel());
+            textViewPrice.setText(String.valueOf(car.getPricePerDay()));
+            textViewLocation.setText(car.getAgencyCity());
+
+            // Retrieve and set the car image from Firebase Storage
+            String imageName = car.getMatricula() + ".png";
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + car.getAgencyUsername() + "/" + imageName);
+
+            final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
+            imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+                // Convert byte array to Bitmap
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                // Set the Bitmap to the ImageView
+                imageView.setImageBitmap(bitmap);
+            }).addOnFailureListener(exception -> {
+                // Handle any errors that occurred while fetching the image
+                exception.printStackTrace();
+            });
+
+            cardView.addView(cardLayout);
+            // Add the CardView to the LinearLayout
+            myLayout.addView(cardView);
+        }
+    }
+
+    @Override
+    public void onCarsRetrieved(List<Car> cars) {
+        displayCarsOnUI(cars);
+    }
+
+    @Override
+    public void onError(DatabaseError databaseError) {
+
     }
 }
