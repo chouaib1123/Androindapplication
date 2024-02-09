@@ -86,6 +86,9 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                     switchToLayout(R.layout.cars);
                 } else if (itemId == R.id.pendreq) {
                     switchToLayout(R.layout.clientpendingrequest);
+                } else if (itemId == R.id.exit) {
+//                    switchToLayout(R.layout.login);
+
                 }
                 return false;
             }
@@ -244,20 +247,19 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
     @SuppressLint("SetTextI18n")
     private void showCarDetailsDialog(Car car) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(clientmain.this);
-        builder.setTitle("Car Details");
+        switchToLayout(R.layout.inspectcar);
 
         // Inflate a layout for the dialog
-        View dialogLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar, null);
+//        View dialogLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar, null);
 
         // Find views in the dialogLayout
-        ImageView imageViewCarDetails = dialogLayout.findViewById(R.id.carpictureinspect);
-        TextView textViewModel = dialogLayout.findViewById(R.id.carModelInspect);
-        TextView textViewAutomatic = dialogLayout.findViewById(R.id.textViewisautomaticLabel);
-        TextView textViewFuelType = dialogLayout.findViewById(R.id.textViewFuelTypeLabel);
-        TextView textViewCity = dialogLayout.findViewById(R.id.textViewCityLabel);
-        TextView textViewPricePerDay = dialogLayout.findViewById(R.id.textViewPriceLabel);
-        TextView textViewSeatsNumber = dialogLayout.findViewById(R.id.textViewsitsnumberLabel);
+        ImageView imageViewCarDetails = findViewById(R.id.carpictureinspect);
+        TextView textViewModel = findViewById(R.id.carModelInspect);
+        TextView textViewAutomatic = findViewById(R.id.textViewisautomaticLabel);
+        TextView textViewFuelType = findViewById(R.id.textViewFuelTypeLabel);
+        TextView textViewCity = findViewById(R.id.textViewCityLabel);
+        TextView textViewPricePerDay = findViewById(R.id.textViewPriceLabel);
+        TextView textViewSeatsNumber = findViewById(R.id.textViewsitsnumberLabel);
         // ... (add more TextViews for other details)
 
         // Set data to views in the dialogLayout
@@ -283,13 +285,6 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             imageViewCarDetails.setImageBitmap(bitmap);
         }).addOnFailureListener(Throwable::printStackTrace);
 
-        builder.setView(dialogLayout);
-
-        // Add buttons or any other customization as needed
-        builder.setPositiveButton("Close", (dialog, which) -> dialog.dismiss());
-
-        // Show the dialog
-        builder.show();
     }
 
 //    Button inspectBtn = findViewById(R.id.inspectButton);
