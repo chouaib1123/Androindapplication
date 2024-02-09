@@ -37,13 +37,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener {
-//    private LinearLayout containerLayout;
-//    TextView selectedTextView;
     private ScrollView scrollView;
     private TextView clientNameTextView;
     private Client loggedInClient;
-    private LinearLayout containerLayout;
-    TextView selectedTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
