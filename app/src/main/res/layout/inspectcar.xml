@@ -13,24 +13,25 @@
     >
 
     <ImageView
+        android:id="@+id/carpictureinspect"
         android:layout_width="wrap_content"
         android:layout_height="600px"
-        android:background="@drawable/back"
         android:elevation="20dp"
 
         android:layout_margin="20dp"
         />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mercedes"
-        android:fontFamily="@font/signikanegative"
-        android:textSize="35dp"
-        android:textAlignment="center"
+        android:id="@+id/carModelInspect"
+        android:layout_width="286dp"
+        android:layout_height="31dp"
         android:layout_margin="20dp"
         android:background="#120B0808"
         android:elevation="20dp"
-        />
+        android:fontFamily="@font/signikanegative"
+        android:text="Mercedes"
+        android:textAlignment="center"
+        android:textSize="25dp" />
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_gravity="center"
@@ -47,17 +48,6 @@
             android:layout_marginEnd="20dp"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textViewFuelTypevalue"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Diesel"
-            android:fontFamily="@font/signikanegative"
-            android:textSize="20dp"
-            android:textColor="#7A7777"
-            android:layout_toEndOf="@id/textViewFuelTypeLabel"
-            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -75,17 +65,6 @@
             android:layout_marginEnd="20dp"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textViewisautomaticvalue"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes"
-            android:fontFamily="@font/signikanegative"
-            android:textSize="20dp"
-            android:textColor="#7A7777"
-            android:layout_toEndOf="@id/textViewisautomaticLabel"
-            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -103,17 +82,6 @@
             android:layout_marginEnd="20dp"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textViewsitsnumbervalue"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4"
-            android:fontFamily="@font/signikanegative"
-            android:textSize="20dp"
-            android:textColor="#7A7777"
-            android:layout_toEndOf="@id/textViewsitsnumberLabel"
-            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -131,17 +99,6 @@
             android:layout_marginEnd="20dp"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textViewCityvalue"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Casablanca"
-            android:fontFamily="@font/signikanegative"
-            android:textSize="20dp"
-            android:textColor="#7A7777"
-            android:layout_toEndOf="@id/textViewCityLabel"
-            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -159,17 +116,6 @@
             android:layout_marginEnd="20dp"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textViewPricevalue"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="200$"
-            android:fontFamily="@font/signikanegative"
-            android:textSize="20dp"
-            android:textColor="#7A7777"
-            android:layout_toEndOf="@id/textViewPriceLabel"
-            />
     </RelativeLayout>
 
     <Button

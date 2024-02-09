@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -176,6 +178,8 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
     private void displayCarsOnUI(List<Car> cars) {
         LinearLayout myLayout = findViewById(R.id.mylayoutcar);
         for (Car car : cars) {
+
+
             // Create CardView for each car
             CardView cardView = new CardView(clientmain.this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -187,6 +191,14 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
             // Inflate the layout for the card
             View cardLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.card_client_layout, null);
+            Button buttonInspect = cardLayout.findViewById(R.id.inspectButton);
+
+            // Set an OnClickListener for the Inspect button
+            buttonInspect.setOnClickListener(view -> {
+                // Handle the click event, e.g., show detailed information
+                showCarDetailsDialog(car);
+            });
+
 
             // Find views in the cardLayout
             ImageView imageView = cardLayout.findViewById(R.id.imageView);
@@ -229,4 +241,61 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
     public void onError(DatabaseError databaseError) {
 
     }
+
+    @SuppressLint("SetTextI18n")
+    private void showCarDetailsDialog(Car car) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(clientmain.this);
+        builder.setTitle("Car Details");
+
+        // Inflate a layout for the dialog
+        View dialogLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar, null);
+
+        // Find views in the dialogLayout
+        ImageView imageViewCarDetails = dialogLayout.findViewById(R.id.carpictureinspect);
+        TextView textViewModel = dialogLayout.findViewById(R.id.carModelInspect);
+        TextView textViewAutomatic = dialogLayout.findViewById(R.id.textViewisautomaticLabel);
+        TextView textViewFuelType = dialogLayout.findViewById(R.id.textViewFuelTypeLabel);
+        TextView textViewCity = dialogLayout.findViewById(R.id.textViewCityLabel);
+        TextView textViewPricePerDay = dialogLayout.findViewById(R.id.textViewPriceLabel);
+        TextView textViewSeatsNumber = dialogLayout.findViewById(R.id.textViewsitsnumberLabel);
+        // ... (add more TextViews for other details)
+
+        // Set data to views in the dialogLayout
+        textViewModel.setText("Car Model: " + car.getModel());
+        textViewPricePerDay.setText("Price Per Day: " + String.valueOf(car.getPricePerDay()) +" MAD" );
+        textViewAutomatic.setText("Automatic Car: " + car.isAutomatic());
+        textViewFuelType.setText("Fuel Type: " + String.valueOf(car.getFuelType()));
+        textViewCity.setText("City: " + car.getAgencyCity());
+        textViewSeatsNumber.setText("Number of Seats: " + String.valueOf(car.getSeatsNumber()));
+
+
+        // ... (set data for other details)
+
+        // Retrieve and set the car image from Firebase Storage
+        String imageName = car.getMatricula() + ".png";
+        StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + car.getAgencyUsername() + "/" + imageName);
+        final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
+        // Handle any errors that occurred while fetching the image
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+            // Convert byte array to Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            // Set the Bitmap to the ImageView in the dialogLayout
+            imageViewCarDetails.setImageBitmap(bitmap);
+        }).addOnFailureListener(Throwable::printStackTrace);
+
+        builder.setView(dialogLayout);
+
+        // Add buttons or any other customization as needed
+        builder.setPositiveButton("Close", (dialog, which) -> dialog.dismiss());
+
+        // Show the dialog
+        builder.show();
+    }
+
+//    Button inspectBtn = findViewById(R.id.inspectButton);
+
+
+
+
+
 }
