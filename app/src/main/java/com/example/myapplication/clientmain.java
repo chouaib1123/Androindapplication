@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.example.myapplication.Controller.CarController;
 import com.example.myapplication.DAO.CarDaoImp;
 import com.example.myapplication.Model.Car;
 import com.example.myapplication.Model.Client;
+import com.example.myapplication.Model.User;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +45,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
     private ScrollView scrollView;
     private TextView clientNameTextView;
     private Client loggedInClient;
+//    private  FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +91,8 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 } else if (itemId == R.id.pendreq) {
                     switchToLayout(R.layout.clientpendingrequest);
                 } else if (itemId == R.id.exit) {
-//                    switchToLayout(R.layout.login);
+                    logOut();
+
 
                 }
                 return false;
@@ -287,7 +292,14 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
     }
 
-//    Button inspectBtn = findViewById(R.id.inspectButton);
+    private void logOut()
+    {
+        Intent intent = new Intent(clientmain.this, login.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 
 
 

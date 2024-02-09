@@ -105,6 +105,9 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                     switchToLayout(R.layout.postedcars);
                 } else if (itemId == R.id.pendreq) {
                     switchToLayout(R.layout.pendingrequest);
+                } else if (itemId == R.id.exit) {
+                    logOut();
+
                 }
                 return false;
             }
@@ -362,6 +365,13 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
     @Override
     public void onError(DatabaseError databaseError) {
 
+    }
+
+    private void logOut()
+    {
+        Intent intent = new Intent(agencymain.this, login.class);
+        startActivity(intent);
+        finish();
     }
 
 
