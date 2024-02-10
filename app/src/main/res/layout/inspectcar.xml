@@ -119,9 +119,10 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/rentCarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rent it"
+        android:text="Rent the car"
         android:fontFamily="@font/ffbold"
         android:textSize="18dp"
         android:layout_gravity="center"

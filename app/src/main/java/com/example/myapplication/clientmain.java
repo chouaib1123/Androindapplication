@@ -1,16 +1,21 @@
 package com.example.myapplication;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +24,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -39,7 +47,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener {
     private ScrollView scrollView;
@@ -89,7 +99,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 } else if (itemId == R.id.cars) {
                     switchToLayout(R.layout.cars);
                 } else if (itemId == R.id.pendreq) {
-                    switchToLayout(R.layout.clientpendingrequest);
+                    switchToLayout(R.layout.request_client_card_layout);
                 } else if (itemId == R.id.exit) {
                     logOut();
 
@@ -181,6 +191,9 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             CarController carController = new CarController();
             carController.retrieveAllCars(this);
         }
+        if(layoutResId == R.layout.rent_process){
+            fillUpRequest();
+        }
     }
 
     private void displayCarsOnUI(List<Car> cars) {
@@ -205,6 +218,14 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             buttonInspect.setOnClickListener(view -> {
                 // Handle the click event, e.g., show detailed information
                 showCarDetailsDialog(car);
+                View requestCardLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar,null);
+                Button requestClientButton = findViewById(R.id.rentCarButton);
+                requestClientButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rentCar(car);
+                    }
+                });
             });
 
 
@@ -297,6 +318,62 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
         Intent intent = new Intent(clientmain.this, login.class);
         startActivity(intent);
         finish();
+    }
+
+    private void rentCar(Car car)
+    {
+        switchToLayout(R.layout.rent_process);
+//
+//        TextView textViewPickUpDate = findViewById(R.id.);
+//        TextView textViewRequestDetails = findViewById(R.id.requestDetails);
+//
+//        Random random = new Random();
+//        int randomNumber = random.nextInt(1000);
+//
+//        // Set data to views in the dialogLayout
+//        textViewRequestNumber.setText(String.valueOf(randomNumber));
+//        textViewRequestDetails.setText("Matricula :" + String.valueOf(car.getMatricula()));
+    }
+
+
+    private void setDatePickerDialog(final TextView textView) {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                // Set the minimum date to be greater than today
+                DatePickerDialog dialog = new DatePickerDialog(
+                        clientmain.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                                month = month + 1;
+                                Log.d(TAG, "onDateSet: yyyy-mm-dd: " + year + "-" + month + "-" + day);
+                                String date = year + "-" + month + "-" + day;
+                                textView.setText(date);
+                            }
+                        },
+                        year, month, day);
+
+                // Set minimum date to be greater than today
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // 1000 ms = 1 second
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+    }
+
+    private void fillUpRequest(){
+        TextView textViewPickUp = findViewById(R.id.PickupDate);
+        TextView textViewReturnDate = findViewById(R.id.returndate);
+        setDatePickerDialog(textViewReturnDate);
+        setDatePickerDialog(textViewPickUp);
     }
 
 

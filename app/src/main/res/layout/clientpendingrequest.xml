@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/myrequestlayout">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
 
             <!-- Title -->
             <TextView
-                android:id="@+id/text_view_title"
+                android:id="@+id/requestNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Request Number"
@@ -32,7 +33,7 @@
 
             <!-- Details -->
             <TextView
-                android:id="@+id/text_view_details"
+                android:id="@+id/requestDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Request Details"

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/inspectcar"
+    android:layout_margin="20dp"
+    android:layout_gravity="center"
+    android:padding="20dp"
+    android:background="@drawable/shadow"
+    android:elevation="20dp"
+
+    >
+    <EditText
+        android:id="@+id/borrowperiod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+
+        android:background="#99A789DC"
+        android:drawableLeft="@drawable/time"
+        android:drawablePadding="20dp"
+        android:fontFamily="@font/exoregular"
+        android:hint="Borrow Period"
+        android:inputType="number"
+        android:padding="20dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+
+        android:textColor="#9E673AB7"
+        android:fontFamily="@font/exoregular"
+        android:text="Delivry Option"
+        android:textSize="20dp"
+        android:drawablePadding="20dp"
+        android:layout_height="wrap_content"/>
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:textColor="#9E673AB7"
+            android:text="In Person"/>
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#9E673AB7"
+            android:text="Deliverd"/>
+
+
+
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/PickupDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+
+        android:background="#99A789DC"
+        android:drawableLeft="@drawable/time"
+        android:drawablePadding="20dp"
+        android:fontFamily="@font/exoregular"
+        android:hint="PickUp Date"
+        android:inputType="number"
+        android:padding="20dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+    <TextView
+        android:id="@+id/returndate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+
+        android:background="#99A789DC"
+        android:drawableLeft="@drawable/time"
+        android:drawablePadding="20dp"
+        android:fontFamily="@font/exoregular"
+        android:hint="Return Date"
+        android:inputType="number"
+        android:padding="20dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:fontFamily="@font/ffbold"
+        android:textSize="18dp"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        />
+</LinearLayout>
