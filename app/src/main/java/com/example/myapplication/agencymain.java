@@ -202,42 +202,42 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
             carController.retrievePostedCars(agencyUsername, this);
         }
 
-        if (layoutResId == R.layout.carinsert) {
-            TextView carPicture = findViewById(R.id.carpicture);
-            setOnClickListenerForTextView(carPicture);
-            Button addCar = findViewById(R.id.button_add_car);
-
-            addCar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getFieldsValues();
-
-                    if(checkFields()) {
-                        DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.hasChild(matricula))
-                                    Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
-                                else {
-                                    CarController carController = new CarController();
-                                    String directoryPath = "carImages/" + agencyUsername;
-                                    String filename = matricula + ".png";
-
-                                    carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
-                                    DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
-
-                                    Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {}
-                        });
-                    }
-                }
-            });
-        }
+//        if (layoutResId == R.layout.carinsert) {
+//            TextView carPicture = findViewById(R.id.carpicture);
+//            setOnClickListenerForTextView(carPicture);
+//            Button addCar = findViewById(R.id.button_add_car);
+//
+//            addCar.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    getFieldsValues();
+//
+//                    if(checkFields()) {
+//                        DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                if(snapshot.hasChild(matricula))
+//                                    Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
+//                                else {
+//                                    CarController carController = new CarController();
+//                                    String directoryPath = "carImages/" + agencyUsername;
+//                                    String filename = matricula + ".png";
+//
+//                                    carController.updateCarDetails(matricula , );
+//                                    DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
+//
+//                                    Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
+//                                    finish();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {}
+//                        });
+//                    }
+//                }
+//            });
+//        }
 
         if(layoutResId == R.layout.agencyprofil) {
             TextView agencyNameTV = (TextView) findViewById(R.id.agencyName);
@@ -269,6 +269,44 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 cityTV.setText(city);
             }
         }
+        if(layoutResId == R.layout.modify_posted_car){
+            TextView carPicture = findViewById(R.id.carpicture);
+            setOnClickListenerForTextView(carPicture);
+            Button modifyCar = findViewById(R.id.button_add_car);
+
+            modifyCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFieldsValues();
+                    if(checkFields()) {
+                        DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.hasChild(matricula))
+                                    Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
+                                else {
+                                    CarController carController = new CarController();
+                                    String directoryPath = "carImages/" + agencyUsername;
+                                    String filename = matricula + ".png";
+
+                                    carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
+                                    DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
+
+                                    Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+                    }
+                }
+            });
+
+        }
+
+
     }
 
     @Override
@@ -373,6 +411,8 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
         startActivity(intent);
         finish();
     }
+
+
 
 
 }

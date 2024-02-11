@@ -143,5 +143,20 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                 });
             }
         }
+
+        if(srcId == R.id.buttonModify){
+            DatabaseUtil.connect().child("Agency").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
     }
 }
