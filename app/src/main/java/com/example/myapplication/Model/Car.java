@@ -124,6 +124,14 @@ public class Car {
         this.agencyCity = agencyCity;
     }
 
+    public void setIsAutomatic(boolean isAutomatic) {
+        this.isAutomatic = isAutomatic;
+    }
+
+    public boolean getIsAutomatic() {
+        return isAutomatic;
+    }
+
     @Override
     public String toString() {
         return "Car [color=" + color + ", fuelType="

@@ -17,8 +17,8 @@ public class RequestController {
         return requestsDao.getRequestById(requestId);
     }
 
-    public void submitRequest(int borrowingPeriod, DeliveryOption deliveryOption,
-                              Date pickUpDate, String carMatricula, String clientUsername) {
+    public void submitRequest(String borrowingPeriod, String deliveryOption,
+                              String pickUpDate, String carMatricula, String clientUsername) {
         requestsDao.insertRequest(borrowingPeriod, deliveryOption, pickUpDate, carMatricula, clientUsername);
     }
 

@@ -10,6 +10,8 @@ import com.example.myapplication.Extra.DeliveryOption;
 import com.example.myapplication.Extra.State;
 import com.example.myapplication.Model.Request;
 import com.example.myapplication.Util.ConnectionPool;
+import com.example.myapplication.Util.DatabaseUtil;
+import com.google.firebase.database.DatabaseReference;
 
 public class RequestDaoImp implements RequestDao {
 
@@ -19,8 +21,13 @@ public class RequestDaoImp implements RequestDao {
     }
 
     @Override
-    public void insertRequest(int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate, String carMatricula, String clientUsername) {
+    public void insertRequest(String borrowingPeriod, String deliveryOption, String pickUpDate, String matricula, String clientUsername) {
+        DatabaseReference identifier = DatabaseUtil.connect().child("Request").child(clientUsername).child(matricula);
 
+        identifier.child("matricula").setValue(matricula);
+        identifier.child("borrowingPeriod").setValue(borrowingPeriod);
+        identifier.child("deliveryOption").setValue(deliveryOption);
+        identifier.child("pickUpDate").setValue(pickUpDate);
     }
 
     @Override

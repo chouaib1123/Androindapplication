@@ -29,11 +29,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.myapplication.Controller.CarController;
+import com.example.myapplication.Controller.RequestController;
 import com.example.myapplication.DAO.CarDaoImp;
+import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Model.Car;
 import com.example.myapplication.Model.Client;
 import com.example.myapplication.Model.User;
@@ -55,7 +59,6 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
     private ScrollView scrollView;
     private TextView clientNameTextView;
     private Client loggedInClient;
-//    private  FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
+
                 if (itemId == R.id.profil) {
                     switchToLayout(R.layout.clientprofil);
                 } else if (itemId == R.id.cars) {
@@ -102,9 +106,8 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                     switchToLayout(R.layout.request_client_card_layout);
                 } else if (itemId == R.id.exit) {
                     logOut();
-
-
                 }
+
                 closeMenu();
                 return false;
             }
@@ -152,56 +155,55 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
         scrollView.addView(newLayout);
 
         if(layoutResId == R.layout.clientprofil) {
-            TextView clientFullNameTV = (TextView) findViewById(R.id.clientFullName);
-            TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
-            TextView usernameTV = (TextView) findViewById(R.id.clientUsername);
-            TextView emailTV = (TextView) findViewById(R.id.email);
-            TextView cinNumberTV = (TextView) findViewById(R.id.cinNumber);
-            TextView drivingLicenseCategoryTV = (TextView) findViewById(R.id.drivingLicenseCategory);
-            TextView drivingLicenseExpireDateTV = (TextView) findViewById(R.id.drivingLicenseExpireDate);
-            TextView drivingLicenseObtainDateTV = (TextView) findViewById(R.id.drivingLicenseObtainDate);
-            TextView addressTV = (TextView) findViewById(R.id.address);
-            TextView cityTV = (TextView) findViewById(R.id.city);
-
-            if(loggedInClient != null) {
-                final String email = loggedInClient.getEmail();
-                final String username = loggedInClient.getUsername();
-                final String clientFullName = String.format("%s %s", loggedInClient.getFirstName(), loggedInClient.getLastName());
-                final String phoneNumber = loggedInClient.getUserPhoneNumber();
-                final String cinNumber = loggedInClient.getCin();
-                final String drivingLicenseCategory = String.valueOf(loggedInClient.getLicenseCategory());
-                final String drivingLicenseExpireDate = String.valueOf(loggedInClient.getLicenseExpireDate());
-                final String drivingLicenseObtainDate = String.valueOf(loggedInClient.getLicenseObtainDate());
-                final String address = loggedInClient.getAddress();
-                final String city = loggedInClient.getCity();
-
-                clientFullNameTV.setText(clientFullName);
-                emailTV.setText(email);
-                phoneNumberTV.setText(phoneNumber);
-                usernameTV.setText(username);
-                cinNumberTV.setText(cinNumber);
-                addressTV.setText(address);
-                cityTV.setText(city);
-                drivingLicenseCategoryTV.setText(drivingLicenseCategory);
-                drivingLicenseExpireDateTV.setText(drivingLicenseExpireDate);
-                drivingLicenseObtainDateTV.setText(drivingLicenseObtainDate);
-            }
+            setUpClientProfile();
         }
 
         if(layoutResId == R.layout.cars){
             CarController carController = new CarController();
             carController.retrieveAllCars(this);
         }
-        if(layoutResId == R.layout.rent_process){
-            fillUpRequest();
+    }
+
+    private void setUpClientProfile() {
+        TextView clientFullNameTV = (TextView) findViewById(R.id.clientFullName);
+        TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
+        TextView usernameTV = (TextView) findViewById(R.id.clientUsername);
+        TextView emailTV = (TextView) findViewById(R.id.email);
+        TextView cinNumberTV = (TextView) findViewById(R.id.cinNumber);
+        TextView drivingLicenseCategoryTV = (TextView) findViewById(R.id.drivingLicenseCategory);
+        TextView drivingLicenseExpireDateTV = (TextView) findViewById(R.id.drivingLicenseExpireDate);
+        TextView drivingLicenseObtainDateTV = (TextView) findViewById(R.id.drivingLicenseObtainDate);
+        TextView addressTV = (TextView) findViewById(R.id.address);
+        TextView cityTV = (TextView) findViewById(R.id.city);
+
+        if(loggedInClient != null) {
+            final String email = loggedInClient.getEmail();
+            final String username = loggedInClient.getUsername();
+            final String clientFullName = String.format("%s %s", loggedInClient.getFirstName(), loggedInClient.getLastName());
+            final String phoneNumber = loggedInClient.getUserPhoneNumber();
+            final String cinNumber = loggedInClient.getCin();
+            final String drivingLicenseCategory = String.valueOf(loggedInClient.getLicenseCategory());
+            final String drivingLicenseExpireDate = String.valueOf(loggedInClient.getLicenseExpireDate());
+            final String drivingLicenseObtainDate = String.valueOf(loggedInClient.getLicenseObtainDate());
+            final String address = loggedInClient.getAddress();
+            final String city = loggedInClient.getCity();
+
+            clientFullNameTV.setText(clientFullName);
+            emailTV.setText(email);
+            phoneNumberTV.setText(phoneNumber);
+            usernameTV.setText(username);
+            cinNumberTV.setText(cinNumber);
+            addressTV.setText(address);
+            cityTV.setText(city);
+            drivingLicenseCategoryTV.setText(drivingLicenseCategory);
+            drivingLicenseExpireDateTV.setText(drivingLicenseExpireDate);
+            drivingLicenseObtainDateTV.setText(drivingLicenseObtainDate);
         }
     }
 
     private void displayCarsOnUI(List<Car> cars) {
         LinearLayout myLayout = findViewById(R.id.mylayoutcar);
         for (Car car : cars) {
-
-
             // Create CardView for each car
             CardView cardView = new CardView(clientmain.this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -219,16 +221,23 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             buttonInspect.setOnClickListener(view -> {
                 // Handle the click event, e.g., show detailed information
                 showCarDetailsDialog(car);
-                View requestCardLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar,null);
                 Button requestClientButton = findViewById(R.id.rentCarButton);
                 requestClientButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        rentCar(car);
+                        switchToLayout(R.layout.rent_process);
+                        fillUpRequest();
+                        Button doneBtn = findViewById(R.id.doneBtn);
+                        doneBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                rentCar(car);
+                                // go back
+                            }
+                        });
                     }
                 });
             });
-
 
             // Find views in the cardLayout
             ImageView imageView = cardLayout.findViewById(R.id.imageView);
@@ -246,15 +255,13 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("carImages/" + car.getAgencyUsername() + "/" + imageName);
 
             final long ONE_MEGABYTE = 1024 * 1024; // Adjust as needed
+            // Handle any errors that occurred while fetching the image
             imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
                 // Convert byte array to Bitmap
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 // Set the Bitmap to the ImageView
                 imageView.setImageBitmap(bitmap);
-            }).addOnFailureListener(exception -> {
-                // Handle any errors that occurred while fetching the image
-                exception.printStackTrace();
-            });
+            }).addOnFailureListener(Throwable::printStackTrace);
 
             cardView.addView(cardLayout);
             // Add the CardView to the LinearLayout
@@ -276,9 +283,6 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
     private void showCarDetailsDialog(Car car) {
         switchToLayout(R.layout.inspectcar);
 
-        // Inflate a layout for the dialog
-//        View dialogLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.inspectcar, null);
-
         // Find views in the dialogLayout
         ImageView imageViewCarDetails = findViewById(R.id.carpictureinspect);
         TextView textViewModel = findViewById(R.id.carModelInspect);
@@ -287,18 +291,20 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
         TextView textViewCity = findViewById(R.id.textViewCityLabel);
         TextView textViewPricePerDay = findViewById(R.id.textViewPriceLabel);
         TextView textViewSeatsNumber = findViewById(R.id.textViewsitsnumberLabel);
-        // ... (add more TextViews for other details)
 
-        // Set data to views in the dialogLayout
-        textViewModel.setText("Car Model: " + car.getModel());
-        textViewPricePerDay.setText("Price Per Day: " + String.valueOf(car.getPricePerDay()) +" MAD" );
-        textViewAutomatic.setText("Automatic Car: " + car.isAutomatic());
-        textViewFuelType.setText("Fuel Type: " + String.valueOf(car.getFuelType()));
-        textViewCity.setText("City: " + car.getAgencyCity());
-        textViewSeatsNumber.setText("Number of Seats: " + String.valueOf(car.getSeatsNumber()));
+        String model = car.getModel();
+        String pricePerDay = String.valueOf(car.getPricePerDay());
+        String isAutomatic = String.valueOf(car.getIsAutomatic());
+        String fuelType = String.valueOf(car.getFuelType());
+        String city = car.getAgencyCity();
+        String seatsNumber = String.valueOf(car.getSeatsNumber());
 
-
-        // ... (set data for other details)
+        textViewModel.setText("Car Model: " + model);
+        textViewPricePerDay.setText("Price Per Day: " + pricePerDay +" MAD" );
+        textViewAutomatic.setText("Automatic Car: " + isAutomatic);
+        textViewFuelType.setText("Fuel Type: " + fuelType);
+        textViewCity.setText("City: " + city);
+        textViewSeatsNumber.setText("Number of Seats: " + seatsNumber);
 
         // Retrieve and set the car image from Firebase Storage
         String imageName = car.getMatricula() + ".png";
@@ -323,17 +329,20 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
     private void rentCar(Car car)
     {
-        switchToLayout(R.layout.rent_process);
-//
-//        TextView textViewPickUpDate = findViewById(R.id.);
-//        TextView textViewRequestDetails = findViewById(R.id.requestDetails);
-//
-//        Random random = new Random();
-//        int randomNumber = random.nextInt(1000);
-//
-//        // Set data to views in the dialogLayout
-//        textViewRequestNumber.setText(String.valueOf(randomNumber));
-//        textViewRequestDetails.setText("Matricula :" + String.valueOf(car.getMatricula()));
+
+        String borrowingPeriod = Functions.getEditTextValue((EditText) findViewById(R.id.borrowperiod));
+        String pickupDate = Functions.getEditTextValue((TextView) findViewById(R.id.PickupDate));
+        String returnDate = Functions.getEditTextValue((TextView) findViewById(R.id.returndate));
+        String matricula = car.getMatricula();
+        String clientUsername = loggedInClient.getUsername();
+
+        RadioGroup deliveryOptionRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        int selectedDeliveryOptionId = deliveryOptionRadioGroup.getCheckedRadioButtonId();
+        String deliveryOption = "In Person";
+        if(selectedDeliveryOptionId != -1) deliveryOption = ((RadioButton)findViewById(selectedDeliveryOptionId)).getText().toString(); // add constraints
+
+        RequestController requestController = new RequestController();
+        requestController.submitRequest(borrowingPeriod, deliveryOption, pickupDate, matricula, clientUsername);
     }
 
 
@@ -362,7 +371,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                         year, month, day);
 
                 // Set minimum date to be greater than today
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // 1000 ms = 1 second
+                dialog.getDatePicker(); // 1000 ms = 1 second
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
