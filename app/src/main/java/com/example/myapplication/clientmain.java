@@ -105,6 +105,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
 
                 }
+                closeMenu();
                 return false;
             }
         });
