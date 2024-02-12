@@ -11,7 +11,7 @@ public interface CarDao {
                    String isAutomatic, String matricula, String model,
                    String pricePerDay, String seatsNumber, String agencyUsername);
 
-    void updateCar(String carMatricula, byte[] carImage, String color, double pricePerDay);
+    void updateCar(String carMatricula,  String color, String pricePerDay , String agencyUsername);
     void deleteCar(String carMatricula);
     void retrievePostedCars(String agencyUsername, CarDaoImp.CarRetrievalListener listener);
     void retrieveAllCars(CarDaoImp.CarRetrievalListener listener);

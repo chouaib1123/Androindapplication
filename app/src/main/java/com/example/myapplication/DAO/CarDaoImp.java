@@ -36,7 +36,12 @@ public class CarDaoImp implements CarDao {
     }
 
     @Override
-    public void updateCar(String carMatricula, byte[] carImage, String color, double pricePerDay) {
+    public void updateCar(String carMatricula,  String color, String pricePerDay , String agencyusername) {
+        DatabaseReference identifier = DatabaseUtil.connect().child("Agency").child(agencyusername).child("Cars").child(carMatricula);
+
+
+        identifier.child("color").setValue(color);
+        identifier.child("pricePerDay").setValue(pricePerDay);
 
     }
 

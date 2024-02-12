@@ -159,6 +159,7 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
         seatsNumber = Functions.getEditTextValue((EditText)findViewById(R.id.edit_text_car_seats_number));
     }
 
+
     private boolean checkFields() {
         UserViewImp userViewImp = new UserViewImp();
 
@@ -320,7 +321,8 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
             buttonModify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switchToLayoutToModify(R.layout.modify_posted_car , car);
+                       switchToLayout(R.layout.modify_posted_car);
+                       modifycar(car);
                 }
             });
 
@@ -383,40 +385,50 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
         finish();
     }
 
-    protected void switchToLayoutToModify(int layoutResId , Car car){
-        populateModifyLayout(car);
+    protected void modifycar( Car car){
 
-    }
 
-    private void populateModifyLayout(Car car) {
-        TextView carPicture = findViewById(R.id.carpicture);
-        setOnClickListenerForTextView(carPicture);
+
+
+        Button modifycar = findViewById(R.id.button_submit_car);
+
+        String matricule = car.getMatricula();
+        TextView modifiedpic = findViewById(R.id.carpicturemodify);
+        setOnClickListenerForTextView(modifiedpic);
+        modifycar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = Functions.getEditTextValue((EditText)findViewById(R.id.modify_color));
+                pricePerDay = Functions.getEditTextValue((EditText)findViewById(R.id.modify_priceperday));
+
                     DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.hasChild(matricula))
-                                Toast.makeText(agencymain.this, "The car already exists", Toast.LENGTH_SHORT).show();
-                            else {
+
                                 CarController carController = new CarController();
-
-                                TextView carImageTextView = findViewById(R.id.carpicture);
-                                String carImageText = carImageTextView.getText().toString();
-                                byte[] carImageBytes = carImageText.getBytes();
-
                                 String directoryPath = "carImages/" + agencyUsername;
-                                String filename = matricula + ".png";
-                                carController.updateCarDetails(matricula , carImageBytes , color , Double.parseDouble(pricePerDay));
+                                String filename = matricule + ".png";
+                                carController.updateCarDetails(matricule,color,pricePerDay,agencyUsername);
                                 DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
-                                Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
+                                Toast.makeText(agencymain.this, "Car is modified successfully", Toast.LENGTH_SHORT).show();
+                            switchToLayout(R.layout.postedcars);
+
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {}
                     });
+
                 }
+
+        });
+    }
+
+
+
+
+
 
 
 

@@ -32,8 +32,8 @@ public class CarController {
                           pricePerDay, seatsNumber, agencyUsername);
     }
 
-    public void updateCarDetails(String carMatricula, byte[] carImage, String color, double pricePerDay) {
-        carDao.updateCar(carMatricula, carImage, color, pricePerDay);
+    public void updateCarDetails(String carMatricula,  String color, String pricePerDay,String agencyUsername) {
+        carDao.updateCar(carMatricula, color, pricePerDay,agencyUsername);
     }
 
     public void removeCar(String carMatricula) {
