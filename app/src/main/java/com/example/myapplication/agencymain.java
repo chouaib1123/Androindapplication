@@ -2,10 +2,10 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +13,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,15 +23,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 
 import com.example.myapplication.Controller.CarController;
+import com.example.myapplication.Controller.RequestController;
 import com.example.myapplication.DAO.CarDaoImp;
+import com.example.myapplication.DAO.RequestDaoImp;
 import com.example.myapplication.Extra.Functions;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Car;
+import com.example.myapplication.Model.Request;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.example.myapplication.View.UserViewImp;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,17 +41,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener {
+public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener, RequestDaoImp.RequestRetrievalListener {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://clientregister-c1856-default-rtdb.firebaseio.com/").getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Map<TextView, Pair<Uri, BitmapDrawable>> textViewImages = new HashMap<>();
@@ -105,7 +101,7 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 } else if (itemId == R.id.postedcards) {
                     switchToLayout(R.layout.postedcars);
                 } else if (itemId == R.id.pendreq) {
-                    switchToLayout(R.layout.pendingrequest);
+                    switchToLayout(R.layout.agencypendingrequest);
                 }
                 else if (itemId == R.id.exit) {
                     logOut();
@@ -242,34 +238,83 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
         }
 
         if(layoutResId == R.layout.agencyprofil) {
-            TextView agencyNameTV = (TextView) findViewById(R.id.agencyName);
-            TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
-            TextView usernameTV = (TextView) findViewById(R.id.agencyUsername);
-            TextView emailTV = (TextView) findViewById(R.id.email);
-            TextView patentNumberTV = (TextView) findViewById(R.id.patentNumber);
-            TextView managerFullNameTV = (TextView) findViewById(R.id.managerFullName);
-            TextView addressTV = (TextView) findViewById(R.id.address);
-            TextView cityTV = (TextView) findViewById(R.id.city);
+            setUpAgencyProfile();
+        }
 
-            if(loggedInAgency != null) {
-                final String email = loggedInAgency.getEmail();
-                final String username = loggedInAgency.getUsername();
-                final String agencyName = loggedInAgency.getAgencyName();
-                final String phoneNumber = loggedInAgency.getUserPhoneNumber();
-                final String patentNumber = String.valueOf(loggedInAgency.getPatentNumber());
-                final String managerFullName = loggedInAgency.getManagerFullName();
-                final String address = loggedInAgency.getAddress();
-                final String city = loggedInAgency.getCity();
+        if(layoutResId == R.layout.agencypendingrequest) {
+            RequestController requestController = new RequestController();
+            requestController.retrieveAgencyRequests(loggedInAgency.getUsername(), this);
+        }
+    }
 
-                agencyNameTV.setText(agencyName);
-                emailTV.setText(email);
-                phoneNumberTV.setText(phoneNumber);
-                usernameTV.setText(username);
-                patentNumberTV.setText(patentNumber);
-                managerFullNameTV.setText(managerFullName);
-                addressTV.setText(address);
-                cityTV.setText(city);
-            }
+    private void setUpAgencyProfile() {
+        TextView agencyNameTV = (TextView) findViewById(R.id.agencyName);
+        TextView phoneNumberTV = (TextView) findViewById(R.id.phoneNumber);
+        TextView usernameTV = (TextView) findViewById(R.id.agencyUsername);
+        TextView emailTV = (TextView) findViewById(R.id.email);
+        TextView patentNumberTV = (TextView) findViewById(R.id.patentNumber);
+        TextView managerFullNameTV = (TextView) findViewById(R.id.managerFullName);
+        TextView addressTV = (TextView) findViewById(R.id.address);
+        TextView cityTV = (TextView) findViewById(R.id.city);
+
+        if(loggedInAgency != null) {
+            final String email = loggedInAgency.getEmail();
+            final String username = loggedInAgency.getUsername();
+            final String agencyName = loggedInAgency.getAgencyName();
+            final String phoneNumber = loggedInAgency.getUserPhoneNumber();
+            final String patentNumber = String.valueOf(loggedInAgency.getPatentNumber());
+            final String managerFullName = loggedInAgency.getManagerFullName();
+            final String address = loggedInAgency.getAddress();
+            final String city = loggedInAgency.getCity();
+
+            agencyNameTV.setText(agencyName);
+            emailTV.setText(email);
+            phoneNumberTV.setText(phoneNumber);
+            usernameTV.setText(username);
+            patentNumberTV.setText(patentNumber);
+            managerFullNameTV.setText(managerFullName);
+            addressTV.setText(address);
+            cityTV.setText(city);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void displayAgencyRequests(List<Request> requests) {
+        for(Request request : requests) {
+            LinearLayout myLayout = findViewById(R.id.agencyPendingRequests);
+            // Create CardView for each car
+            CardView cardView = new CardView(agencymain.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(40, 20, 40, 50);
+            cardView.setLayoutParams(layoutParams);
+
+            // Inflate the layout for the card
+            View cardLayout = LayoutInflater.from(agencymain.this).inflate(R.layout.request_agency_card, null);
+
+            // Find views in the cardLayout
+            TextView titleTV = cardLayout.findViewById(R.id.requestNumber);
+            TextView requestDetailsTV = cardLayout.findViewById(R.id.requestDetails);
+            TextView deliveryOptionTV = cardLayout.findViewById(R.id.deliveryOptionId);
+            ImageView acceptBtn = cardLayout.findViewById(R.id.image_view_modify);
+            ImageView rejectBtn = cardLayout.findViewById(R.id.image_view_delete);
+
+            String title = request.getRequestTitle();
+            String pickUpDate = String.valueOf(request.getPickUpDate());
+            String borrowingPeriod = String.valueOf(request.getBorrowingPeriod());
+            String matricula = request.getCarMatricula();
+            String deliveryOption = String.valueOf(request.getDeliveryOption());
+
+            // Set data to views
+            titleTV.setText(title);
+            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
+            deliveryOptionTV.setText(deliveryOption);
+
+            cardView.addView(cardLayout);
+            // Add the CardView to the LinearLayout
+            myLayout.addView(cardView);
         }
     }
 
@@ -419,7 +464,15 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 }
 
 
+    @Override
+    public void onRequestRetrieved(List<Request> requests) {
+        displayAgencyRequests(requests);
+    }
 
+    @Override
+    public void onErrorRequest(DatabaseError databaseError) {
+
+    }
 }
 
 

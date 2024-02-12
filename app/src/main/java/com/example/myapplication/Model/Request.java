@@ -16,9 +16,19 @@ public class Request {
     private int actualBorrowingPeriod;
     private String carMatricula;
     private String clientUsername;
+
+    public String getAgencyUsername() {
+        return agencyUsername;
+    }
+
+    public void setAgencyUsername(String agencyUsername) {
+        this.agencyUsername = agencyUsername;
+    }
+
+    private String agencyUsername;
     
     public Request(String requestTitle, int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate,
-                   State requestState, Date returnDate, int actualBorrowingPeriod, String carMatricula, String clientUsername) {
+                   State requestState, Date returnDate, int actualBorrowingPeriod, String carMatricula, String clientUsername, String agencyUsername) {
         this.requestTitle = requestTitle;
         this.borrowingPeriod = borrowingPeriod;
         this.deliveryOption = deliveryOption;
@@ -28,6 +38,7 @@ public class Request {
         this.actualBorrowingPeriod = actualBorrowingPeriod;
         this.carMatricula = carMatricula;
         this.clientUsername = clientUsername;
+        this.agencyUsername = agencyUsername;
     }
 
     public Request(String requestTitle, int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate,
@@ -42,7 +53,7 @@ public class Request {
     }
 
     public Request(String requestTitle, String borrowingPeriod, String deliveryOption, String pickUpDate,
-                   String requestState, String carMatricula, String clientUsername) {
+                   String requestState, String carMatricula, String clientUsername, String agencyUsername) {
         this.requestTitle = requestTitle;
         this.borrowingPeriod = Integer.parseInt(borrowingPeriod);
         if(deliveryOption.toUpperCase().equals("IN PERSON")) deliveryOption = "IN_PERSON";
@@ -51,6 +62,7 @@ public class Request {
         this.requestState = State.valueOf(requestState);
         this.carMatricula = carMatricula;
         this.clientUsername = clientUsername;
+        this.agencyUsername = agencyUsername;
     }
 
     public Request() {

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#8D5B5967"
+    android:padding="16dp"
+    android:id="@+id/request_agency_card_layout">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/requestNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Number"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Details -->
+    <TextView
+        android:id="@+id/requestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Details"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/deliveryOptionId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Details"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <ImageView
+            android:id="@+id/image_view_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/verified"
+            android:layout_marginEnd="8dp"/>
+
+        <ImageView
+            android:id="@+id/image_view_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close"/>
+
+    </LinearLayout>
+
+</LinearLayout>

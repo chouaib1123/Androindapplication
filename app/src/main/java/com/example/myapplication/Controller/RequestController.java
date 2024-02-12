@@ -38,4 +38,8 @@ public class RequestController {
     public void retrieveClientRequests(String clientUsername, RequestDaoImp.RequestRetrievalListener listener) {
         requestsDao.retrieveClientRequests(clientUsername, listener);
     }
+
+    public void retrieveAgencyRequests(String agencyUsername, RequestDaoImp.RequestRetrievalListener listener) {
+        requestsDao.retrieveAgencyRequests(agencyUsername, listener);
+    }
 }

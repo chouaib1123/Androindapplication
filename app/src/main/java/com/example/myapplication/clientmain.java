@@ -293,7 +293,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
             // Set data to views
             titleTV.setText(title);
-            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days" + " car: " + matricula);
+            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
             deliveryOptionTV.setText(deliveryOption);
 
             cardView.addView(cardLayout);

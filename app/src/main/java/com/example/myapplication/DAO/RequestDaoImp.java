@@ -42,6 +42,7 @@ public class RequestDaoImp implements RequestDao {
         identifier.child("deliveryOption").setValue(deliveryOption);
         identifier.child("pickUpDate").setValue(pickUpDate);
         identifier.child("requestState").setValue(requestState);
+        identifier.child("clientUsername").setValue(clientUsername);
 
         DatabaseReference identifier2 = DatabaseUtil.connect().child("Client")
                 .child(clientUsername).child("Requests").child(agencyUsername + "_" + currentDate);
@@ -52,6 +53,7 @@ public class RequestDaoImp implements RequestDao {
         identifier2.child("deliveryOption").setValue(deliveryOption);
         identifier2.child("pickUpDate").setValue(pickUpDate);
         identifier2.child("requestState").setValue(requestState);
+        identifier2.child("agencyUsername").setValue(agencyUsername);
     }
 
     @Override
@@ -90,8 +92,9 @@ public class RequestDaoImp implements RequestDao {
                     String matricula = requestSnapshot.child("matricula").getValue(String.class);
                     String pickUpDate = requestSnapshot.child("pickUpDate").getValue(String.class);
                     String requestState = requestSnapshot.child("requestState").getValue(String.class);
+                    String agencyUsername = requestSnapshot.child("agencyUsername").getValue(String.class);
 
-                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername);
+                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername);
                     requests.add(request);
                 }
                 listener.onRequestRetrieved(requests);
@@ -103,5 +106,35 @@ public class RequestDaoImp implements RequestDao {
             }
         });
     }
-    
+
+    @Override
+    public void retrieveAgencyRequests(String agencyUsername, RequestDaoImp.RequestRetrievalListener listener) {
+        DatabaseReference identifier = DatabaseUtil.connect().child("Agency").child(agencyUsername)
+                .child("Requests");
+        identifier.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Request> requests = new ArrayList<>();
+                for (DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                    // Read car data
+                    String title = requestSnapshot.child("title").getValue(String.class);
+                    String borrowingPeriod = requestSnapshot.child("borrowingPeriod").getValue(String.class);
+                    String deliveryOption = requestSnapshot.child("deliveryOption").getValue(String.class);
+                    String matricula = requestSnapshot.child("matricula").getValue(String.class);
+                    String pickUpDate = requestSnapshot.child("pickUpDate").getValue(String.class);
+                    String requestState = requestSnapshot.child("requestState").getValue(String.class);
+                    String clientUsername = requestSnapshot.child("clientUsername").getValue(String.class);
+
+                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername);
+                    requests.add(request);
+                }
+                listener.onRequestRetrieved(requests);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onErrorRequest(databaseError);
+            }
+        });
+    }
 }

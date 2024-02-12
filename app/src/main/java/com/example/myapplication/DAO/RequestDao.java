@@ -17,4 +17,6 @@ public interface RequestDao {
     void deleteRequest(int requestId);
 
     void retrieveClientRequests(String clientUsername, RequestDaoImp.RequestRetrievalListener listener);
+
+    void retrieveAgencyRequests(String agencyUsername, RequestDaoImp.RequestRetrievalListener listener);
 }
