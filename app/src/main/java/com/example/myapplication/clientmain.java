@@ -241,9 +241,9 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             TextView textViewLocation = cardLayout.findViewById(R.id.textViewLocation);
 
             // Set data to views
-            textViewCarModel.setText(car.getModel());
-            textViewPrice.setText(String.valueOf(car.getPricePerDay()));
-            textViewLocation.setText(car.getAgencyCity());
+            textViewCarModel.setText("Car Model : " + car.getModel());
+            textViewPrice.setText("Price Per day (MAD) : " + String.valueOf(car.getPricePerDay()));
+            textViewLocation.setText("Agency Name : " + car.getAgencyCity());
 
             // Retrieve and set the car image from Firebase Storage
             String imageName = car.getMatricula() + ".png";
@@ -336,7 +336,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
         textViewModel.setText("Car Model: " + model);
         textViewPricePerDay.setText("Price Per Day: " + pricePerDay +" MAD" );
-        textViewAutomatic.setText("Automatic Car: " + isAutomatic);
+        textViewAutomatic.setText("Automatic Car: " + isAutomatic.toUpperCase());
         textViewFuelType.setText("Fuel Type: " + fuelType);
         textViewCity.setText("City: " + city);
         textViewSeatsNumber.setText("Number of Seats: " + seatsNumber);
