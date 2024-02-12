@@ -1,39 +1,68 @@
 package com.example.myapplication.Model;
 
 import java.sql.Date;
+import java.util.Objects;
+
 import com.example.myapplication.Extra.State;
 import com.example.myapplication.Extra.DeliveryOption;
 
 public class Request {
-    private int requestId;
+    private String requestTitle;
     private int borrowingPeriod;
     private DeliveryOption deliveryOption;
     private Date pickUpDate;
     private State requestState;
     private Date returnDate;
     private int actualBorrowingPeriod;
-    private int carId;
-    private int clientId;
+    private String carMatricula;
+    private String clientUsername;
     
-    public Request(int requestId, int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate,
-            State requestState, Date returnDate, int actualBorrowingPeriod, int carId, int clientId) {
-        this.requestId = requestId;
+    public Request(String requestTitle, int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate,
+                   State requestState, Date returnDate, int actualBorrowingPeriod, String carMatricula, String clientUsername) {
+        this.requestTitle = requestTitle;
         this.borrowingPeriod = borrowingPeriod;
         this.deliveryOption = deliveryOption;
         this.pickUpDate = pickUpDate;
         this.requestState = requestState;
         this.returnDate = returnDate;
         this.actualBorrowingPeriod = actualBorrowingPeriod;
-        this.carId = carId;
-        this.clientId = clientId;
+        this.carMatricula = carMatricula;
+        this.clientUsername = clientUsername;
     }
 
-    public int getRequestId() {
-        return requestId;
+    public Request(String requestTitle, int borrowingPeriod, DeliveryOption deliveryOption, Date pickUpDate,
+                   State requestState, String carMatricula, String clientUsername) {
+        this.requestTitle = requestTitle;
+        this.borrowingPeriod = borrowingPeriod;
+        this.deliveryOption = deliveryOption;
+        this.pickUpDate = pickUpDate;
+        this.requestState = requestState;
+        this.carMatricula = carMatricula;
+        this.clientUsername = clientUsername;
     }
 
-    public void setRequestId(int requestId) {
-        this.requestId = requestId;
+    public Request(String requestTitle, String borrowingPeriod, String deliveryOption, String pickUpDate,
+                   String requestState, String carMatricula, String clientUsername) {
+        this.requestTitle = requestTitle;
+        this.borrowingPeriod = Integer.parseInt(borrowingPeriod);
+        if(deliveryOption.toUpperCase().equals("IN PERSON")) deliveryOption = "IN_PERSON";
+        this.deliveryOption = DeliveryOption.valueOf(deliveryOption);
+        this.pickUpDate = Date.valueOf(pickUpDate);
+        this.requestState = State.valueOf(requestState);
+        this.carMatricula = carMatricula;
+        this.clientUsername = clientUsername;
+    }
+
+    public Request() {
+
+    }
+
+    public String getRequestTitle() {
+        return requestTitle;
+    }
+
+    public void setRequestTitle(String requestTitle) {
+        this.requestTitle = requestTitle;
     }
 
     public int getBorrowingPeriod() {
@@ -84,27 +113,27 @@ public class Request {
         this.actualBorrowingPeriod = actualBorrowingPeriod;
     }
 
-    public int getCarId() {
-        return carId;
+    public String getCarMatricula() {
+        return carMatricula;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
+    public void setCarMatricula(String carMatricula) {
+        this.carMatricula = carMatricula;
     }
 
-    public int getClientId() {
-        return clientId;
+    public String getClientUsername() {
+        return clientUsername;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
     }
 
     @Override
     public String toString() {
-        return "Request [requestId=" + requestId + ", borrowingPeriod=" + borrowingPeriod + ", deliveryOption="
+        return "Request [requestId=" + requestTitle + ", borrowingPeriod=" + borrowingPeriod + ", deliveryOption="
                 + deliveryOption + ", pickUpDate=" + pickUpDate + ", requestState=" + requestState + ", returnDate="
-                + returnDate + ", actualBorrowingPeriod=" + actualBorrowingPeriod + ", carId=" + carId + ", clientId="
-                + clientId + "]";
+                + returnDate + ", actualBorrowingPeriod=" + actualBorrowingPeriod + ", carId=" + carMatricula + ", clientId="
+                + clientUsername + "]";
     }
 }

@@ -15,12 +15,15 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -37,9 +40,12 @@ import android.widget.TextView;
 import com.example.myapplication.Controller.CarController;
 import com.example.myapplication.Controller.RequestController;
 import com.example.myapplication.DAO.CarDaoImp;
+import com.example.myapplication.DAO.RequestDaoImp;
 import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Extra.State;
 import com.example.myapplication.Model.Car;
 import com.example.myapplication.Model.Client;
+import com.example.myapplication.Model.Request;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.Util.DatabaseUtil;
 import com.google.android.material.navigation.NavigationView;
@@ -55,7 +61,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener {
+public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrievalListener, RequestDaoImp.RequestRetrievalListener {
     private ScrollView scrollView;
     private TextView clientNameTextView;
     private Client loggedInClient;
@@ -103,7 +109,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 } else if (itemId == R.id.cars) {
                     switchToLayout(R.layout.cars);
                 } else if (itemId == R.id.pendreq) {
-                    switchToLayout(R.layout.request_client_card_layout);
+                    switchToLayout(R.layout.clientpendingrequest);
                 } else if (itemId == R.id.exit) {
                     logOut();
                 }
@@ -161,6 +167,11 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
         if(layoutResId == R.layout.cars){
             CarController carController = new CarController();
             carController.retrieveAllCars(this);
+        }
+
+        if(layoutResId == R.layout.clientpendingrequest) {
+            RequestController requestController = new RequestController();
+            requestController.retrieveClientRequests(loggedInClient.getUsername(), this);
         }
     }
 
@@ -221,22 +232,6 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             buttonInspect.setOnClickListener(view -> {
                 // Handle the click event, e.g., show detailed information
                 showCarDetailsDialog(car);
-                Button requestClientButton = findViewById(R.id.rentCarButton);
-                requestClientButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switchToLayout(R.layout.rent_process);
-                        fillUpRequest();
-                        Button doneBtn = findViewById(R.id.doneBtn);
-                        doneBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                rentCar(car);
-                                // go back
-                            }
-                        });
-                    }
-                });
             });
 
             // Find views in the cardLayout
@@ -262,6 +257,44 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 // Set the Bitmap to the ImageView
                 imageView.setImageBitmap(bitmap);
             }).addOnFailureListener(Throwable::printStackTrace);
+
+            cardView.addView(cardLayout);
+            // Add the CardView to the LinearLayout
+            myLayout.addView(cardView);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void displayClientRequests(List<Request> requests) {
+        for(Request request : requests) {
+            LinearLayout myLayout = findViewById(R.id.myrequestlayout);
+            // Create CardView for each car
+            CardView cardView = new CardView(clientmain.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(40, 20, 40, 50);
+            cardView.setLayoutParams(layoutParams);
+
+            // Inflate the layout for the card
+            View cardLayout = LayoutInflater.from(clientmain.this).inflate(R.layout.request_client_card_layout, null);
+
+            // Find views in the cardLayout
+            TextView titleTV = cardLayout.findViewById(R.id.requestNumber);
+            TextView requestDetailsTV = cardLayout.findViewById(R.id.requestDetails);
+            TextView deliveryOptionTV = cardLayout.findViewById(R.id.deliveryOptionId);
+
+            String title = request.getRequestTitle();
+            String pickUpDate = String.valueOf(request.getPickUpDate());
+            String borrowingPeriod = String.valueOf(request.getBorrowingPeriod());
+            String matricula = request.getCarMatricula();
+            String deliveryOption = String.valueOf(request.getDeliveryOption());
+
+            // Set data to views
+            titleTV.setText(title);
+            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days" + " car: " + matricula);
+            deliveryOptionTV.setText(deliveryOption);
 
             cardView.addView(cardLayout);
             // Add the CardView to the LinearLayout
@@ -318,6 +351,15 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             imageViewCarDetails.setImageBitmap(bitmap);
         }).addOnFailureListener(Throwable::printStackTrace);
 
+        Button requestClientButton = findViewById(R.id.rentCarButton);
+        requestClientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToLayout(R.layout.rent_process);
+                rentCar(car);
+            }
+        });
+
     }
 
     private void logOut()
@@ -329,20 +371,36 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
     private void rentCar(Car car)
     {
+        switchToLayout(R.layout.rent_process);
+        TextView textViewPickUp = findViewById(R.id.PickupDate);
+        TextView textViewReturnDate = findViewById(R.id.returndate);
+        setDatePickerDialog(textViewReturnDate);
+        setDatePickerDialog(textViewPickUp);
 
-        String borrowingPeriod = Functions.getEditTextValue((EditText) findViewById(R.id.borrowperiod));
-        String pickupDate = Functions.getEditTextValue((TextView) findViewById(R.id.PickupDate));
-        String returnDate = Functions.getEditTextValue((TextView) findViewById(R.id.returndate));
-        String matricula = car.getMatricula();
-        String clientUsername = loggedInClient.getUsername();
+        Button doneBtn = findViewById(R.id.doneBtn);
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String borrowingPeriod = Functions.getEditTextValue((EditText) findViewById(R.id.borrowperiod));
+                String pickupDate = Functions.getEditTextValue(textViewPickUp);
+                String returnDate = Functions.getEditTextValue(textViewReturnDate);
+                String matricula = car.getMatricula();
+                String clientUsername = loggedInClient.getUsername();
+                String requestState = String.valueOf(State.PENDING);
+                String agencyUsername = car.getAgencyUsername();
 
-        RadioGroup deliveryOptionRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        int selectedDeliveryOptionId = deliveryOptionRadioGroup.getCheckedRadioButtonId();
-        String deliveryOption = "In Person";
-        if(selectedDeliveryOptionId != -1) deliveryOption = ((RadioButton)findViewById(selectedDeliveryOptionId)).getText().toString(); // add constraints
+                RadioGroup deliveryOptionRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+                int selectedDeliveryOptionId = deliveryOptionRadioGroup.getCheckedRadioButtonId();
+                String deliveryOption = "IN_PERSON";
+                if(selectedDeliveryOptionId != -1) deliveryOption = ((RadioButton)findViewById(selectedDeliveryOptionId)).getText().toString().toUpperCase(); // add constraints
 
-        RequestController requestController = new RequestController();
-        requestController.submitRequest(borrowingPeriod, deliveryOption, pickupDate, matricula, clientUsername);
+                RequestController requestController = new RequestController();
+                requestController.submitRequest(borrowingPeriod, deliveryOption, pickupDate, matricula, clientUsername, requestState, agencyUsername);
+
+                switchToLayout(R.layout.clientpendingrequest);
+//                createCardLayout(new Request());
+            }
+        });
     }
 
 
@@ -379,17 +437,14 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
         });
     }
 
-    private void fillUpRequest(){
-        TextView textViewPickUp = findViewById(R.id.PickupDate);
-        TextView textViewReturnDate = findViewById(R.id.returndate);
-        setDatePickerDialog(textViewReturnDate);
-        setDatePickerDialog(textViewPickUp);
+
+    @Override
+    public void onRequestRetrieved(List<Request> requests) {
+        displayClientRequests(requests);
     }
 
+    @Override
+    public void onErrorRequest(DatabaseError databaseError) {
 
-
-
-
-
-
+    }
 }
