@@ -12,6 +12,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class CarDaoImp implements CarDao {
 
@@ -46,8 +48,12 @@ public class CarDaoImp implements CarDao {
     }
 
     @Override
-    public void deleteCar(String carMatricula) {
-
+    public void deleteCar(String carMatricula ,String agencyusername) {
+        DatabaseReference identifier = DatabaseUtil.connect().child("Agency").child(agencyusername).child("Cars").child(carMatricula);
+        identifier.removeValue();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference()
+                .child("carImages" + "/"+ agencyusername+ "/" + carMatricula + ".png");
+        storageRef.delete();
     }
 
     public interface CarRetrievalListener {
