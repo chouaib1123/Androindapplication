@@ -27,6 +27,7 @@ import com.example.myapplication.Controller.RequestController;
 import com.example.myapplication.DAO.CarDaoImp;
 import com.example.myapplication.DAO.RequestDaoImp;
 import com.example.myapplication.Extra.Functions;
+import com.example.myapplication.Extra.State;
 import com.example.myapplication.Model.Agency;
 import com.example.myapplication.Model.Car;
 import com.example.myapplication.Model.Request;
@@ -307,12 +308,34 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
             String borrowingPeriod = String.valueOf(request.getBorrowingPeriod());
             String matricula = request.getCarMatricula();
             String deliveryOption = String.valueOf(request.getDeliveryOption());
+            String requestState = String.valueOf(request.getRequestState());
+            String firstName = request.getFirstName();
+            String lastName = request.getLastName();
+            String phoneNumber = request.getPhoneNumber();
+            String clientUsername = request.getClientUsername();
+
 
             // Set data to views
-            titleTV.setText(title);
+            titleTV.setText(matricula);
             requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
-            deliveryOptionTV.setText(deliveryOption);
+            deliveryOptionTV.setText(deliveryOption + " | " +requestState + "\n" + firstName + " " + lastName + "\n" + phoneNumber   );
+            acceptBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestController requestController = new RequestController();
+                    requestController.updateRequestState(title, String.valueOf(State.APPROVED),agencyUsername,clientUsername);
+                    switchToLayout(R.layout.agencypendingrequest);
+                }
+            });
+            rejectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestController requestController = new RequestController();
+                    requestController.updateRequestState(title, String.valueOf(State.DECLINED),agencyUsername,clientUsername);
+                    switchToLayout(R.layout.agencypendingrequest);
 
+            }
+            });
             cardView.addView(cardLayout);
             // Add the CardView to the LinearLayout
             myLayout.addView(cardView);

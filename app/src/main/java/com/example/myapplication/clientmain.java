@@ -290,11 +290,13 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             String borrowingPeriod = String.valueOf(request.getBorrowingPeriod());
             String matricula = request.getCarMatricula();
             String deliveryOption = String.valueOf(request.getDeliveryOption());
+            String model = request.getCarModel();
+            String requestState = String.valueOf(request.getRequestState());
 
             // Set data to views
-            titleTV.setText(title);
+            titleTV.setText(matricula + " | " + model);
             requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
-            deliveryOptionTV.setText(deliveryOption);
+            deliveryOptionTV.setText(deliveryOption + " | " + requestState);
 
             cardView.addView(cardLayout);
             // Add the CardView to the LinearLayout
@@ -388,6 +390,10 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 String clientUsername = loggedInClient.getUsername();
                 String requestState = String.valueOf(State.PENDING);
                 String agencyUsername = car.getAgencyUsername();
+                String firstName = loggedInClient.getFirstName();
+                String lastName = loggedInClient.getLastName();
+                String phoneNumber = loggedInClient.getUserPhoneNumber();
+                String carModel = car.getModel();
 
                 RadioGroup deliveryOptionRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
                 int selectedDeliveryOptionId = deliveryOptionRadioGroup.getCheckedRadioButtonId();
@@ -395,7 +401,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
                 if(selectedDeliveryOptionId != -1) deliveryOption = ((RadioButton)findViewById(selectedDeliveryOptionId)).getText().toString().toUpperCase(); // add constraints
 
                 RequestController requestController = new RequestController();
-                requestController.submitRequest(borrowingPeriod, deliveryOption, pickupDate, matricula, clientUsername, requestState, agencyUsername);
+                requestController.submitRequest(borrowingPeriod, deliveryOption, pickupDate, matricula, clientUsername, requestState, agencyUsername , firstName , lastName , phoneNumber,carModel);
 
                 switchToLayout(R.layout.clientpendingrequest);
 //                createCardLayout(new Request());

@@ -31,7 +31,7 @@ public class RequestDaoImp implements RequestDao {
 
     @Override
     public void insertRequest(String borrowingPeriod, String deliveryOption, String pickUpDate,
-                              String matricula, String clientUsername, String requestState, String agencyUsername) {
+                              String matricula, String clientUsername, String requestState, String agencyUsername , String firstName , String lastName , String phoneNumber , String carModel) {
         String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
         DatabaseReference identifier = DatabaseUtil.connect().child("Agency")
                 .child(agencyUsername).child("Requests").child(clientUsername + "_" + currentDate);
@@ -43,9 +43,12 @@ public class RequestDaoImp implements RequestDao {
         identifier.child("pickUpDate").setValue(pickUpDate);
         identifier.child("requestState").setValue(requestState);
         identifier.child("clientUsername").setValue(clientUsername);
-
+        identifier.child("firstName").setValue(firstName);
+        identifier.child("lastName").setValue(lastName);
+        identifier.child("phoneNumber").setValue(phoneNumber);
+        identifier.child("carModel").setValue(carModel);
         DatabaseReference identifier2 = DatabaseUtil.connect().child("Client")
-                .child(clientUsername).child("Requests").child(agencyUsername + "_" + currentDate);
+                .child(clientUsername).child("Requests").child(clientUsername + "_" + currentDate);
 
         identifier2.child("title").setValue(agencyUsername + "_" + currentDate);
         identifier2.child("matricula").setValue(matricula);
@@ -54,6 +57,8 @@ public class RequestDaoImp implements RequestDao {
         identifier2.child("pickUpDate").setValue(pickUpDate);
         identifier2.child("requestState").setValue(requestState);
         identifier2.child("agencyUsername").setValue(agencyUsername);
+        identifier2.child("carModel").setValue(carModel);
+
     }
 
     @Override
@@ -93,8 +98,11 @@ public class RequestDaoImp implements RequestDao {
                     String pickUpDate = requestSnapshot.child("pickUpDate").getValue(String.class);
                     String requestState = requestSnapshot.child("requestState").getValue(String.class);
                     String agencyUsername = requestSnapshot.child("agencyUsername").getValue(String.class);
+                    String carModel = requestSnapshot.child("carModel").getValue(String.class);
 
-                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername);
+
+
+                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername,carModel);
                     requests.add(request);
                 }
                 listener.onRequestRetrieved(requests);
@@ -124,8 +132,12 @@ public class RequestDaoImp implements RequestDao {
                     String pickUpDate = requestSnapshot.child("pickUpDate").getValue(String.class);
                     String requestState = requestSnapshot.child("requestState").getValue(String.class);
                     String clientUsername = requestSnapshot.child("clientUsername").getValue(String.class);
+                    String firstName = requestSnapshot.child("firstName").getValue(String.class);
+                    String lastName = requestSnapshot.child("lastName").getValue(String.class);
+                    String phoneNumber = requestSnapshot.child("phoneNumber").getValue(String.class);
+                    String carModel = requestSnapshot.child("carModel").getValue(String.class);
 
-                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername);
+                    Request request = new Request(title, borrowingPeriod, deliveryOption, pickUpDate, requestState, matricula, clientUsername, agencyUsername , firstName,lastName,phoneNumber,carModel);
                     requests.add(request);
                 }
                 listener.onRequestRetrieved(requests);
@@ -137,4 +149,15 @@ public class RequestDaoImp implements RequestDao {
             }
         });
     }
+
+    public void updateRequestState(String requestTitle , String requestState , String agencyUsername , String clientUsername){
+        DatabaseReference identifier = DatabaseUtil.connect().child("Agency")
+                .child(agencyUsername).child("Requests").child(requestTitle);
+        identifier.child("requestState").setValue(requestState);
+        DatabaseReference identifier2 = DatabaseUtil.connect().child("Client")
+                .child(clientUsername).child("Requests").child(requestTitle);
+        identifier2.child("requestState").setValue(requestState);
+
+    }
+
 }

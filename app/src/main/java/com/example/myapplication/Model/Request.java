@@ -16,6 +16,46 @@ public class Request {
     private int actualBorrowingPeriod;
     private String carMatricula;
     private String clientUsername;
+    private String firstName ;
+    private String lastName ;
+    private String phoneNumber ;
+
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
+    }
+
+    private String carModel ;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+
 
     public String getAgencyUsername() {
         return agencyUsername;
@@ -53,7 +93,7 @@ public class Request {
     }
 
     public Request(String requestTitle, String borrowingPeriod, String deliveryOption, String pickUpDate,
-                   String requestState, String carMatricula, String clientUsername, String agencyUsername) {
+                   String requestState, String carMatricula, String clientUsername, String agencyUsername , String firstName , String lastName, String phoneNumber , String carModel) {
         this.requestTitle = requestTitle;
         this.borrowingPeriod = Integer.parseInt(borrowingPeriod);
         if(deliveryOption.toUpperCase().equals("IN PERSON")) deliveryOption = "IN_PERSON";
@@ -63,8 +103,25 @@ public class Request {
         this.carMatricula = carMatricula;
         this.clientUsername = clientUsername;
         this.agencyUsername = agencyUsername;
+        this.firstName = firstName ;
+        this.lastName = lastName ;
+        this.phoneNumber = phoneNumber ;
+        this.carModel = carModel ;
     }
+    public Request(String requestTitle, String borrowingPeriod, String deliveryOption, String pickUpDate,
+                   String requestState, String carMatricula, String clientUsername, String agencyUsername,String carModel ) {
+        this.requestTitle = requestTitle;
+        this.borrowingPeriod = Integer.parseInt(borrowingPeriod);
+        if(deliveryOption.toUpperCase().equals("IN PERSON")) deliveryOption = "IN_PERSON";
+        this.deliveryOption = DeliveryOption.valueOf(deliveryOption);
+        this.pickUpDate = Date.valueOf(pickUpDate);
+        this.requestState = State.valueOf(requestState);
+        this.carMatricula = carMatricula;
+        this.clientUsername = clientUsername;
+        this.agencyUsername = agencyUsername;
+        this.carModel = carModel ;
 
+    }
     public Request() {
 
     }

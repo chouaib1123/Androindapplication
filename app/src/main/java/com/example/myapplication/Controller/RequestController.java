@@ -18,8 +18,8 @@ public class RequestController {
     }
 
     public void submitRequest(String borrowingPeriod, String deliveryOption,
-                              String pickUpDate, String carMatricula, String clientUsername, String requestState, String agencyUsername) {
-        requestsDao.insertRequest(borrowingPeriod, deliveryOption, pickUpDate, carMatricula, clientUsername, requestState, agencyUsername);
+                              String pickUpDate, String carMatricula, String clientUsername, String requestState, String agencyUsername ,String firstName , String lastName, String phoneNumber , String carModel) {
+        requestsDao.insertRequest(borrowingPeriod, deliveryOption, pickUpDate, carMatricula, clientUsername, requestState, agencyUsername , firstName , lastName ,  phoneNumber , carModel);
     }
 
     public void updateRequestDetails(int requestId, int borrowingPeriod,
@@ -42,4 +42,8 @@ public class RequestController {
     public void retrieveAgencyRequests(String agencyUsername, RequestDaoImp.RequestRetrievalListener listener) {
         requestsDao.retrieveAgencyRequests(agencyUsername, listener);
     }
+    public void updateRequestState(String requestTitle , String requestState , String agencyUsername , String clientUsernam){
+        requestsDao.updateRequestState(requestTitle,requestState ,  agencyUsername ,  clientUsernam);
+    }
+
 }

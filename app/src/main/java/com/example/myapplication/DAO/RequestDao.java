@@ -8,7 +8,7 @@ public interface RequestDao {
     Request getRequestById(int requestId);
     void insertRequest(String borrowingPeriod, String deliveryOption,
                        String pickUpDate, String carMatricula, String clientUsername,
-                       String requestState, String agencyUsername);
+                       String requestState, String agencyUsername ,String firstName , String lastName, String phoneNumber,String carModel);
 
     void updateRequest(int requestId, int borrowingPeriod, DeliveryOption deliveryOption,
                        Date pickUpDate);
@@ -19,4 +19,6 @@ public interface RequestDao {
     void retrieveClientRequests(String clientUsername, RequestDaoImp.RequestRetrievalListener listener);
 
     void retrieveAgencyRequests(String agencyUsername, RequestDaoImp.RequestRetrievalListener listener);
+
+    void updateRequestState(String requestTitle , String requestState , String agencyUsername , String clientUsername);
 }
