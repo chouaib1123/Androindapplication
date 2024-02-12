@@ -121,7 +121,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/email"/>
+                    android:src="@drawable/em"/>
 
                 <TextView
                     android:id="@+id/email"
@@ -145,7 +145,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/phonenumer"/>
+                    android:src="@drawable/ph"/>
 
                 <TextView
                     android:id="@+id/phoneNumber"
@@ -169,7 +169,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/prfl"/>
+                    android:src="@drawable/usr"/>
 
                 <TextView
                     android:id="@+id/clientUsername"
@@ -193,7 +193,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/cin"/>
 
                 <TextView
                     android:id="@+id/cinNumber"
@@ -217,7 +217,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/addr"/>
 
                 <TextView
                     android:id="@+id/address"
@@ -241,7 +241,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/adress"/>
 
                 <TextView
                     android:id="@+id/city"
@@ -264,7 +264,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/cat"/>
 
                 <TextView
                     android:id="@+id/drivingLicenseCategory"
@@ -288,7 +288,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/din"/>
 
                 <TextView
                     android:id="@+id/drivingLicenseObtainDate"
@@ -312,7 +312,7 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/comments"/>
+                    android:src="@drawable/doff"/>
 
                 <TextView
                     android:id="@+id/drivingLicenseExpireDate"
