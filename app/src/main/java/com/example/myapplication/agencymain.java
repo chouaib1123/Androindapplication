@@ -230,7 +230,7 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                                     DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
                                     Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    switchToLayout(R.layout.postedcars);
                                 }
                             }
 
@@ -394,32 +394,31 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
     }
 
     protected void modifycar( Car car){
-
-
-
-
         Button modifycar = findViewById(R.id.button_submit_car);
-
         String matricule = car.getMatricula();
         TextView modifiedpic = findViewById(R.id.carpicturemodify);
         setOnClickListenerForTextView(modifiedpic);
+        EditText colorTV = findViewById(R.id.modify_color);
+        EditText pricePerDayTV = findViewById(R.id.modify_priceperday);
+        colorTV.setText(car.getColor());
+        pricePerDayTV.setText(String.valueOf(car.getPricePerDay()));
         modifycar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                color = Functions.getEditTextValue((EditText)findViewById(R.id.modify_color));
-                pricePerDay = Functions.getEditTextValue((EditText)findViewById(R.id.modify_priceperday));
+                color = Functions.getEditTextValue((EditText)colorTV);
+                pricePerDay = Functions.getEditTextValue((EditText)pricePerDayTV);
 
                     DatabaseUtil.connect().child(agencyUsername).child("matricula").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                CarController carController = new CarController();
-                                String directoryPath = "carImages/" + agencyUsername;
-                                String filename = matricule + ".png";
-                                carController.updateCarDetails(matricule,color,pricePerDay,agencyUsername);
-                                DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
+                            CarController carController = new CarController();
+                            String directoryPath = "carImages/" + agencyUsername;
+                            String filename = matricule + ".png";
+                            carController.updateCarDetails(matricule,color,pricePerDay,agencyUsername);
+                            DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
-                                Toast.makeText(agencymain.this, "Car is modified successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(agencymain.this, "Car is modified successfully", Toast.LENGTH_SHORT).show();
                             switchToLayout(R.layout.postedcars);
 
                         }
