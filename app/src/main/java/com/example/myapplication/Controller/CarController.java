@@ -36,7 +36,7 @@ public class CarController {
         carDao.updateCar(carMatricula, color, pricePerDay,agencyUsername);
     }
 
-    public void removeCar(String carMatricula) {
-        carDao.deleteCar(carMatricula);
+    public void removeCar(String carMatricula , String agencyUsername) {
+        carDao.deleteCar(carMatricula,agencyUsername);
     }
 }

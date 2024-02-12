@@ -325,6 +325,14 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                        modifycar(car);
                 }
             });
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CarController carController = new CarController();
+                    carController.removeCar(car.getMatricula(),agencyUsername);
+                    switchToLayout(R.layout.postedcars);
+                }
+            });
 
             // Set data to views
             textViewCarModel.setText(car.getModel());
