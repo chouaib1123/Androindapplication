@@ -226,7 +226,7 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                                     carController.addCar(color, fuelType, isAutomatic, matricula, model, pricePerDay, seatsNumber, agencyUsername);
                                     DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
-                                    Toast.makeText(agencymain.this, "Car is inserted successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(agencymain.this, "Car has been successfully inserted", Toast.LENGTH_SHORT).show();
                                     switchToLayout(R.layout.postedcars);
                                 }
                             }
@@ -486,7 +486,7 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
                             carController.updateCarDetails(matricule,color,pricePerDay,agencyUsername);
                             DatabaseUtil.uploadImagesToFirebaseStorage(directoryPath, filename, textViewImages);
 
-                            Toast.makeText(agencymain.this, "Car is modified successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(agencymain.this, "Car has been successfully modified", Toast.LENGTH_SHORT).show();
                             switchToLayout(R.layout.postedcars);
 
                         }

@@ -133,7 +133,7 @@ public class agencyregister extends AppCompatActivity implements OnClickListener
                             agencyController.registerAgency(username, agencyFullAddress, city, email, password, phoneNumber,
                                     patentNumber, managerFullName, agencyName);
 
-                            Toast.makeText(agencyregister.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(agencyregister.this, "Registration successful", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
