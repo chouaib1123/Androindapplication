@@ -295,8 +295,8 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
             // Set data to views
             titleTV.setText(matricula + " | " + model);
-            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
-            deliveryOptionTV.setText(deliveryOption + " | " + requestState);
+            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for " + borrowingPeriod + " days");
+            deliveryOptionTV.setText("Delivery Option :      " + deliveryOption + " \n" + "Request State :        "+ requestState);
 
             cardView.addView(cardLayout);
             // Add the CardView to the LinearLayout

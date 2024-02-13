@@ -317,8 +317,8 @@ public class agencymain extends AppCompatActivity implements CarDaoImp.CarRetrie
 
             // Set data to views
             titleTV.setText(matricula);
-            requestDetailsTV.setText("Pickup date: " + pickUpDate + " for: " + borrowingPeriod + " days");
-            deliveryOptionTV.setText(deliveryOption + " | " +requestState + "\n" + firstName + " " + lastName + "\n" + phoneNumber   );
+            requestDetailsTV.setText("Pickup date : " + pickUpDate + " for " + borrowingPeriod + " days");
+            deliveryOptionTV.setText("Delivery Option :      " + deliveryOption + "\n"+"Request State :        " +requestState + "\n"+ "Full Name :               " + firstName + " " + lastName + "\n" +"Phone Number :      "+ phoneNumber   );
             acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
