@@ -333,7 +333,7 @@
     <Button
         android:id="@+id/test"
         android:textColor="#fff"
-
+        android:background="@drawable/rounded_corner"
         android:layout_marginTop="35dp"
         android:layout_marginBottom="30dp"
         android:layout_gravity="center_horizontal"

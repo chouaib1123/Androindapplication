@@ -147,7 +147,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:background="#30ffffff"
-            android:drawableLeft="@drawable/adress"
+            android:drawableLeft="@drawable/whitecity"
             android:drawablePadding="20dp"
             android:fontFamily="@font/exoregular"
             android:hint="City"
@@ -400,10 +400,10 @@
                 android:layout_below="@id/dlverso"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="40dp"
                 android:fontFamily="@font/exobold"
                 android:paddingHorizontal="40dp"
-
+                android:background="@drawable/rounded_corner"
                 android:text="Register" />
 
 

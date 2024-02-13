@@ -14,5 +14,6 @@
         android:drawableLeft="@drawable/add"
         android:layout_margin="20dp"
         android:layout_gravity="center"
+        android:background="@drawable/rounded_corner"
         />
 </LinearLayout>

@@ -6,16 +6,16 @@
     android:background="@drawable/purplebackground"
     android:id="@+id/nav_header"
     >
+
     <ImageView
         android:id="@+id/backnav"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@font/back"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="10dp"
         android:rotation="180"
-        />
+        android:src="@font/back" />
     <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
