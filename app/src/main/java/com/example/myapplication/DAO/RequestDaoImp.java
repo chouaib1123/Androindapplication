@@ -7,7 +7,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Formatter;
 import java.util.List;
 
 import com.example.myapplication.Extra.DeliveryOption;
@@ -33,10 +38,39 @@ public class RequestDaoImp implements RequestDao {
     public void insertRequest(String borrowingPeriod, String deliveryOption, String pickUpDate,
                               String matricula, String clientUsername, String requestState, String agencyUsername , String firstName , String lastName , String phoneNumber , String carModel) {
         String currentDate = new java.sql.Date(System.currentTimeMillis()).toString();
-        DatabaseReference identifier = DatabaseUtil.connect().child("Agency")
-                .child(agencyUsername).child("Requests").child(clientUsername + "_" + currentDate);
 
-        identifier.child("title").setValue(clientUsername + "_" + currentDate);
+        Formatter format = new Formatter();
+        Calendar gfg_calender = Calendar.getInstance();
+        format = new Formatter();
+        format.format("%tl:%tM", gfg_calender,
+                gfg_calender);
+
+        LocalDateTime now = LocalDateTime.now();
+        //String format1 = now.format(DateTimeFormatter.ISO_DATE_TIME);
+        //String format1 = now.format(DateTimeFormatter.ISO_DATE_TIME);
+        //String format2 = now.atZone(ZoneId.of("GMT")).format(DateTimeFormatter.RFC_1123_DATE_TIME);
+        //String format3 = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.ENGLISH));
+
+
+        //System.out.println(format3);
+
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
+        int hour = now.getHour();
+        int minute = now.getMinute();
+        int second = now.getSecond();
+        int millis = now.get(ChronoField.MILLI_OF_SECOND); // Note: no direct getter available.
+        String var = ""+year+  month+ day+ hour+ minute+ second+ millis;
+
+        //System.out.printf("%d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, minute, second, millis);
+
+        //System.out.println(format1);
+
+        DatabaseReference identifier = DatabaseUtil.connect().child("Agency")
+                .child(agencyUsername).child("Requests").child(clientUsername + "_" + var);
+
+        identifier.child("title").setValue(clientUsername + "_" + var);
         identifier.child("matricula").setValue(matricula);
         identifier.child("borrowingPeriod").setValue(borrowingPeriod);
         identifier.child("deliveryOption").setValue(deliveryOption);
@@ -48,9 +82,9 @@ public class RequestDaoImp implements RequestDao {
         identifier.child("phoneNumber").setValue(phoneNumber);
         identifier.child("carModel").setValue(carModel);
         DatabaseReference identifier2 = DatabaseUtil.connect().child("Client")
-                .child(clientUsername).child("Requests").child(clientUsername + "_" + currentDate);
+                .child(clientUsername).child("Requests").child(clientUsername + "_" + var);
 
-        identifier2.child("title").setValue(agencyUsername + "_" + currentDate);
+        identifier2.child("title").setValue(clientUsername + "_" + var);
         identifier2.child("matricula").setValue(matricula);
         identifier2.child("borrowingPeriod").setValue(borrowingPeriod);
         identifier2.child("deliveryOption").setValue(deliveryOption);
