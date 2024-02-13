@@ -18,6 +18,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#61383B7A">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/signikanegative"
+                    android:text="Client Space"
+                    android:textColor="#411D80"
+
+                    android:textSize="22sp" />
+
+                <ImageView
+                    android:id="@+id/menu_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/menuu" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
@@ -28,33 +52,6 @@
 
 
         </ScrollView>
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#61383B7A"
-            app:layout_anchor="@+id/navbar"
-            app:layout_anchorGravity="center">
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/signikanegative"
-                android:text="Client Space"
-                android:textColor="#411D80"
-
-                android:textSize="22sp" />
-
-            <ImageView
-                android:id="@+id/menu_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/menuu" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

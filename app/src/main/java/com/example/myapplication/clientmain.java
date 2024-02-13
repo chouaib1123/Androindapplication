@@ -243,7 +243,7 @@ public class clientmain extends AppCompatActivity implements CarDaoImp.CarRetrie
             // Set data to views
             textViewCarModel.setText("Car Model : " + car.getModel());
             textViewPrice.setText("Price Per day (MAD) : " + String.valueOf(car.getPricePerDay()));
-            textViewLocation.setText("Agency Name : " + car.getAgencyCity());
+            textViewLocation.setText("City : " + car.getAgencyCity());
 
             // Retrieve and set the car image from Firebase Storage
             String imageName = car.getMatricula() + ".png";
